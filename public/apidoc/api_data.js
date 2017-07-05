@@ -85,7 +85,7 @@ define({ "api": [
     "groupTitle": "Ask",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/ask"
+        "url": "http://wztx.drv.api.ruitukeji.com/ask"
       }
     ]
   },
@@ -188,7 +188,7 @@ define({ "api": [
     "groupTitle": "Ask",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/ask/:id"
+        "url": "http://wztx.drv.api.ruitukeji.com/ask/:id"
       }
     ]
   },
@@ -236,7 +236,7 @@ define({ "api": [
     "groupTitle": "Ask",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/ask/reply"
+        "url": "http://wztx.drv.api.ruitukeji.com/ask/reply"
       }
     ]
   },
@@ -277,7 +277,7 @@ define({ "api": [
     "groupTitle": "Ask",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/ask"
+        "url": "http://wztx.drv.api.ruitukeji.com/ask"
       }
     ]
   },
@@ -467,7 +467,7 @@ define({ "api": [
     "name": "GetIndexHome",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/index/home"
+        "url": "http://wztx.drv.api.ruitukeji.com/index/home"
       }
     ]
   },
@@ -483,7 +483,7 @@ define({ "api": [
     "groupTitle": "Index",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/apiCode"
+        "url": "http://wztx.drv.api.ruitukeji.com/apiCode"
       }
     ]
   },
@@ -518,7 +518,7 @@ define({ "api": [
     "groupTitle": "Index",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/appConfig"
+        "url": "http://wztx.drv.api.ruitukeji.com/appConfig"
       }
     ]
   },
@@ -560,7 +560,7 @@ define({ "api": [
     "groupTitle": "Index",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/lastApk"
+        "url": "http://wztx.drv.api.ruitukeji.com/lastApk"
       }
     ]
   },
@@ -595,7 +595,7 @@ define({ "api": [
     "groupTitle": "Index",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/index/sendCaptcha"
+        "url": "http://wztx.drv.api.ruitukeji.com/index/sendCaptcha"
       }
     ]
   },
@@ -736,7 +736,7 @@ define({ "api": [
     "groupTitle": "Message",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/message"
+        "url": "http://wztx.drv.api.ruitukeji.com/message"
       }
     ]
   },
@@ -825,7 +825,7 @@ define({ "api": [
     "groupTitle": "Message",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/message/:id"
+        "url": "http://wztx.drv.api.ruitukeji.com/message/:id"
       }
     ]
   },
@@ -866,7 +866,7 @@ define({ "api": [
     "groupTitle": "PO",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/po/agree"
+        "url": "http://wztx.drv.api.ruitukeji.com/po/agree"
       }
     ]
   },
@@ -1026,7 +1026,7 @@ define({ "api": [
     "groupTitle": "PO",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/po"
+        "url": "http://wztx.drv.api.ruitukeji.com/po"
       }
     ]
   },
@@ -1199,7 +1199,7 @@ define({ "api": [
     "groupTitle": "PO",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/po/:id"
+        "url": "http://wztx.drv.api.ruitukeji.com/po/:id"
       }
     ]
   },
@@ -1240,7 +1240,7 @@ define({ "api": [
     "groupTitle": "PO",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/po/refuse"
+        "url": "http://wztx.drv.api.ruitukeji.com/po/refuse"
       }
     ]
   },
@@ -1477,7 +1477,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/user/info"
+        "url": "http://wztx.drv.api.ruitukeji.com/user/info"
       }
     ]
   },
@@ -1560,7 +1560,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/User/login"
+        "url": "http://wztx.drv.api.ruitukeji.com/User/login"
       }
     ]
   },
@@ -1650,7 +1650,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/User/qualification"
+        "url": "http://wztx.drv.api.ruitukeji.com/User/qualification"
       }
     ]
   },
@@ -1692,7 +1692,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/User/resetPwd"
+        "url": "http://wztx.drv.api.ruitukeji.com/User/resetPwd"
       }
     ]
   },
@@ -1768,7 +1768,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/user/qualification"
+        "url": "http://wztx.drv.api.ruitukeji.com/user/qualification"
       }
     ]
   },
@@ -1830,7 +1830,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/user/updateInfo"
+        "url": "http://wztx.drv.api.ruitukeji.com/user/updateInfo"
       }
     ]
   },
@@ -1892,7 +1892,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/user/uploadAvatar"
+        "url": "http://wztx.drv.api.ruitukeji.com/user/uploadAvatar"
       }
     ]
   },
@@ -1946,7 +1946,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/user/uploadQfctImg"
+        "url": "http://wztx.drv.api.ruitukeji.com/user/uploadQfctImg"
       }
     ]
   },
@@ -2112,7 +2112,7 @@ define({ "api": [
     "groupTitle": "inquiry",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/inquiry"
+        "url": "http://wztx.drv.api.ruitukeji.com/inquiry"
       }
     ]
   },
@@ -2174,7 +2174,7 @@ define({ "api": [
     "groupTitle": "inquiry",
     "sampleRequest": [
       {
-        "url": "http://atwwg.api.ruitukeji.com/inquiry/quote"
+        "url": "http://wztx.drv.api.ruitukeji.com/inquiry/quote"
       }
     ]
   }
