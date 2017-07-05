@@ -1,12 +1,12 @@
 define({
-  "name": "物载天下-司机端接口文档",
+  "name": "物载天下-司机端-接口文档",
   "version": "0.0.0",
   "description": "返回数据格式说明：<br> <pre class=\"prettyprint language-json prettyprinted\" data-type=\"json\"><code class=\"sample-request-response-json\">{\n  \"code\": 2000, \t//状态码 \n  \"msg\": \"SUCCESS\", \t//返回信息\n  \"result\": {}\t\t//数据包 \n}</code></pre> \n 正式服地址：暂无 \n测试服地址：http://wztx.drv.api.ruitukeji.com",
-  "title": "物载天下-司机端接口文档 ",
+  "title": "物载天下-司机端-接口文档 ",
   "url": "http://wztx.drv.api.ruitukeji.com",
   "sampleUrl": "http://wztx.drv.api.ruitukeji.com",
   "header": {
-    "title": "物载天下-司机端接口文档",
+    "title": "物载天下-司机端-接口文档",
     "filename": ""
   },
   "footer": {
@@ -26,7 +26,7 @@ define({
   "apidoc": "0.2.0",
   "generator": {
     "name": "apidoc",
-    "time": "2017-07-05T06:57:10.267Z",
+    "time": "2017-07-05T07:00:09.926Z",
     "url": "http://apidocjs.com",
     "version": "0.16.1"
   }
