@@ -17,7 +17,7 @@ class Index extends BaseController{
 
 
     /**
-     * @api             {GET} /apiCode 00.返回码说明(ok)
+     * @api             {GET} /apiCode 返回码说明(ok)
      * @apiDescription  技术支持：<a href="http://www.ruitukeji.com" target="_blank">睿途科技</a>
      * @apiName         apiCode
      * @apiGroup        Index
@@ -31,7 +31,7 @@ class Index extends BaseController{
     }
 
     /**
-     * @api      {GET} /appConfig 01.应用配置参数(OK)
+     * @api      {GET} /appConfig 应用配置参数(OK)
      * @apiName  appConfig
      * @apiGroup Index
      * @apiSuccess {Array} payWays             付款方式 一维数组
@@ -56,7 +56,7 @@ class Index extends BaseController{
     }
 
     /**
-     * @api      {GET} /index/home 01.首页(ok)
+     * @api      {GET} /index/home 首页(ok)
      * @apiDescription
      * @apiName  home
      * @apiGroup Index
@@ -69,10 +69,6 @@ class Index extends BaseController{
      * @apiSuccess {String} banners.img     图片.
      * @apiSuccess {String} [banners.title] 标题.
      * @apiSuccess {Object} unreadMsg        未读消息.
-     * @apiSuccess {Number} unreadMsg.io    询价单未读数量.
-     * @apiSuccess {Number} unreadMsg.po    采购单未读数量.
-     * @apiSuccess {Number} unreadMsg.msg   推送消息未读数量.
-     * @apiSuccess {Number} unreadMsg.ask   咨询消息未读数量.
      */
     public function home(){
         $banners = model('SystemBanner', 'logic')->getBannerList();
@@ -93,11 +89,15 @@ class Index extends BaseController{
     }
 
     /**
-     * @api      {POST} /index/sendCaptcha 02.发送验证码(ok)
+     * @api      {POST} /index/sendCaptcha 发送验证码(ok)
      * @apiName  sendCaptcha
      * @apiGroup Index
      * @apiParam {String} mobile   手机号.
      * @apiParam {String} opt      验证码类型 reg=注册 restpwd=找回密码 login=登陆 bind=绑定手机号.
+     * @apiParam {String} codeId   此为客户端系统当前时间截 除去前两位后经MD5 加密后字符串.
+     * @apiParam {String} validationId   codeIdvalidationId(此为手机号除去第一位后字符串+（codeId再次除去前三位） 生成字符串后经MD5加密后字符串)
+     * 后端接收到此三个字符串后      也同样生成validationId
+     * 与接收到的validationId进行对比 如果一致则发送短信验证码，否则不发送。同时建议对 codeId 进行唯一性检验   另外，错误时不要返回错误内容，只返回errCode，此设计仅限获取短信验证码
      */
     public function sendCaptcha(){
         $data = $this->getReqParams(['mobile', 'opt']);

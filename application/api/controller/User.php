@@ -12,9 +12,70 @@ use think\Request;
 
 class User extends BaseController{
 
+    /**
+     * @api     {POST} /User/reg            用户注册
+     * @apiName   reg
+     * @apiGroup  User
+     * @apiParam {String} type              注册类型 person-个人 company-公司.
+     * @apiParam {String} phone             手机号.
+     * @apiParam {String} password          加密的密码. 加密方式：MD5("RUITU"+明文密码+"KEJI")
+     * @apiParam {String} [recommendcode]   推荐码
+     * @apiSuccess {Number} userId          用户id.
+     * @apiSuccess {String} accessToken     接口调用凭证.
+     */
+    public function reg(Request $request){
+        //校验参数
+        $paramAll = $this->getReqParams(['type','user_name', 'password', 'recommendcode', 'captcha']);
+        //$result=$this->validate($paramAll,'User');
+        $rule = [
+            'user_name'=>['regex'=>'/^[1]{1}[3|5|7|8]{1}[0-9]{9}$/','require','unique:system_user_shipper'],
+            'password' => 'require|length:6,128',
+            'captcha' => 'require|length:4,8',
+        ];
+        validateData($paramAll, $rule);
+        //写入数据库
+        //echo getenv('APP_API_HOME');
+    }
 
     /**
-     * @api      {POST} /User/login 02.用户登录(ok)
+     * @api      {POST} /User/driverAuth  司机认证
+     * @apiName  driverAuth
+     * @apiGroup User
+     * @apiHeader {String} authorization-token           token.
+     * @apiParam {String} id           个人ID.
+     * @apiParam {String} real_name          真实姓名.
+     * @apiParam {String} sex        性别 1=男 2=女 0=未知.
+     * @apiParam {String} pushToken         消息推送token.
+     * @apiParam {String} identity         身份证号.
+     * @apiParam {String} hold_pic         手持身份证照.
+     * @apiParam {String} front_pic        身份证正面照.
+     * @apiParam {String} back_pic         身份证反面照.
+     */
+    public function driverAuth(){
+
+    }
+
+    /**
+     * @api      {POST} /User/carAuth  车辆认证
+     * @apiName  carAuth
+     * @apiGroup User
+     * @apiHeader {String} authorization-token           token.
+     * @apiParam {String} id                 个人ID.
+     * @apiParam {String} type               车型.
+     * @apiParam {String} length             车长.
+     * @apiParam {String} card_number        车牌号.
+     * @apiParam {String} policy_deadline    保单截止日期.
+     * @apiParam {String} license_deadline   行驶证截止日期.
+     * @apiParam {String} index_pic          车头和车牌号照片.
+     * @apiParam {String} vehicle_license_pic 行驶证照片
+     * @apiParam {String} driving_licence_pic 驾驶证照片
+     * @apiParam {String} operation_pic         营运证照片
+     */
+    public function carAuth(){
+
+    }
+    /**
+     * @api      {POST} /User/login 用户登录(ok)
      * @apiName  login
      * @apiGroup User
      * @apiParam {String} account           账号/手机号/邮箱.
@@ -40,7 +101,7 @@ class User extends BaseController{
     }
 
     /**
-     * @api      {POST} /User/resetPwd 03.重置密码(toto)
+     * @api      {POST} /User/resetPwd 重置密码(toto)
      * @apiName  resetPwd
      * @apiGroup User
      * @apiParam {String} account           账号/手机号/邮箱.
@@ -62,39 +123,16 @@ class User extends BaseController{
 
 
     /**
-     * @api      {GET} /user/info 04.获取用户信息(ok)
+     * @api      {GET} /user/info 获取用户信息(ok)
      * @apiName  info
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
      * @apiSuccess {Number} id                  id.
-     * @apiSuccess {String} bindMobile          绑定手机号.
-     * @apiSuccess {String} bindEmail           绑定邮箱.
+     * @apiSuccess {String} phone          绑定手机号.
      * @apiSuccess {Number} sex                 性别 1=男 2=女 0=未知.
      * @apiSuccess {String} avatar              头像.
-     * @apiSuccess {String} nickName            昵称.
-     * @apiSuccess {String} code                供应商编号.
-     * @apiSuccess {String} name                供应商名称.
-     * @apiSuccess {String} typeCode            主分类编码.
-     * @apiSuccess {String} typeName            主分类名称.
-     * @apiSuccess {String} taxCode             税号.
-     * @apiSuccess {String} foundDate           成立日期.
-     * @apiSuccess {String} taxRate             税率.
-     * @apiSuccess {String} mobile              电话.
-     * @apiSuccess {String} phone               手机.
-     * @apiSuccess {String} email               邮箱.
-     * @apiSuccess {String} fax                 传真.
-     * @apiSuccess {String} ctcName             联系人.
-     * @apiSuccess {String} address             地址.
-     * @apiSuccess {String} payWay              付款方式.
-     * @apiSuccess {String} comName             企业名称.
-     * @apiSuccess {String} purchCode           采购员工号.
-     * @apiSuccess {String} purchName           采购员工姓名.
-     * @apiSuccess {String} purchType           供应商采购属性.
-     * @apiSuccess {String} checkType           检验类型.
-     * @apiSuccess {String} checkRate           抽检比例.
-     * @apiSuccess {String} arvRate             到货率.
-     * @apiSuccess {String} passRate            合格率.
-     * @apiSuccess {String} creditLevel         信用等级.
+     * @apiSuccess {String} real_name            昵称.
+     * @apiSuccess {String} auth_status         认证状态（init=未认证，pass=认证通过，refuse=认证失败，delete=后台删除）
      */
 
     public function info(Request $request){
@@ -103,7 +141,7 @@ class User extends BaseController{
     }
 
     /**
-     * @api      {POST} /user/uploadAvatar 05.上传并修改头像(ok)
+     * @api      {POST} /user/uploadAvatar 上传并修改头像(ok)
      * @apiName  uploadAvatar
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
@@ -125,7 +163,7 @@ class User extends BaseController{
     }
 
     /**
-     * @api      {PUT} /user/updateInfo 06.更新用户信息(ok)
+     * @api      {PUT} /user/updateInfo 更新用户信息(ok)
      * @apiName  updateInfo
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
