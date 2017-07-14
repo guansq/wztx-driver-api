@@ -9,7 +9,7 @@
 namespace app\api\logic;
 
 use jwt\JwtHelper;
-
+use think\Db;
 class User extends BaseLogic{
 
     protected $table = 'atw_system_user';
@@ -267,12 +267,67 @@ class User extends BaseLogic{
     }
 
     /**
-     * Author: WILL<314112362@qq.com>
-     * Describe: TODO 计算用户信用等级
-     * @param $supInfo
+     * 用户注册 system_user_driver 插入记录，并插入到dr_base_info表
      */
-    public function getCreditLevel($supInfo){
-        return '优';
+    public function reg($params){
+
+
+            //启动事务
+            $now = time();
+            $systemUser = [];
+            $systemUser['salt'] = randomStr();//得到加密盐值
+            $systemUser['user_name'] = $params['user_name'];
+            $systemUser['mobile'] = $params['user_name'];
+            $systemUser['password'] = self::encryptPwdSalt($params['password'],$systemUser['salt']);
+            $systemUser['avatar'] = getSysconf('default_avatar');
+            $systemUser['push_token'] = $params['pushToken'];
+            $systemUser['last_login_time'] = $now;
+            $systemUser['create_at'] = $now;
+            $systemUser['update_at'] = $now;
+            //$this->create($systemUser);
+            $userId = Db::name('system_user_driver')->insertGetId($systemUser);//得到user_id
+            //map_id记录map_id
+            //$systemUser['user_id'] = $userId;
+            $baseUser = [];
+            if(isset($params['recomm_code']) && !empty($params['recomm_code'])){
+                $recomm_id = Db::name('dr_base_info')->where("recomm_code",$params['recomm_code'])->value('id');
+                if(!empty($recomm_id)){
+                    $baseUser['recomm_id'] = $recomm_id;
+                }
+            }
+
+            $baseUser['id'] = $userId;
+            $baseUser['user_id'] = $userId;
+            $baseUser['phone'] = $params['user_name'];
+            $baseUser['type'] = $params['type'];
+            $baseUser['avatar'] = $systemUser['avatar'];
+            $baseUser['create_at'] = $now;
+            $baseUser['update_at'] = $now;
+            $baseUser['recomm_code'] = randomStr(6);
+            if(isset($params['recom_code'])){
+                $baseUser['recom_code'] = $params['recom_code'];
+            }
+            $result = Db::name('dr_base_info')->insertGetId($baseUser);
+            Db::commit();
+        /*Db::startTrans();
+        try{}catch(\Exception $e){
+            Db::rollback();
+            return resultArray(4000, '注册失败');
+        }*/
+        $userObj = new \StdClass;
+        $userObj->last_login_time = $now;
+        $userObj->password = $systemUser['password'];
+        $userObj->salt = $systemUser['salt'];
+        $userObj->id = $userId;
+
+        $token = JwtHelper::encodeToken($userObj);
+        $ret = [
+            'userId' => $result,
+            'accessToken' => $token,
+            'refreshToken' => '没有哟~',
+            'expireTime' => $now + JwtHelper::DUE_TIME,
+        ];
+        return resultArray(2000, '', $ret);
     }
 
 

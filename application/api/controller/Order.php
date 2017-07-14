@@ -8,7 +8,7 @@
 namespace app\api\controller;
 
 class Order extends BaseController{
-    /**
+    /*
      * @api     {POST}  /order/showQuoteInfo        显示分配中的报价信息
      * @apiName showQuoteInfo
      * @apiGroup Order
@@ -39,6 +39,8 @@ class Order extends BaseController{
      * @apiSuccess {String} list.weight                  货物重量
      * @apiSuccess {String} list.goods_name              货物名称
      * @apiSuccess {String} list.price                   出价
+     * @apiSuccess {String} list.usecar_time             用车时间
+     * @apiSuccess {String} list.avatar                  头像
      * @apiSuccess {String} list.usecar_time             用车时间
      * @apiSuccess {String} list.status init 初始状态（未分发订单前）quote报价中（分发订单后）quoted已报价-未配送（装货中）distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成）pay_failed（支付失败）/pay_success（支付成功）comment（已评论）
      *

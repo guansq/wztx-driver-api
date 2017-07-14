@@ -115,19 +115,6 @@
     "title": "首页(ok)",
     "description": "<p>@apiName  home</p>",
     "group": "Index",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
     "success": {
       "fields": {
         "Success 200": [
@@ -172,13 +159,6 @@
             "optional": true,
             "field": "banners.title",
             "description": "<p>标题.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "unreadMsg",
-            "description": "<p>未读消息.</p>"
           }
         ]
       }
@@ -834,6 +814,13 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
+            "field": "list.avatar",
+            "description": "<p>头像</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
             "field": "list.status",
             "description": "<p>init 初始状态（未分发订单前）quote报价中（分发订单后）quoted已报价-未配送（装货中）distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成）pay_failed（支付失败）/pay_success（支付成功）comment（已评论）</p>"
           }
@@ -846,116 +833,6 @@
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.ruitukeji.com/order/listInfo"
-      }
-    ]
-  },
-  {
-    "type": "POST",
-    "url": "/order/showQuoteInfo",
-    "title": "显示分配中的报价信息",
-    "name": "showQuoteInfo",
-    "group": "Order",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "quote_id",
-            "description": "<p>报价ID</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "org_address_name",
-            "description": "<p>起始地</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "dest_address_name",
-            "description": "<p>目的地</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "org_send_name",
-            "description": "<p>寄件人姓名</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "org_phone",
-            "description": "<p>寄件人电话</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "org_address",
-            "description": "<p>寄件人地址</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "goods_name",
-            "description": "<p>货品名称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "weight",
-            "description": "<p>重量</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Float",
-            "optional": false,
-            "field": "system_price",
-            "description": "<p>系统价 保留2位小数点</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Float",
-            "optional": false,
-            "field": "mind_price",
-            "description": "<p>货主出价 保留2位小数点</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Order.php",
-    "groupTitle": "Order",
-    "sampleRequest": [
-      {
-        "url": "http://wztx.drv.api.ruitukeji.com/order/showQuoteInfo"
       }
     ]
   },
@@ -983,7 +860,7 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Float",
+            "type": "String",
             "optional": false,
             "field": "balance",
             "description": "<p>账户余额</p>"
@@ -997,7 +874,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Float",
+            "type": "String",
             "optional": false,
             "field": "pre_month_total_money",
             "description": "<p>上月累计金额</p>"
@@ -1011,14 +888,42 @@
           },
           {
             "group": "Success 200",
-            "type": "Float",
+            "type": "String",
             "optional": false,
-            "field": "year_total_money",
+            "field": "month_total_money",
             "description": "<p>本月累计金额</p>"
           },
           {
             "group": "Success 200",
-            "type": "Float",
+            "type": "String",
+            "optional": false,
+            "field": "year_total_money",
+            "description": "<p>年累计金额</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "uninvoicing_singular_total_order",
+            "description": "<p>累计未结账单数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "uninvoicing_singular_total_money",
+            "description": "<p>累计未结金额数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "withdrawal_money",
+            "description": "<p>可提现金额</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
             "optional": false,
             "field": "bonus",
             "description": "<p>我的推荐奖励</p>"
@@ -1059,7 +964,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Float",
+            "type": "String",
             "optional": false,
             "field": "real_amount",
             "description": "<p>充值金额</p>"
@@ -1112,6 +1017,47 @@
   },
   {
     "type": "POST",
+    "url": "/pay/showCashRecord",
+    "title": "提现记录",
+    "name": "showCashRecord",
+    "group": "Pay",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "list",
+            "description": "<p>提现记录</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pay.php",
+    "groupTitle": "Pay",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/pay/showCashRecord"
+      }
+    ]
+  },
+  {
+    "type": "POST",
     "url": "/pay/showPayRecord",
     "title": "查看账单",
     "name": "showPayRecord",
@@ -1145,6 +1091,13 @@
             "optional": false,
             "field": "list.order_id",
             "description": "<p>订单ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "list.is_pay",
+            "description": "<p>1为已支付   0为未支付</p>"
           },
           {
             "group": "Success 200",
@@ -1210,37 +1163,31 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Float",
+            "type": "String",
             "optional": false,
-            "field": "bond",
-            "description": "<p>保证金金额</p>"
+            "field": "withdrawal_amount",
+            "description": "<p>提现金额</p>"
           },
           {
             "group": "Parameter",
-            "type": "Int",
+            "type": "String",
             "optional": false,
-            "field": "pay_way",
-            "description": "<p>支付方式 1=支付宝，2=微信</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Int",
-            "optional": false,
-            "field": "pay_status",
-            "description": "<p>支付状态 0=未支付，1=支付成功，2=支付失败</p>"
+            "field": "bank_name",
+            "description": "<p>银行名称</p>"
           },
           {
-            "group": "Success 200",
-            "type": "Array",
+            "group": "Parameter",
+            "type": "String",
             "optional": false,
-            "field": "pay_info",
-            "description": "<p>支付返回信息</p>"
+            "field": "payment_account",
+            "description": "<p>收款账号</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "account_name",
+            "description": "<p>开户名</p>"
           }
         ]
       }
@@ -1400,130 +1347,6 @@
   },
   {
     "type": "GET",
-    "url": "/quote/quoteList",
-    "title": "司机报价列表",
-    "name": "quoteList",
-    "group": "Quote",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "org_short_name",
-            "description": "<p>起始地</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "dest_short_name",
-            "description": "<p>目的地</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "goods_name",
-            "description": "<p>货品名称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "weight",
-            "description": "<p>货品重量</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "system_price",
-            "description": "<p>系统出价</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "sp_price",
-            "description": "<p>货主出价</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "usecar_time",
-            "description": "<p>用车时间</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Quote.php",
-    "groupTitle": "Quote",
-    "sampleRequest": [
-      {
-        "url": "http://wztx.drv.api.ruitukeji.com/quote/quoteList"
-      }
-    ]
-  },
-  {
-    "type": "GET",
-    "url": "recommend/showMyRecommInfo",
-    "title": "显示我的推荐信息",
-    "name": "showMyRecommInfo",
-    "group": "Recommend",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "code",
-            "description": "<p>推荐码</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Recommend.php",
-    "groupTitle": "Recommend",
-    "sampleRequest": [
-      {
-        "url": "http://wztx.drv.api.ruitukeji.comrecommend/showMyRecommInfo"
-      }
-    ]
-  },
-  {
-    "type": "GET",
     "url": "recommend/showMyRecommList",
     "title": "显示我的推荐列表",
     "name": "showMyRecommList",
@@ -1658,13 +1481,6 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "id",
-            "description": "<p>个人ID.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
             "field": "type",
             "description": "<p>车型.</p>"
           },
@@ -1760,10 +1576,17 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": false,
             "field": "id",
             "description": "<p>个人ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "logistic_stype",
+            "description": "<p>物流类型 1：同城物流 2：长途物流</p>"
           },
           {
             "group": "Parameter",
@@ -1778,13 +1601,6 @@
             "optional": false,
             "field": "sex",
             "description": "<p>性别 1=男 2=女 0=未知.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "pushToken",
-            "description": "<p>消息推送token.</p>"
           },
           {
             "group": "Parameter",
@@ -1888,7 +1704,7 @@
             "type": "String",
             "optional": false,
             "field": "auth_status",
-            "description": "<p>认证状态（init=未认证，pass=认证通过，refuse=认证失败，delete=后台删除）</p>"
+            "description": "<p>认证状态（init=未认证， check=认证中，pass=认证通过，refuse=认证失败，delete=后台删除）</p>"
           }
         ]
       }
@@ -1899,6 +1715,34 @@
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.ruitukeji.com/user/info"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/User/isWork",
+    "title": "工作状态",
+    "name": "isWork",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/User/isWork"
       }
     ]
   },
@@ -1998,15 +1842,8 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "type",
-            "description": "<p>注册类型 person-个人 company-公司.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "phone",
-            "description": "<p>手机号.</p>"
+            "field": "user_name",
+            "description": "<p>手机号/用户名.</p>"
           },
           {
             "group": "Parameter",
@@ -2018,9 +1855,23 @@
           {
             "group": "Parameter",
             "type": "String",
+            "optional": false,
+            "field": "captcha",
+            "description": "<p>验证码.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
             "optional": true,
-            "field": "recommendcode",
+            "field": "recomm_code",
             "description": "<p>推荐码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pushToken",
+            "description": "<p>推送使用的Token</p>"
           }
         ]
       }
@@ -2097,10 +1948,10 @@
     ]
   },
   {
-    "type": "PUT",
-    "url": "/user/updateInfo",
-    "title": "更新用户信息(ok)",
-    "name": "updateInfo",
+    "type": "POST",
+    "url": "/User/updatePwd",
+    "title": "修改密码",
+    "name": "updatePwd",
     "group": "User",
     "header": {
       "fields": {
@@ -2120,31 +1971,24 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "sex",
-            "description": "<p>性别 1=男 2=女 0=未知.</p>"
+            "type": "String",
+            "optional": false,
+            "field": "old_password",
+            "description": "<p>加密的密码. 加密方式：MD5(&quot;RUITU&quot;+明文密码+&quot;KEJI&quot;).</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
-            "optional": true,
-            "field": "avatar",
-            "description": "<p>头像.</p>"
+            "optional": false,
+            "field": "new_password",
+            "description": "<p>加密的密码. 加密方式：MD5(&quot;RUITU&quot;+明文密码+&quot;KEJI&quot;).</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
-            "optional": true,
-            "field": "nickName",
-            "description": "<p>昵称.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "payWay",
-            "description": "<p>付款方式.</p>"
+            "optional": false,
+            "field": "repeat_password",
+            "description": "<p>重复密码.</p>"
           }
         ]
       }
@@ -2154,7 +1998,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/user/updateInfo"
+        "url": "http://wztx.drv.api.ruitukeji.com/User/updatePwd"
       }
     ]
   },

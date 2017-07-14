@@ -60,7 +60,6 @@ class Index extends BaseController{
      * @apiDescription
      * @apiName  home
      * @apiGroup Index
-     * @apiHeader {String} authorization-token           token.
      *
      * @apiSuccess {Array} banners        轮播图.
      * @apiSuccess {Number} banners.id      id.
@@ -68,7 +67,6 @@ class Index extends BaseController{
      * @apiSuccess {String} banners.link    跳转链接.
      * @apiSuccess {String} banners.img     图片.
      * @apiSuccess {String} [banners.title] 标题.
-     * @apiSuccess {Object} unreadMsg        未读消息.
      */
     public function home(){
         $banners = model('SystemBanner', 'logic')->getBannerList();

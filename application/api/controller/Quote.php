@@ -40,7 +40,7 @@ class Quote extends BaseController{
 
     }
 
-    /**
+    /*
      * @api {GET}   /quote/quoteList     司机报价列表
      * @apiName     quoteList
      * @apiGroup    Quote

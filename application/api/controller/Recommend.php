@@ -10,17 +10,7 @@ namespace app\api\controller;
 use think\Request;
 
 class Recommend extends BaseController{
-    /**
-     * @api {GET}   recommend/showMyRecommInfo      显示我的推荐信息
-     * @apiName     showMyRecommInfo
-     * @apiGroup    Recommend
-     * @apiHeader   {String}    authorization-token         token.
-     * @apiSuccess  {String}    code            推荐码
-     *
-     */
-    public function showMyRecommInfo(){
 
-    }
 
 
     /**

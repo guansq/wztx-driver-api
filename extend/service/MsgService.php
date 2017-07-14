@@ -23,7 +23,7 @@ namespace service;
  */
 class MsgService{
 
-    const RT_APP_KEY  = 'atw_wg';
+    const RT_APP_KEY  = 'wztx';
     const RT_MSG_HOME = 'http://pushmsg.ruitukeji.com';
 
     /**
