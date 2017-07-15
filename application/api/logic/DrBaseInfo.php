@@ -33,7 +33,7 @@ class DrBaseInfo extends BaseLogic{
      * Auther: guanshaoqiu <94600115@qq.com>
      * Describe:保存个人验证信息
      */
-    public function savePersonAuth($where,$data){
+    public function saveDriverAuth($where,$data){
         $ret = $this->where($where)->update($data);
         if($ret === false){
             return resultArray('4020', '更新失败');

@@ -48,6 +48,15 @@ class User extends BaseLogic{
         return $pwd = sha1("THE{$salt}DAO{$pwd}");
     }
 
+    /**
+     * Auther: guanshaoqiu <94600115@qq.com>
+     * Describe:得到认证状态
+     */
+    public function getAuthStatus($user_id){
+        return $this->where("user_id",$user_id)->value('auth_status');
+    }
+
+
 
     /**
      * Author: WILL<314112362@qq.com>

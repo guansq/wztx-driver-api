@@ -2,22 +2,9 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/car/getAllCarStyle",
-    "title": "获取车辆车长信息以及车型",
+    "title": "获取车辆车长信息以及车型done",
     "name": "getAllCarStyle",
     "group": "Car",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
     "success": {
       "fields": {
         "Success 200": [
@@ -25,22 +12,64 @@ define({ "api": [
             "group": "Success 200",
             "type": "Array",
             "optional": false,
-            "field": "list",
-            "description": "<p>车辆信息数组</p>"
+            "field": "length",
+            "description": "<p>车长数组</p>"
           },
           {
             "group": "Success 200",
             "type": "Array",
             "optional": false,
-            "field": "list.length",
-            "description": "<p>车辆长度信息数组</p>"
+            "field": "type",
+            "description": "<p>车型数组</p>"
           },
           {
             "group": "Success 200",
-            "type": "Array",
+            "type": "String",
             "optional": false,
-            "field": "list.type",
-            "description": "<p>车辆类型信息数组</p>"
+            "field": "length-type.name",
+            "description": "<p>名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "length-type.type",
+            "description": "<p>1=车型，2=车长</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "length-type.status",
+            "description": "<p>0=正常，1=删除</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "length-type.over_metres_price",
+            "description": "<p>超出起步公里费</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "length-type.weight_price",
+            "description": "<p>计重费</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "length-type.init_kilometres",
+            "description": "<p>起步公里数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "length-type.init_price",
+            "description": "<p>车长-起步价</p>"
           }
         ]
       }
@@ -106,6 +135,60 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.ruitukeji.com/car/getOneCarStyle"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/file/uploadImg",
+    "title": "上传图片done",
+    "name": "uploadImg",
+    "group": "File",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Image",
+            "optional": false,
+            "field": "file",
+            "description": "<p>上传的文件 最大5M 支持'jpg', 'gif', 'png', 'jpeg'</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "url",
+            "description": "<p>下载链接(绝对路径)</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/File.php",
+    "groupTitle": "File",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/file/uploadImg"
       }
     ]
   },
@@ -1481,8 +1564,15 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "type",
+            "field": "car_type",
             "description": "<p>车型.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "car_style_type_id",
+            "description": "<p>车型ID.</p>"
           },
           {
             "group": "Parameter",
@@ -1578,14 +1668,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "id",
-            "description": "<p>个人ID.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "logistic_stype",
+            "field": "logistics_type",
             "description": "<p>物流类型 1：同城物流 2：长途物流</p>"
           },
           {

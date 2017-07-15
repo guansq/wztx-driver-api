@@ -9,16 +9,24 @@ namespace app\api\controller;
 
 class Car extends BaseController{
     /**
-     * @api     {GET} /car/getAllCarStyle       获取车辆车长信息以及车型
+     * @api     {GET} /car/getAllCarStyle       获取车辆车长信息以及车型done
      * @apiName     getAllCarStyle
      * @apiGroup    Car
-     * @apiHeader   {String} authorization-token           token.
-     * @apiSuccess  {Array}  list                          车辆信息数组
-     * @apiSuccess  {Array}  list.length                   车辆长度信息数组
-     * @apiSuccess  {Array}  list.type                     车辆类型信息数组
+     * @apiSuccess  {Array}  length                 车长数组
+     * @apiSuccess  {Array}  type                   车型数组
+     * @apiSuccess  {String} length-type.name                   名称
+     * @apiSuccess  {Number} length-type.type                   1=车型，2=车长
+     * @apiSuccess  {Number} length-type.status                 0=正常，1=删除
+     * @apiSuccess  {String} length-type.over_metres_price      超出起步公里费
+     * @apiSuccess  {String} length-type.weight_price           计重费
+     * @apiSuccess  {String} length-type.init_kilometres        起步公里数
+     * @apiSuccess  {String} length-type.init_price             车长-起步价
      */
     public function getAllCarStyle(){
 
+        //dump($paramAll);die;
+        $result = model('Car','logic')->getCarInfo();
+        returnJson($result);
     }
 
     /**

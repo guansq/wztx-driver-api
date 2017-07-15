@@ -37,6 +37,7 @@ class BaseController extends Controller{
         $except_controller = [
             "User" => ["login", "reg", "test", "forget",'computeQlfScore'],
             "Index" => ["apiCode", 'lastApk', 'appConfig', 'sendCaptcha'],
+            "Car" => ['getallcarstyle'],
         ];
 
         if(!array_key_exists($this->controller, $except_controller) || !in_array($this->action, $except_controller[$this->controller])){

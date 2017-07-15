@@ -10,6 +10,7 @@ namespace app\api\controller;
 
 use think\Request;
 use service\MsgService;
+use service\MapService;
 
 class User extends BaseController{
 
@@ -57,17 +58,46 @@ class User extends BaseController{
      * @apiName  driverAuth
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
-     * @apiParam {Number} id           个人ID.
-     * @apiParam {Number} logistic_stype         物流类型 1：同城物流 2：长途物流
+     * @apiParam {Number} logistics_type         物流类型 1：同城物流 2：长途物流
      * @apiParam {String} real_name          真实姓名.
      * @apiParam {String} sex        性别 1=男 2=女 0=未知.
      * @apiParam {String} identity         身份证号.
      * @apiParam {String} hold_pic         手持身份证照.
      * @apiParam {String} front_pic        身份证正面照.
      * @apiParam {String} back_pic         身份证反面照.
+     *
      */
     public function driverAuth(){
+        //校验参数
+        $paramAll = $this->getReqParams(['logistics_type','real_name','sex', 'identity', 'hold_pic', 'front_pic','back_pic']);
+        $rule = [
+            'logistics_type' => ['require','regex'=>'/^(1|2)$/'],
+            'real_name' => 'require|max:10',
+            'sex' => ['require','regex'=>'/^(0|1|2)$/'],
+            'identity' =>['require','regex'=>'/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/'],
+            'hold_pic' =>'require',
+            'front_pic' =>'require',
+            'back_pic' =>'require',
+        ];
+        validateData($paramAll, $rule);
+        //查看验证状态为init才可以进行验证
+        $drBaseInfoLogic = model('DrBaseInfo','logic');
+        $authStatus = $drBaseInfoLogic->getAuthStatus($this->loginUser['id']);
+        if($authStatus != 'init'){
+            $ret = [
+                'code' => '4022',
+                'msg' => '状态不合法',
+                'result' => ['auth_status'=>$authStatus]
+            ];
+            returnJson($ret);
+        }
+        //验证信息入库更改状态为check
 
+        $where = [
+            'id' => $this->loginUser['id']
+        ];
+        $result = $drBaseInfoLogic->saveDriverAuth($where,$paramAll);
+        returnJson($result);
     }
 
     /**
@@ -75,7 +105,11 @@ class User extends BaseController{
      * @apiName  carAuth
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
-     * @apiParam {String} type               车型.
+     * @apiParam {String} car_type               车型.
+     * @apiParam {String} car_style_type_id               车型ID.
+     *
+     * @apiParam {String} car_style_type_id               车长.
+     *
      * @apiParam {String} length             车长.
      * @apiParam {String} card_number        车牌号.
      * @apiParam {String} policy_deadline    保单截止日期.
@@ -87,6 +121,9 @@ class User extends BaseController{
      */
     public function carAuth(){
 
+        $paramAll['auth_status'] = 'check';//待认证
+        //MapService::saveMapData($this->loginUser['user_name'],$paramAll['location']);
+        dump($this->loginUser);die;//当前坐标.  104.394729,31.125698
     }
     /**
      * @api      {POST} /User/login 用户登录done
