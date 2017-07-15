@@ -12,10 +12,10 @@ use Firebase\JWT\JWT;
 use think\Db;
 
 class JwtHelper{
-    const JWT_KEY         = "JWT_KEY_ATW";
-    const JWT_SIGN_KEY    = "SIGN_KEY_ATW";
+    const JWT_KEY         = "JWT_KEY_WZTX";
+    const JWT_SIGN_KEY    = "SIGN_KEY_WZTX";
     const DUE_TIME        = 60*60*24*365;  //token 有效期
-    const USER_TABLE_NAME = 'atw_system_user';  //用户表名
+    const USER_TABLE_NAME = 'rt_system_user_driver';  //用户表名
 
     public static function encodeToken($loginUser){
 

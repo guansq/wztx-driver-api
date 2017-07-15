@@ -33,43 +33,26 @@ class BaseController extends Controller{
      * token检测
      */
     public function tokenGrantCheck(){
-
         //不需要token验证的控制器方法
         $except_controller = [
-            "User" => ["login", "reg", "forget",'computeQlfScore'],
+            "User" => ["login", "reg", "test", "forget",'computeQlfScore'],
             "Index" => ["apiCode", 'lastApk', 'appConfig', 'sendCaptcha'],
-            "U9Api" => [
-                'initU9Data',
-                'syncAll',
-                "initSupplier",
-                "syncSupplier",
-                'initItem',
-                'syncItem',
-                'syncItemTrade',
-                'syncSupItem',
-                'syncPr',
-                'initPr',
-                'prToInquiry',
-                'evaluateBid',
-                'ioToPo',
-                'syncPOState',
-                'placeOrder'
-            ]
         ];
 
         if(!array_key_exists($this->controller, $except_controller) || !in_array($this->action, $except_controller[$this->controller])){
             $token = request()->header('authorization-token', '');
             if(empty($token)){
-                returnJson(4011);
+                //returnJson(4011);
             }
+
             $this->loginUser = JwtHelper::checkToken($token);
 
-            $supplierInfo = model('SupplierInfo', 'logic')->findBySupId($this->loginUser['id']);
+            $drBaseInfo = model('DrBaseInfo', 'logic')->findInfoByUserId($this->loginUser['id']);
+
             if(empty($supplierInfo)){
-                returnJson(4011);
+                //returnJson(4011);
             }
-            $this->loginUser['sup_code'] = $supplierInfo['code'];
-            $this->loginUser['sup_name'] = $supplierInfo['name'];
+            $this->loginUser['type'] = $drBaseInfo['type'];
         }
     }
 

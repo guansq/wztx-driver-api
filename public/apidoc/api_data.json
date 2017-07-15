@@ -1749,7 +1749,7 @@
   {
     "type": "POST",
     "url": "/User/login",
-    "title": "用户登录(ok)",
+    "title": "用户登录done",
     "name": "login",
     "group": "User",
     "parameter": {
@@ -1832,7 +1832,7 @@
   {
     "type": "POST",
     "url": "/User/reg",
-    "title": "用户注册",
+    "title": "用户注册done",
     "name": "reg",
     "group": "User",
     "parameter": {
@@ -1907,8 +1907,8 @@
   },
   {
     "type": "POST",
-    "url": "/User/resetPwd",
-    "title": "重置密码(toto)",
+    "url": "/User/forget",
+    "title": "重置密码done",
     "name": "resetPwd",
     "group": "User",
     "parameter": {
@@ -1925,7 +1925,7 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "password",
+            "field": "new_password",
             "description": "<p>加密的密码. 加密方式：MD5(&quot;RUITU&quot;+明文密码+&quot;KEJI&quot;).</p>"
           },
           {
@@ -1943,14 +1943,14 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/User/resetPwd"
+        "url": "http://wztx.drv.api.ruitukeji.com/User/forget"
       }
     ]
   },
   {
     "type": "POST",
     "url": "/User/updatePwd",
-    "title": "修改密码",
+    "title": "修改密码done",
     "name": "updatePwd",
     "group": "User",
     "header": {

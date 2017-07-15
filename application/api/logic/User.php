@@ -12,7 +12,7 @@ use jwt\JwtHelper;
 use think\Db;
 class User extends BaseLogic{
 
-    protected $table = 'atw_system_user';
+    protected $table = 'rt_system_user_driver';
 
     /**
      * Author: WILL<314112362@qq.com>
@@ -243,7 +243,7 @@ class User extends BaseLogic{
      * @param $account
      */
     private function findByAccount($account){
-        return $this->where(['user_name' => $account])->find();
+        return $this->alias('a')->field('a.*,b.real_name')->join('sp_base_info b','a.user_name = b.phone','LEFT')->where(['a.user_name' => $account])->find();
     }
 
     /**
@@ -271,7 +271,8 @@ class User extends BaseLogic{
      */
     public function reg($params){
 
-
+        Db::startTrans();
+        try{
             //启动事务
             $now = time();
             $systemUser = [];
@@ -305,15 +306,14 @@ class User extends BaseLogic{
             $baseUser['update_at'] = $now;
             $baseUser['recomm_code'] = randomStr(6);
             if(isset($params['recom_code'])){
-                $baseUser['recom_code'] = $params['recom_code'];
+                $baseUser['recomm_id'] = getBaseIdByRecommCode($params['recom_code']);//写入推荐人ID进数据库
             }
             $result = Db::name('dr_base_info')->insertGetId($baseUser);
             Db::commit();
-        /*Db::startTrans();
-        try{}catch(\Exception $e){
+        }catch(\Exception $e){
             Db::rollback();
             return resultArray(4000, '注册失败');
-        }*/
+        }
         $userObj = new \StdClass;
         $userObj->last_login_time = $now;
         $userObj->password = $systemUser['password'];
@@ -328,6 +328,44 @@ class User extends BaseLogic{
             'expireTime' => $now + JwtHelper::DUE_TIME,
         ];
         return resultArray(2000, '', $ret);
+    }
+
+    /**
+     * Auther: guanshaoqiu <94600115@qq.com>
+     * Describe:修改个人密码
+     */
+    public function resetPwd($userInfo,$params){
+
+        if(!is_array($userInfo)){
+            $account = $userInfo;
+        }else{
+            $account = $userInfo['user_name'];
+        }
+
+        $loginUser = $this->findByAccount($account);
+
+        if(empty($loginUser)){
+            return resultArray(4014);
+        }
+        if(is_array($userInfo)){//存在数组 是修改密码 不存在则是重置密码
+            // 校验密码
+            $ret = $this->checkPassword($loginUser, $params['old_password']);
+            if(!$ret){
+                return resultArray(4014);
+            }
+        }
+
+        $salt = randomStr();
+        $newPwd = self::encryptPwdSalt($params['new_password'],$salt);
+        $data = [
+            'password' => $newPwd,
+            'salt' => $salt
+        ];
+        $result = $this->where("id",$loginUser['id'])->update($data);
+        if($result !== false){
+            return resultArray('2000','更改成功');
+        }
+        return resultArray('4020','更改失败');
     }
 
 

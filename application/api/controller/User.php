@@ -14,7 +14,7 @@ use service\MsgService;
 class User extends BaseController{
 
     /**
-     * @api     {POST} /User/reg            用户注册
+     * @api     {POST} /User/reg            用户注册done
      * @apiName   reg
      * @apiGroup  User
      * @apiParam {String} user_name             手机号/用户名.
@@ -44,7 +44,6 @@ class User extends BaseController{
         //进行注册
         $userLogic = model('User','logic');
         $result = $userLogic->reg($paramAll);
-        dump($result);die;
         //$userLogic
         if($result === false){
             returnJson(['4020','注册失败',[]]);
@@ -90,7 +89,7 @@ class User extends BaseController{
 
     }
     /**
-     * @api      {POST} /User/login 用户登录(ok)
+     * @api      {POST} /User/login 用户登录done
      * @apiName  login
      * @apiGroup User
      * @apiParam {String} account           账号/手机号/邮箱.
@@ -116,24 +115,31 @@ class User extends BaseController{
     }
 
     /**
-     * @api      {POST} /User/resetPwd 重置密码(toto)
+     * @api      {POST} /User/forget   重置密码done
      * @apiName  resetPwd
      * @apiGroup User
      * @apiParam {String} account           账号/手机号/邮箱.
-     * @apiParam {String} password          加密的密码. 加密方式：MD5("RUITU"+明文密码+"KEJI").
+     * @apiParam {String} new_password          加密的密码. 加密方式：MD5("RUITU"+明文密码+"KEJI").
      * @apiParam {String} captcha           验证码.
      */
-    public function resetPwd(Request $request){
+    public function forget(Request $request){
         //校验参数
-        $paramAll = $this->getReqParams(['account', 'password', 'captcha']);
+        $paramAll = $this->getReqParams(['account', 'new_password', 'captcha']);
         $rule = [
-            'account' => 'require|max:32',
-            'password' => 'require|length:6,128',
+            'account' => ['regex'=>'/^[1]{1}[3|5|7|8]{1}[0-9]{9}$/','require'],
+            'new_password' => 'require|length:6,128',
             'captcha' => 'require|length:4,8',
         ];
         validateData($paramAll, $rule);
-        $loginRet = \think\Loader::model('User', 'logic')->login($paramAll);
-        returnJson($loginRet);
+        //校验验证码
+        $result = MsgService::verifyCaptcha($paramAll['account'],'resetpwd',$paramAll['captcha']);
+        if($result['code'] != 2000){
+            returnJson($result);
+        }
+        $userLogic = model('User','logic');
+
+        $ret = $userLogic->resetPwd($paramAll['account'],$paramAll);
+        returnJson($ret);
     }
 
 
@@ -178,7 +184,7 @@ class User extends BaseController{
     }
 
     /**
-     * @api      {POST} /User/updatePwd   修改密码
+     * @api      {POST} /User/updatePwd   修改密码done
      * @apiName  updatePwd
      * @apiGroup User
      * @apiHeader {String}  authorization-token     token.
@@ -213,6 +219,5 @@ class User extends BaseController{
     public function isWork(){
 
     }
-
 
 }

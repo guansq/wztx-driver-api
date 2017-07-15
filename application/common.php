@@ -306,3 +306,43 @@ function randomNum($len = 4){
     }
     return $outputstr;
 }
+/*
+ * 时间的处理
+ */
+function wztxDate($time){
+    if(empty($time)){
+        return $time;
+    }
+    return date('Y-m-d H:i:s',$time);
+}
+
+/*
+ * 金钱的处理-->统一后两位小数点
+ */
+function wztxMoney($num,$ispre = false){
+    $num = $num > 0 ? $num : 0;
+    //number_format(10000, 2, '.', '')
+    $formattedNum = number_format($num, 2,'.', '') ;
+    if($ispre){
+        return '¥'.$formattedNum;
+    }else{
+        return $formattedNum;
+    }
+}
+
+/*
+ * 计算系统价格
+ */
+function accountSystemPrice(){
+
+}
+
+/*
+ * 通过推荐码得到推荐人ID
+ */
+function getBaseIdByRecommCode($recommCode){
+    if(!empty($recommCode)){
+            return Db::name('dr_base_info')->where("recomm_code",$recommCode)->value('id');
+    }
+    return '';
+}
