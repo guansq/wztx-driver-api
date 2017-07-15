@@ -105,19 +105,26 @@ class User extends BaseController{
      * @apiName  carAuth
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
-     * @apiParam {String} car_type               车型.
-     * @apiParam {String} car_style_type_id               车型ID.
-     *
-     * @apiParam {String} car_style_type_id               车长.
-     *
-     * @apiParam {String} length             车长.
-     * @apiParam {String} card_number        车牌号.
-     * @apiParam {String} policy_deadline    保单截止日期.
-     * @apiParam {String} license_deadline   行驶证截止日期.
-     * @apiParam {String} index_pic          车头和车牌号照片.
-     * @apiParam {String} vehicle_license_pic 行驶证照片
-     * @apiParam {String} driving_licence_pic 驾驶证照片
-     * @apiParam {String} operation_pic         营运证照片
+     * @apiParam {String} car_type                       车型.
+     * @apiParam {String} car_style_type_id              车型ID.
+     * @apiParam {String} car_style_length               车长.
+     * @apiParam {String} car_style_length_id            车长ID.
+     * @apiParam {String} weight                         载重.
+     * @apiParam {String} volume                         可载体积.
+     * @apiParam {String} card_number                    车牌号码.
+     * @apiParam {String} policy_pic                     保险单照片.
+     * @apiParam {String} policy_startline               保单开始时间.
+     * @apiParam {String} policy_deadline                保单截止时间.
+     * @apiParam {String} license_startline              行驶证开始时间.
+     * @apiParam {String} license_deadline               行驶证截止时间.
+     * @apiParam {String} operation_startline            营运证开始日期.
+     * @apiParam {String} operation_deadline             营运证截止日期.
+     * @apiParam {String} driving_startline              驾驶证开始日期.
+     * @apiParam {String} driving_deadline               驾驶证截止日期.
+     * @apiParam {String} index_pic                      车头和车牌号照片.
+     * @apiParam {String} vehicle_license_pic            行驶证照片.
+     * @apiParam {String} driving_licence_pic            驾驶证照片.
+     * @apiParam {String} operation_pic                  营运证照片.
      */
     public function carAuth(){
 
