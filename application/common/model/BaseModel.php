@@ -20,6 +20,14 @@ class BaseModel extends Model{
         return parent::save($data, $where, $sequence);
     }
 
+    public function insertGetId($data = [], $where = [], $sequence = null){
+        if(!$this->isUpdate && !$where){
+            $data['create_at'] = time();
+        }
+        $data['update_at'] = time();
+        return parent::save($data, $where, $sequence);
+    }
+
     public static function update($data = [], $where = [], $field = null){
         $data['update_at'] = time();
         return parent::update($data, $where, $field);

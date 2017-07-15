@@ -31,7 +31,7 @@ class Index extends BaseController{
     }
 
     /**
-     * @api      {GET} /appConfig 应用配置参数(OK)
+     * @api      {GET} /appConfig 应用配置参数done
      * @apiName  appConfig
      * @apiGroup Index
      * @apiSuccess {Array} payWays             付款方式 一维数组
@@ -87,7 +87,7 @@ class Index extends BaseController{
     }
 
     /**
-     * @api      {POST} /index/sendCaptcha 发送验证码(ok)
+     * @api      {POST} /index/sendCaptcha 发送验证码done
      * @apiName  sendCaptcha
      * @apiGroup Index
      * @apiParam {String} mobile   手机号.

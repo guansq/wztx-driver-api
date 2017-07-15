@@ -107,7 +107,7 @@ class User extends BaseController{
      * @apiHeader {String} authorization-token           token.
      * @apiParam {String} car_type                       车型.
      * @apiParam {String} car_style_type_id              车型ID.
-     * @apiParam {String} car_style_length               车长.
+     * @apiParam {String} car_length                     车长.
      * @apiParam {String} car_style_length_id            车长ID.
      * @apiParam {String} weight                         载重.
      * @apiParam {String} volume                         可载体积.
@@ -127,10 +127,65 @@ class User extends BaseController{
      * @apiParam {String} operation_pic                  营运证照片.
      */
     public function carAuth(){
-
+        //校验参数
+        $paramAll = $this->getReqParams(['car_type',
+            'car_style_type_id',
+            'car_length',
+            'car_style_length_id',
+            'weight',
+            'volume',
+            'card_number',
+            'policy_pic',
+            'policy_startline',
+            'policy_deadline',
+            'license_startline',
+            'license_deadline',
+            'driving_startline',
+            'driving_deadline',
+            'index_pic',
+            'vehicle_license_pic',
+            'driving_licence_pic',
+            'operation_pic'
+        ]);
+        $rule = ['car_type' => 'require|max:50',
+            'car_style_type_id' => 'require|max:20',
+            'car_length' => 'require|max:50',
+            'car_style_length_id' => 'require|max:20',
+            'weight' => 'require|max:50',
+            'volume' => 'require|max:50',
+            'card_number' => 'require|max:20',
+            'policy_pic' => 'require|max:200',
+            'policy_startline' => 'require|max:100',
+            'policy_deadline' => 'require|max:100|gt:policy_startline',
+            'license_startline' => 'require|max:100',
+            'license_deadline' => 'require|max:100|gt:license_startline',
+            'driving_startline' => 'require|max:100',
+            'driving_deadline' => 'require|max:100|gt:driving_startline',
+            'index_pic' => 'require|max:200',
+            'vehicle_license_pic' => 'require|max:200',
+            'driving_licence_pic' => 'require|max:200',
+            'operation_pic' => 'require|max:200'
+        ];
+        //validateData($paramAll,$rule);
         $paramAll['auth_status'] = 'check';//待认证
-        //MapService::saveMapData($this->loginUser['user_name'],$paramAll['location']);
-        dump($this->loginUser);die;//当前坐标.  104.394729,31.125698
+        $mapInfo = [
+            '_name' => $this->loginUser['id'],
+            '_location' => '116.480881,39.989410',
+            'car_length' => $paramAll['car_length'],
+            'car_type' => $paramAll['car_type'],
+            'card_number' => $paramAll['card_number']
+        ];
+        $map_code = MapService::saveMapData($mapInfo);//当前坐标.  104.394729,31.125698
+        $carinfoAuthLogic = model('CarinfoAuth','logic');
+
+        $carinfoAuthLogic->saveCarAuth($paramAll);
+        $where = [
+            'id' => $this->loginUser['id']
+        ];
+        $carId = $carinfoAuthLogic->saveCarAuth($where,$paramAll);
+        $drBaseInfoLogic = model('DrBaseInfo','logic');
+        $drBaseInfoLogic->saveDriverAuth(['id',$this->loginUser['id']],['','']);
+        //returnJson($result);
     }
     /**
      * @api      {POST} /User/login 用户登录done

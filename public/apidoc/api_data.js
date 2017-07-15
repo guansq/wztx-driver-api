@@ -139,60 +139,6 @@ define({ "api": [
     ]
   },
   {
-    "type": "POST",
-    "url": "/file/uploadImg",
-    "title": "上传图片done",
-    "name": "uploadImg",
-    "group": "File",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Image",
-            "optional": false,
-            "field": "file",
-            "description": "<p>上传的文件 最大5M 支持'jpg', 'gif', 'png', 'jpeg'</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "url",
-            "description": "<p>下载链接(绝对路径)</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/File.php",
-    "groupTitle": "File",
-    "sampleRequest": [
-      {
-        "url": "http://wztx.drv.api.ruitukeji.com/file/uploadImg"
-      }
-    ]
-  },
-  {
     "type": "GET",
     "url": "/index/home",
     "title": "首页(ok)",
@@ -275,7 +221,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/appConfig",
-    "title": "应用配置参数(OK)",
+    "title": "应用配置参数done",
     "name": "appConfig",
     "group": "Index",
     "success": {
@@ -352,7 +298,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/index/sendCaptcha",
-    "title": "发送验证码(ok)",
+    "title": "发送验证码done",
     "name": "sendCaptcha",
     "group": "Index",
     "parameter": {
@@ -1578,7 +1524,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "car_style_length",
+            "field": "car_length",
             "description": "<p>车长.</p>"
           },
           {

@@ -19,17 +19,11 @@ class MapService{
      * http://yuntuapi.amap.com/datamanage/data/create
      * ['location','car_length','car_type','car_number']
      */
-    public static function saveMapData($name,$location){
+    public static function saveMapData($mapInfo){
         $data = [
             'key' => getSysconf('map_key'),
             'tableid' => getSysconf('map_table_id'),
-            'data' => json_encode([
-                '_name' => $name,
-                '_location' => $location,
-                'car_length' => '100米',
-                'car_type' => '长板',
-                'car_number' => '苏E11111',
-            ])
+            'data' => json_encode($mapInfo)
         ];
         //dump(http_build_query($data));die;
         //echo json_encode($data);die;
@@ -42,11 +36,10 @@ class MapService{
         if(empty($ret)){
             return resultArray(6000,'',$httpRet);
         }
-        dump($ret);die;
-        if($ret['']){
-
+        if($ret['infocode'] == 10000){
+            return $ret['_id'];
+        }else{
+            returnJson(6000,$ret['infocode'],$ret);
         }
-        //status info _id
-        return resultArray($ret);
     }
 }
