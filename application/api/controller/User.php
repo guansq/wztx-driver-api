@@ -206,13 +206,13 @@ class User extends BaseController{
     }
 
     /**
-     * @api      {POST} /user/uploadAvatar 上传并修改头像(ok)
+     * @api      {POST} /user/uploadAvatar 上传并修改头像done
      * @apiName  uploadAvatar
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
-     * @apiParam {Image} file       上传的文件 最大5M 支持'jpg', 'gif', 'png', 'jpeg'
-     * @apiParam {Number} [retType=json]   返回数据格式 默认=json  jsonp
-     * @apiSuccess {String} url  下载链接(绝对路径)
+     * @apiParam  {Image} file              上传的文件 最大5M 支持'jpg', 'gif', 'png', 'jpeg'
+     * @apiParam  {Number} [retType=json]   返回数据格式 默认=json  jsonp
+     * @apiSuccess {String} url             下载链接(绝对路径)
      */
     public function uploadAvatar(){
         $file = $this->request->file('file');

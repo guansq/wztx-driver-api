@@ -211,6 +211,7 @@ class User extends BaseLogic{
             return resultArray($ossRet);
         }
         $dbRet = $this->where('id', $loginUser['id'])->update(['avatar' => $ossRet['result']['file']['url']]);
+        Db::name('dr_base_info')->where('id', $loginUser['id'])->update(['avatar' => $ossRet['result']['file']['url']]);
         if(!$dbRet){
             return resultArray(5000);
         }

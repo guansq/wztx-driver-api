@@ -2158,7 +2158,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/user/uploadAvatar",
-    "title": "上传并修改头像(ok)",
+    "title": "上传并修改头像done",
     "name": "uploadAvatar",
     "group": "User",
     "header": {
