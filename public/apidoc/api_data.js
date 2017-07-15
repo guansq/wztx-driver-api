@@ -1715,7 +1715,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/User/driverAuth",
-    "title": "司机认证",
+    "title": "司机认证done",
     "name": "driverAuth",
     "group": "User",
     "header": {

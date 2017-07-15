@@ -54,7 +54,7 @@ class User extends BaseController{
     }
 
     /**
-     * @api      {POST} /User/driverAuth  司机认证
+     * @api      {POST} /User/driverAuth  司机认证done
      * @apiName  driverAuth
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
