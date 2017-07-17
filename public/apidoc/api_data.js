@@ -1798,7 +1798,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/user/info",
-    "title": "获取用户信息(ok)",
+    "title": "获取用户信息done",
     "name": "info",
     "group": "User",
     "header": {

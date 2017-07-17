@@ -246,7 +246,7 @@ class User extends BaseController{
 
 
     /**
-     * @api      {GET} /user/info 获取用户信息(ok)
+     * @api      {GET} /user/info 获取用户信息done
      * @apiName  info
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
@@ -259,8 +259,11 @@ class User extends BaseController{
      */
 
     public function info(Request $request){
-        $ret = model('User', 'logic')->getInfo($this->loginUser);
-        returnJson($ret);
+        $ret = model('DrBaseInfo', 'logic')->findInfoByUserId($this->loginUser['id']);
+        if($ret !== false){
+            returnJson(2000,'成功',$ret);
+        }
+        returnJson(4000,'获取数据失败');
     }
 
     /**
