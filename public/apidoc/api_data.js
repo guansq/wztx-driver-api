@@ -1541,7 +1541,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/User/carAuth",
-    "title": "车辆认证",
+    "title": "车辆认证done",
     "name": "carAuth",
     "group": "User",
     "header": {

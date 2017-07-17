@@ -56,6 +56,9 @@ class MsgService{
         if(empty($ret)){
             return resultArray(6000,'',$httpRet);
         }
+        if($ret['msg'] == '手机号码个数错'){
+            $ret['msg'] = '手机号码错误';
+        }
         return resultArray($ret);
     }
 

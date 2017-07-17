@@ -101,7 +101,7 @@ class User extends BaseController{
     }
 
     /**
-     * @api      {POST} /User/carAuth  车辆认证
+     * @api      {POST} /User/carAuth  车辆认证done
      * @apiName  carAuth
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
@@ -177,16 +177,18 @@ class User extends BaseController{
         ];
         $map_code = MapService::saveMapData($mapInfo);//当前坐标.  104.394729,31.125698
         $carinfoAuthLogic = model('CarinfoAuth','logic');
-
-        $carinfoAuthLogic->saveCarAuth($paramAll);
         $where = [
             'id' => $this->loginUser['id']
         ];
-        $carId = $carinfoAuthLogic->saveCarAuth($where,$paramAll);
+        $carId = $carinfoAuthLogic->saveCarAuth($paramAll);
         $drBaseInfoLogic = model('DrBaseInfo','logic');
-        //$drBaseInfoLogic->saveDriverAuth(['id',$this->loginUser['id']],['','']);
-
-        //returnJson($result);
+        $data = [
+            'car_id'=>$carId,
+            'map_code'=>$map_code,
+            'auth_status'=>'check'
+        ];
+        $result = $drBaseInfoLogic->saveDriverAuth($where,$data);
+        returnJson($result);
     }
     /**
      * @api      {POST} /User/login 用户登录done

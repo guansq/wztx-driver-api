@@ -13,11 +13,11 @@ class CarinfoAuth extends BaseLogic{
      * Auther: guanshaoqiu <94600115@qq.com>
      * Describe:保存车辆验证信息 并获得车辆验证ID
      */
-    public function saveCarAuth($where,$data){
-        $id = $this->where($where)->insertGetId($data);
-        if($id === false){
+    public function saveCarAuth($data){
+        $ret = $this->allowField(true)->save($data);
+        if($ret === false){
             returnJson('4020', '更新失败');
         }
-        return $id;
+        return $this->getLastInsID();
     }
 }
