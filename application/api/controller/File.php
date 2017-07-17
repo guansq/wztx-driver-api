@@ -8,29 +8,23 @@
 namespace app\api\controller;
 
 class File extends BaseController{
-    // 上传文件 php 5.5
-    function uploadFile(\think\File $file){
+    /**
+     * @api      {POST} /file/uploadImg  上传图片done
+     * @apiName  uploadImg
+     * @apiGroup File
+     * @apiHeader {String} authorization-token           token.
+     * @apiParam {Image} file    上传的文件 最大5M 支持'jpg', 'gif', 'png', 'jpeg'
+     * @apiSuccess {String} url  下载链接(绝对路径)
+     */
+    public function uploadImg(){
+        $file = $this->request->file('file');
 
-        //$info = $file->move('/tmp','wztx_tmp_avatar.png');
-        $info = $file->move(ROOT_PATH . 'public' . DS . 'upload');
-        //$filePath = ROOT_PATH . 'public' . DS . 'upload'. DS .$info->getSaveName();
-        $data = [
-            'rt_appkey' => 'wztx',
-            'file' => '@'.$info->getPathname()
-        ];
-
-        $return_data = HttpService::post($this->url, $data);
-        if(empty($return_data)){
-            return resultArray(6001);
+        if(empty($file)){
+            returnJson(4001);
         }
-        $ossRet = json_decode($return_data,true);
-        if(empty($ossRet)){
-            return resultArray(6001,'上传图片错误','');
-        }
-        if($ossRet['code'] !=2000){
-            return resultArray(6001,$ossRet['msg'],'');
-        }
-
-        return resultArray($ossRet);
+        $rule = ['size' => 1024*1024*5, 'ext' => 'jpg,gif,png,jpeg'];
+        validateFile($file, $rule);
+        $logic = model('File', 'logic');
+        returnJson($logic->uploadImg($file,$this->loginUser));
     }
 }
