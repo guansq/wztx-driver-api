@@ -346,3 +346,67 @@ function getBaseIdByRecommCode($recommCode){
     }
     return '';
 }
+
+/*
+ * 发送信息 $basetype =0 为发送信息给货主 $basetype =1 为发送信息给司机
+ */
+function sendMsg($sendeeId,$title,$content,$basetype=0,$type='single',$pri=3){
+    $data = [
+        'title' => $title,
+        'content' => $content,
+        'type' => $type,
+        'publish_time' => time(),
+        'pri' => $pri,
+        'create_at' => time(),
+        'update_at' => time()
+    ];
+    $msgId = model('Message')->saveMsg($data);
+    $data = [
+        'msg_id' => $msgId,
+        'sendee_id' => $sendeeId,
+        'type' => 0,
+        'create_at' => time(),
+        'update_at' => time()
+    ];
+    $res = model('MessageSendee')->saveSendee($data);
+    return $res;
+}
+
+/*
+ * 发送短信 推送给货主为$rt_key='wztx_shipper' 推送给司机为 $rt_key='wztx_driver'
+ */
+function sendSMS($phone,$content,$rt_key='wztx_shipper'){
+    $sendData = [
+        'mobile' => $phone,
+        'rt_appkey' => 'wztx_shipper',
+        'text' => $content,
+    ];
+    HttpService::curl(getenv('APP_API_MSG').'SendSms/sendText',$sendData);//sendSms($data)
+}
+
+
+/*
+ * 推送信息 推送给货主为$rt_key='wztx_shipper' 推送给司机为 $rt_key='wztx_driver'
+ */
+function pushInfo($token,$title,$content,$rt_key='wztx_shipper'){
+    $sendData = [
+        "platform" => "all",
+        "rt_appkey" => "wztx_shipper",
+        "alert" => $title,
+        "regIds" => $token,
+        //"platform" => "all",
+        "androidNotification" => [
+            "alert" => $title,
+            "title" => $content,
+            "builder_id" => "builder_id",
+            "priority" => 0,
+            "style" => 0,
+            "alert_type" => -1,
+            "extras" => [
+                "0" => "RuiTu",
+                "key" => "value"
+            ]
+        ]
+    ];
+    HttpService::curl(getenv('APP_API_MSG').'push',$sendData);
+}

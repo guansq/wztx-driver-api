@@ -50,10 +50,11 @@ class BaseController extends Controller{
 
             $drBaseInfo = model('DrBaseInfo', 'logic')->findInfoByUserId($this->loginUser['id']);
 
-            if(empty($supplierInfo)){
+/*            if(empty($drBaseInfo)){
                 //returnJson(4011);
-            }
+            }*/
             $this->loginUser['type'] = $drBaseInfo['type'];
+            $this->loginUser['map_code'] = $drBaseInfo['map_code'];
         }
     }
 

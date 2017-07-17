@@ -25,7 +25,11 @@ class Message extends BaseLogic{
      * @param $user
      */
     public function countUnreadMsg($user){
-        return Db::table('atw_message_sendee')->where('read_at', 'NULL')->where('sendee_id', $user['id'])->count();
+        $where = [
+            'read_at' => 'NULL',
+            'type' => 1
+        ];
+        return Db::table('rt_message_sendee')->where($where)->where('sendee_id', $user['id'])->count();
     }
 
     /**
@@ -48,7 +52,10 @@ class Message extends BaseLogic{
     public function getMyMessage($user, $pageParam){
         $MsgSendeeModel = db('MessageSendee');
         $list = [];
-        $where = ['ms.sendee_id' => $user['id']];
+        $where = [
+            'ms.sendee_id' => $user['id'],
+            'ms.type' => 1
+        ];
         $fields = [
             'm.id' => 'id',
             'm.type' => 'type',

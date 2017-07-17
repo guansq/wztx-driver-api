@@ -188,6 +188,9 @@ class User extends BaseController{
             'auth_status'=>'check'
         ];
         $result = $drBaseInfoLogic->saveDriverAuth($where,$data);
+        if($result['code'] == 2000){
+            $result['result'] = $map_code;
+        }
         returnJson($result);
     }
     /**
