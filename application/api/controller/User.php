@@ -184,7 +184,8 @@ class User extends BaseController{
         ];
         $carId = $carinfoAuthLogic->saveCarAuth($where,$paramAll);
         $drBaseInfoLogic = model('DrBaseInfo','logic');
-        $drBaseInfoLogic->saveDriverAuth(['id',$this->loginUser['id']],['','']);
+        //$drBaseInfoLogic->saveDriverAuth(['id',$this->loginUser['id']],['','']);
+
         //returnJson($result);
     }
     /**

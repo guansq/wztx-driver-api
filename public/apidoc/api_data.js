@@ -139,6 +139,60 @@ define({ "api": [
     ]
   },
   {
+    "type": "POST",
+    "url": "/file/uploadImg",
+    "title": "上传图片done",
+    "name": "uploadImg",
+    "group": "File",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Image",
+            "optional": false,
+            "field": "file",
+            "description": "<p>上传的文件 最大5M 支持'jpg', 'gif', 'png', 'jpeg'</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "url",
+            "description": "<p>下载链接(绝对路径)</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/File.php",
+    "groupTitle": "File",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/file/uploadImg"
+      }
+    ]
+  },
+  {
     "type": "GET",
     "url": "/index/home",
     "title": "首页(ok)",
