@@ -354,7 +354,7 @@ function sendMsg($sendeeId,$title,$content,$basetype=0,$type='single',$pri=3){
     $data = [
         'title' => $title,
         'content' => $content,
-        'type' => $type,
+        'type' => $basetype,
         'publish_time' => time(),
         'pri' => $pri,
         'create_at' => time(),
@@ -391,7 +391,9 @@ function sendSMS($phone,$content,$rt_key='wztx_shipper'){
 function pushInfo($token,$title,$content,$rt_key='wztx_shipper'){
     $sendData = [
         "platform" => "all",
-        "rt_appkey" => "wztx_shipper",
+        "rt_appkey" => $rt_key,
+        "req_time" => time(),
+        "req_action" => 'push',
         "alert" => $title,
         "regIds" => $token,
         //"platform" => "all",
@@ -408,5 +410,13 @@ function pushInfo($token,$title,$content,$rt_key='wztx_shipper'){
             ]
         ]
     ];
-    HttpService::curl(getenv('APP_API_MSG').'push',$sendData);
+    $desClass = new DesUtils();
+    $arrOrder = $desClass->naturalOrdering([$sendData['rt_appkey'],$sendData['req_time'],$sendData['req_action']]);
+    $skArr = explode('_',config('app_access_key'));
+    $sendData['sign'] = $desClass->strEnc($arrOrder,$skArr[0],$skArr[1],$skArr[2]);//签名
+    //echo $sendData['sign'];die;
+    //echo http_build_query($sendData);http_build_query();json_encode($sendData)
+    //echo getenv('APP_API_HOME').'push';die;
+    $result = HttpService::post(getenv('APP_API_HOME').'push',http_build_query($sendData));
+    return $result;
 }
