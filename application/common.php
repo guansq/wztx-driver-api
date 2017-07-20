@@ -380,9 +380,13 @@ function sendSMS($phone,$content,$rt_key='wztx_shipper'){
     $sendData = [
         'mobile' => $phone,
         'rt_appkey' => 'wztx_shipper',
+        "req_time" => time(),
+        "req_action" => 'sendText',
         'text' => $content,
     ];
-    HttpService::curl(getenv('APP_API_MSG').'SendSms/sendText',$sendData);//sendSms($data)
+    //进行签名校验
+    $sendData['sign'] = createSign($sendData);
+    HttpService::post(getenv('APP_API_MSG').'SendSms/sendText',$sendData);//sendSms($data)
 }
 
 
