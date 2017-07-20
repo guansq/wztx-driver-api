@@ -30,7 +30,7 @@ class Order extends BaseController {
     }
 
     /**
-     * @api     {POST}  /order/listInfo             订单列表
+     * @api     {POST}  /order/listInfo             订单列表done
      * @apiName listInfo
      * @apiGroup Order
      * @apiHeader {String} authorization-token           token.
@@ -75,7 +75,7 @@ class Order extends BaseController {
     }
 
     /**
-     * @api     {POST}  /order/detail            订单详情
+     * @api     {POST}  /order/detail            订单详情done
      * @apiName detail
      * @apiGroup Order
      * @apiHeader {String} authorization-token           token.
