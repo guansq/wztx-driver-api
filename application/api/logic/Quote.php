@@ -15,12 +15,22 @@ class Quote extends BaseLogic{
      * Auther: guanshaoqiu <94600115@qq.com>
      * Describe: 得到报价列表
      */
-    public function geteQuoteList($where){
-        $ret = $this->where($where)->select();
-        if(empty($ret)){
-            return resultArray(4000,'没有报价信息');
+    public function geteQuoteList($where,$pageParam){
+        $list = [];
+        $dataTotal = $this->where($where)->count();
+        $list = $this->where($where)->page($pageParam['page'], $pageParam['pageSize'])->select();
+        if(empty($dataTotal)){
+            return resultArray(4004,'没有报价信息');
         }
-        return resultArray(2000,'',$ret);
+        $ret = [
+            'list' => $list,
+            'page' => $pageParam['page'],
+            'pageSize' => $pageParam['pageSize'],
+            'dataTotal' => $dataTotal,
+            'pageTotal' => floor($dataTotal/$pageParam['pageSize']) + 1,
+        ];
+
+        return resultArray(2000, '', $ret);
     }
 
     /**

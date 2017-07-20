@@ -1308,14 +1308,14 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Int",
+            "type": "String",
             "optional": false,
             "field": "quote_id",
             "description": "<p>报价ID。</p>"
           },
           {
             "group": "Parameter",
-            "type": "Float",
+            "type": "String",
             "optional": false,
             "field": "dr_price",
             "description": "<p>司机出价</p>"
@@ -1463,6 +1463,13 @@ define({ "api": [
     "success": {
       "fields": {
         "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>报价ID</p>"
+          },
           {
             "group": "Success 200",
             "type": "String",

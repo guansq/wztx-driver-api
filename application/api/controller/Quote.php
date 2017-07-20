@@ -28,11 +28,11 @@ class Quote extends BaseController{
     public function getInfo(){
         $paramAll = $this->getReqParams(['quote_id']);
         $rule = [
-            'quote_id' => 'request',
+            'quote_id' => 'require',
         ];
         validateData($paramAll,$rule);
         $where = ['id'=>$paramAll['quote_id']];
-        $result = model('Quote','logic')->saveQuoteInfo($where);
+        $result = model('Quote','logic')->getQuoteInfo($where);
         returnJson($result);
     }
 
@@ -41,32 +41,34 @@ class Quote extends BaseController{
      * @apiName     add
      * @apiGroup    Quote
      * @apiHeader   {String}    authorization-token     token.
-     * @apiParam    {Int}       quote_id                报价ID。
-     * @apiParam    {Float}     dr_price                司机出价
+     * @apiParam    {String}       quote_id                报价ID。
+     * @apiParam    {String}     dr_price                司机出价
      */
     public function add(){
         $paramAll = $this->getReqParams(['quote_id','dr_price']);
-        $rule = [
-            'quote_id' => 'request',
-        ];
+        $rule = ['quote_id' => 'require'];
+        //dump($paramAll);
         validateData($paramAll,$rule);
         $data = [
             'status' => 'quote',
             'dr_price' => wztxMoney($paramAll['dr_price'])
         ];
         $where = [
-            'id' => $paramAll['quote_id']
+            'id' => $paramAll['quote_id'],
+            'dr_id' => $this->loginUser['id']
         ];
         //是否是第一次报价的司机 如果是第一次 发送短信给货主count(*) order =
-        $info = model('Quote','logic')->saveQuoteInfo(['id'=>$paramAll['quote_id']]);
+        $info = model('Quote','logic')->getQuoteInfo(['id'=>$paramAll['quote_id']]);
         if(empty($info)){
             returnJson(4000,'抱歉暂无报价所对应的订单信息');
         }
+        $info = $info['result'];
+        //dump(collection($info)->toArray());die;
         $quote_time = model('Quote','logic')->findOneQuote(['order_id'=>$info['order_id'],'status'=>'quote']);//该订单的报价次数
         if($quote_time == 0){
             //第一次发送报价的价格给货主,取出货主phone
             $phone = getSpPhone($info['sp_id']);
-            sendSMS($phone,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),$rt_key='wztx_driver');
+            sendSMS($phone,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),$rt_key='wztx_shipper');
         }
         $result = model('Quote','logic')->saveQuoteInfo($where,$data);
         //发送推送信息给货主
@@ -83,6 +85,7 @@ class Quote extends BaseController{
      * @apiGroup    Quote
      * @apiHeader   {String}    authorization-token     token.
      * @apiParam    {String}    status          all所有,init未报价,quote已报价
+     * @apiSuccess  {String}    id  报价ID
      * @apiSuccess  {String}    org_city  起始地
      * @apiSuccess  {String}    dest_city 目的地
      * @apiSuccess  {String}    goods_name      货品名称
@@ -93,6 +96,7 @@ class Quote extends BaseController{
      */
     public function quoteList(){
         $paramAll = $this->getReqParams(['status']);
+        $pageParam = $this->getPagingParams();
         $rule = ['status' => 'require'];
         validateData($paramAll,$rule);
 
@@ -102,7 +106,8 @@ class Quote extends BaseController{
         if(in_array($paramAll['status'],['init','quote'])){
             $where['status'] = $paramAll['status'];
         }
-        $result = model('Quote','logic')->geteQuoteList($where);
+        $result = model('Quote','logic')->geteQuoteList($where,$pageParam);
+
         returnJson($result);
     }
 }
