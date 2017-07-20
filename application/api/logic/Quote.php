@@ -46,4 +46,12 @@ class Quote extends BaseLogic{
         }
         return resultArray(2000,'保存报价信息成功');
     }
+
+    /**
+     * Auther: guanshaoqiu <94600115@qq.com>
+     * Describe:找出自己是否是第一次报价
+     */
+    public function findOneQuote($where){
+        return $this->where($where)->count();
+    }
 }

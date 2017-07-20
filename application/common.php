@@ -14,8 +14,9 @@
 
 
 use think\Validate;
-
-
+use service\HttpService;
+use DesUtils\DesUtils;
+use think\Db;
 /**
  * 打印输出数据到文件
  * @param mixed       $data
@@ -419,4 +420,36 @@ function pushInfo($token,$title,$content,$rt_key='wztx_shipper'){
     //echo getenv('APP_API_HOME').'push';die;
     $result = HttpService::post(getenv('APP_API_HOME').'push',http_build_query($sendData));
     return $result;
+}
+
+/*
+ * 通过报价id得到订单id
+ */
+function getOrderIdByQuoteId($id){
+    return Db::name('quote')->where("id",$id)->value('order_id');
+}
+
+/*
+ *通过货主ID取出货主手机
+ */
+function getSpPhone($id){
+    return Db::name('sp_base_info')->where("id",$id)->value('phone');
+}
+
+/*
+ * 得到货主token
+ */
+
+function getSpPushToken($id){
+    return Db::name('system_user_shipper')->where("id",$id)->value('push_token');
+}
+
+/*
+ * 生成签名
+ */
+function createSign($sendData){
+    $desClass = new DesUtils();
+    $arrOrder = $desClass->naturalOrdering([$sendData['rt_appkey'],$sendData['req_time'],$sendData['req_action']]);
+    $skArr = explode('_',config('app_access_key'));
+    return $desClass->strEnc($arrOrder,$skArr[0],$skArr[1],$skArr[2]);//签名
 }

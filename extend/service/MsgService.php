@@ -23,7 +23,7 @@ namespace service;
  */
 class MsgService{
 
-    const RT_APP_KEY  = 'wztx';
+    const RT_APP_KEY  = 'wztx_driver';
     const RT_MSG_HOME = 'http://pushmsg.ruitukeji.com';
 
     /**
@@ -45,9 +45,12 @@ class MsgService{
     public static function sendCaptcha($mobile, $opt){
         $data = [
             'rt_appkey' => self::RT_APP_KEY,
+            "req_time" => time(),
+            "req_action" => 'sendCaptcha',
             'mobile' => $mobile,
             'opt' => $opt,
         ];
+        $data['sign'] = createSign($data);
         $httpRet = HttpService::post(self::RT_MSG_HOME.'/SendSms/sendCaptcha', $data);
         if(empty($httpRet)){
             return resultArray(6000);
@@ -72,10 +75,13 @@ class MsgService{
     public static function verifyCaptcha($mobile, $opt,$captcha){
         $data = [
             'rt_appkey' => self::RT_APP_KEY,
+            "req_time" => time(),
+            "req_action" => 'verifyCaptcha',
             'mobile' => $mobile,
             'opt' => $opt,
             'captcha' => $captcha,
         ];
+        $data['sign'] = createSign($data);
         $httpRet = HttpService::post(self::RT_MSG_HOME.'/SendSms/verifyCaptcha', $data);
         if(empty($httpRet)){
             return resultArray(6000);

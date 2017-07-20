@@ -168,9 +168,10 @@ class User extends BaseController{
         ];
         //validateData($paramAll,$rule);
         $paramAll['auth_status'] = 'check';//待认证
+        $paramAll['dr_id'] = $this->loginUser['id'];//
         $mapInfo = [
             '_name' => $this->loginUser['id'],
-            '_location' => '116.480881,39.989410',
+            '_location' => '120.735442,31.251365',//腾飞创新园
             'car_length' => $paramAll['car_length'],
             'car_type' => $paramAll['car_type'],
             'card_number' => $paramAll['card_number']

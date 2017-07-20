@@ -20,4 +20,5 @@ return [
         'use' => 'atwwg_batch_sender_dev',
         'key' => 'arrIrMMSuLJMFWz2',
     ],
+    'app_access_key' => 'wert_hgfd_sdfs'
 ];
