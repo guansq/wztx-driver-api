@@ -631,7 +631,7 @@
   {
     "type": "POST",
     "url": "/order/detail",
-    "title": "订单详情",
+    "title": "订单详情done",
     "name": "detail",
     "group": "Order",
     "header": {
@@ -695,14 +695,14 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "org_address_name",
+            "field": "org_city",
             "description": "<p>起始地</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "dest_address_name",
+            "field": "dest_city",
             "description": "<p>目的地</p>"
           },
           {
@@ -723,8 +723,15 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "dest_address",
+            "field": "dest_address_name",
             "description": "<p>收货人地址</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "dest_address_detail",
+            "description": "<p>收货人地址详情</p>"
           },
           {
             "group": "Success 200",
@@ -744,8 +751,15 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "org_address",
+            "field": "org_address_name",
             "description": "<p>寄件人地址</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "org_address_datail",
+            "description": "<p>寄件人地址详情</p>"
           },
           {
             "group": "Success 200",
@@ -825,7 +839,7 @@
   {
     "type": "POST",
     "url": "/order/listInfo",
-    "title": "订单列表",
+    "title": "订单列表done",
     "name": "listInfo",
     "group": "Order",
     "header": {
@@ -837,6 +851,35 @@
             "optional": false,
             "field": "authorization-token",
             "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>订单状态（all全部状态，quote报价中，quoted已报价，待发货 distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成））</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "page",
+            "defaultValue": "1",
+            "description": "<p>页码.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageSize",
+            "defaultValue": "20",
+            "description": "<p>每页数据量.</p>"
           }
         ]
       }
@@ -883,7 +926,21 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.price",
+            "field": "list.car_style_length",
+            "description": "<p>车长</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.car_style_type",
+            "description": "<p>车型</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.final_price",
             "description": "<p>出价</p>"
           },
           {
@@ -895,10 +952,31 @@
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "Number",
             "optional": false,
-            "field": "list.avatar",
-            "description": "<p>头像</p>"
+            "field": "page",
+            "description": "<p>页码.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页数据量.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "dataTotal",
+            "description": "<p>数据总数.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pageTotal",
+            "description": "<p>总页码数.</p>"
           },
           {
             "group": "Success 200",
@@ -1319,6 +1397,13 @@
             "optional": false,
             "field": "dr_price",
             "description": "<p>司机出价</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "is_place_order",
+            "description": "<p>是否立即下单</p>"
           }
         ]
       }

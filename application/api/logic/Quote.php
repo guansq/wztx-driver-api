@@ -22,6 +22,13 @@ class Quote extends BaseLogic{
         if(empty($dataTotal)){
             return resultArray(4004,'没有报价信息');
         }
+        foreach($list as $k => $v){
+            $v['dr_price'] = wztxMoney($v['dr_price']);
+            $v['system_price'] = wztxMoney($v['system_price']);
+            $v['sp_price'] = wztxMoney($v['sp_price']);
+            $v['weight'] = strval($v['weight']);
+            $v['usecar_time'] = wztxDate($v['usecar_time']);
+        }
         $ret = [
             'list' => $list,
             'page' => $pageParam['page'],

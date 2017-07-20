@@ -43,6 +43,7 @@ class Quote extends BaseController{
      * @apiHeader   {String}    authorization-token     token.
      * @apiParam    {String}       quote_id                报价ID。
      * @apiParam    {String}     dr_price                司机出价
+     * @apiParam    {String}     is_place_order          是否立即下单
      */
     public function add(){
         $paramAll = $this->getReqParams(['quote_id','dr_price']);
