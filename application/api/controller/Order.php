@@ -155,7 +155,7 @@ class Order extends BaseController {
     }
 
     /**
-     * @api     {POST}  /order/uploadCerPic            上传到货凭证
+     * @api     {POST}  /order/uploadCerPic            上传到货凭证done
      * @apiName uploadCerPic
      * @apiGroup Order
      * @apiHeader {String} authorization-token           token.
@@ -170,7 +170,7 @@ class Order extends BaseController {
         ]);
         $rule = [
             'order_id' => ['require', 'regex' => '^[0-9]*$'],
-            'imgurl' => 'require',
+            'img_url' => 'require',
         ];
 
         validateData($paramAll, $rule);
@@ -178,9 +178,14 @@ class Order extends BaseController {
         if (empty($orderInfo)) {
             returnJson('4004', '未获取到订单信息');
         }
-        /*if(){
-
-        }*/
-        returnJson('2000', '成功', []);
+        if($orderInfo['status'] != 'distribute'){
+            returnJson('4000', '当前状态不能拍照上传');
+        }
+        //没有问题存入数据库
+        $changeStatus = model('TransportOrder', 'logic')->updateTransport(['id' => $paramAll['order_id']], ['status' => 'photo','arr_cer_pic'=>$paramAll['img_url']]);
+        if ($changeStatus['code'] != '2000') {
+            returnJson($changeStatus);
+        }
+        returnJson('200', '成功',['order_id'=>$paramAll['order_id']]);
     }
 }

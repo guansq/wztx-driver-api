@@ -48,6 +48,18 @@ class TransportOrder extends BaseLogic {
         $info = $this->alias('a')->field('a.*')->join('quote b','a.id = b.order_id','LEFT')->where($where)->find();
         return $info;
     }
-
+    /**
+     * Auther: guanshaoqiu <94600115@qq.com>
+     * Describe: * @param $where
+     * @param $data
+     * 更改订单信息
+     */
+    public function updateTransport($where, $data) {
+        $ret = $this->where($where)->update($data);
+        if ($ret === false) {
+            return resultArray(4000, '更改订单状态失败');
+        }
+        return resultArray(2000, '更改订单状态成功');
+    }
 
 }
