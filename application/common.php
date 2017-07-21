@@ -457,3 +457,10 @@ function createSign($sendData){
     $skArr = explode('_',config('app_access_key'));
     return $desClass->strEnc($arrOrder,$skArr[0],$skArr[1],$skArr[2]);//签名
 }
+
+/*
+ * 得到货主ID通过orderId
+ */
+function getSpIdByOrderId($id){
+    return Db('transport_order')->where("id",$id)->value('sp_id');
+}

@@ -80,7 +80,7 @@ class Quote extends BaseController{
                 'final_price' => $final_price,
                 'dr_id' => $info['dr_id'],
             ];
-            $result = model('TransportOrder','logic')->updateTransport(['id'=>$info['order_id'],'sp_id'=>$this->loginUser['id'],'status'=>'quote'],$data);
+            $result = model('TransportOrder','logic')->updateTransport(['id'=>$info['order_id'],'sp_id'=>$info['sp_id'],'status'=>'quote'],$data);
             if($result['code'] == 4000){
                 returnJson($result);
             }

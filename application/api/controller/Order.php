@@ -178,7 +178,7 @@ class Order extends BaseController {
         ];
 
         validateData($paramAll, $rule);
-        $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo(['dr_id' => $this->loginUser['id'], 'id' => $paramAll['order_id']]);
+        $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo(['dr_id' => $this->loginUser['id'], 'id' => $paramAll['order_id'],'status' => 'distribute']);//配送中的订单信息
         if (empty($orderInfo)) {
             returnJson('4004', '未获取到订单信息');
         }
@@ -194,21 +194,38 @@ class Order extends BaseController {
     }
 
     /**
-     * @api     {POST}  /order/shipping             司机进行发货动作
+     * @api     {POST}  /order/shipping             司机进行发货动作done
      * @apiName shipping
      * @apiGroup Order
      * @apiHeader {String} authorization-token      token.
      * @apiParam  {Number}  order_id            order_id
      */
-    public function order(){
+    public function shipping(){
         $paramAll = $this->getReqParams(['order_id']);
         $rule = ['order_id' => ['require', 'regex' => '^[0-9]*$']];
         validateData($paramAll, $rule);
         $where = [
             'dr_id' => $this->loginUser['id'],
             'id' => $paramAll['order_id'],
-
+            'status' => 'quoted',//已确认订单状态
         ];
-        $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo();
+        $data = [
+            'status' => 'distribute'//更改为配送中的状态
+        ];
+        //通过order_id得到sp_id
+        $spId = getSpIdByOrderId($paramAll['order_id']);
+        if(empty($spId)){
+            returnJson(4000,'发货失败');
+        }
+        $ret = model('TransportOrder', 'logic')->updateTransport($where,$data);
+        if($ret['code'] == 4000){
+            returnJson(4000,'发货失败');
+        }
+        //发送推送信息给货主
+        $push_token = getSpPushToken($spId);
+        if(!empty($push_token)){
+            pushInfo($push_token,'您的订单已经在配送中啦',$rt_key='wztx_shipper');//推送给货主端
+        }
+        returnJson(2000,'发货成功');
     }
 }

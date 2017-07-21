@@ -1014,7 +1014,7 @@
   {
     "type": "POST",
     "url": "/order/shipping",
-    "title": "司机进行发货动作",
+    "title": "司机进行发货动作done",
     "name": "shipping",
     "group": "Order",
     "header": {
