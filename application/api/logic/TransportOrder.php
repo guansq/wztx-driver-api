@@ -43,6 +43,16 @@ class TransportOrder extends BaseLogic {
         return $ret;
     }
 
+
+    /**
+     * Auther: guanshaoqiu <94600115@qq.com>
+     *获取派发订单详情
+     */
+    public function getTransportOrderQuoteInfo($where) {
+        $info = $this->alias('a')->field('a.*')->join('quote b','a.id = b.order_id','LEFT')->where($where)->find();
+        return $info;
+    }
+    
     /**
      * Auther: guanshaoqiu <94600115@qq.com>
      * 更改订单信息
