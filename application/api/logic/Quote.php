@@ -71,4 +71,16 @@ class Quote extends BaseLogic{
     public function findOneQuote($where){
         return $this->where($where)->count();
     }
+
+    /**
+     * Auther: guanshaoqiu <94600115@qq.com>
+     * Describe:更改报价信息状态
+     */
+    public function changeQuote($where,$data){
+        $ret =  $this->where($where)->update($data);
+        if($ret === false){
+            return resultArray(4000,'更改报价信息失败');
+        }
+    }
+
 }

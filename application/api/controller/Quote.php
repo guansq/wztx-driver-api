@@ -43,41 +43,74 @@ class Quote extends BaseController{
      * @apiHeader   {String}    authorization-token     token.
      * @apiParam    {String}       quote_id                报价ID。
      * @apiParam    {String}     dr_price                司机出价
-     * @apiParam    {String}     is_place_order          是否立即下单
+     * @apiParam    {String}     is_place_order          是否立即下单 0表示不立即下单 1表示立即下单
      */
     public function add(){
-        $paramAll = $this->getReqParams(['quote_id','dr_price']);
-        $rule = ['quote_id' => 'require'];
+        $paramAll = $this->getReqParams(['quote_id','dr_price','is_place_order']);
+        $rule = ['quote_id' => 'require','dr_price' => 'require','is_place_order'=>'require'];
         //dump($paramAll);
         validateData($paramAll,$rule);
         $data = [
             'status' => 'quote',
-            'dr_price' => wztxMoney($paramAll['dr_price'])
+            'dr_price' => wztxMoney($paramAll['dr_price']),
+            'is_place_order' => $paramAll['is_place_order']
         ];
         $where = [
             'id' => $paramAll['quote_id'],
             'dr_id' => $this->loginUser['id']
         ];
-        //是否是第一次报价的司机 如果是第一次 发送短信给货主count(*) order =
-        $info = model('Quote','logic')->getQuoteInfo(['id'=>$paramAll['quote_id']]);
+        $info = model('Quote','logic')->getQuoteInfo(['id'=>$paramAll['quote_id'],'dr_id'=>$this->loginUser['id'],'status'=>'init']);
+        $info = $info['result'];//报价信息
         if(empty($info)){
-            returnJson(4000,'抱歉暂无报价所对应的订单信息');
+            returnJson(4000,'抱歉暂无报价所对应的订单信息，或该订单已报价完成');
         }
-        $info = $info['result'];
-        //dump(collection($info)->toArray());die;
-        $quote_time = model('Quote','logic')->findOneQuote(['order_id'=>$info['order_id'],'status'=>'quote']);//该订单的报价次数
-        if($quote_time == 0){
-            //第一次发送报价的价格给货主,取出货主phone
-            $phone = getSpPhone($info['sp_id']);
-            sendSMS($phone,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),$rt_key='wztx_shipper');
+
+        if($paramAll['is_place_order'] == 1){
+            //通过quote_id获得order_id$order_id = getOrderIdByQuoteId($paramAll['quote_id']);
+            model('Quote','logic')->changeQuote(['id'=>$paramAll['quote_id']],['is_receive'=>1]);//货主确认的价格,更改
+            $final_price = $info['dr_price'];//获得司机报价的价格
+            $result = model('Quote','logic')->saveQuoteInfo($where,$data);
+            if($result['code'] == 4000){
+                returnJson($result);
+            }
+            //更改订单状态
+            $data = [
+                'status' => 'quoted',
+                'final_price' => $final_price,
+                'dr_id' => $info['dr_id'],
+            ];
+            $result = model('TransportOrder','logic')->updateTransport(['id'=>$paramAll['order_id'],'sp_id'=>$this->loginUser['id'],'status'=>'quote'],$data);
+            if($result['code'] == 4000){
+                returnJson($result);
+            }
+            //发送订单信息给货主
+            sendMsg($info['sp_id'],self::DRTITLE,self::DRCONTENT,1);
+            //发送推送消息
+            $push_token = getSpPushToken($info['sp_id']);//得到推送token
+            if(!empty($push_token)){
+                pushInfo($push_token,self::DRTITLE,self::DRCONTENT,'wztx_shipper');//推送给司机
+            }
+            //发送短信
+            sendSMS(getSpPhone($info['sp_id']),self::DRCONTENT,'wztx_shipper');
+            returnJson(2000,'恭喜，您已获取该订单，请及时发货');
+        }else{
+            //是否是第一次报价的司机 如果是第一次 发送短信给货主count(*) order =
+            //dump(collection($info)->toArray());die;
+            $quote_time = model('Quote','logic')->findOneQuote(['order_id'=>$info['order_id'],'status'=>'quote']);//该订单的报价次数
+            if($quote_time == 0){
+                //第一次发送报价的价格给货主,取出货主phone
+                $phone = getSpPhone($info['sp_id']);
+                sendSMS($phone,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),$rt_key='wztx_shipper');
+            }
+
+            //发送推送信息给货主
+            $push_token = getSpPushToken($info['sp_id']);
+            if(!empty($push_token)){
+                pushInfo($push_token,self::TITLE,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),$rt_key='wztx_shipper');//推送给货主端
+            }
+            $result = model('Quote','logic')->saveQuoteInfo($where,$data);
+            returnJson($result);
         }
-        $result = model('Quote','logic')->saveQuoteInfo($where,$data);
-        //发送推送信息给货主
-        $push_token = getSpPushToken($info['sp_id']);
-        if(!empty($push_token)){
-            pushInfo($push_token,self::TITLE,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),$rt_key='wztx_shipper');//推送给货主端
-        }
-        returnJson($result);
     }
 
     /**

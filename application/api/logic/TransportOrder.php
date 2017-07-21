@@ -43,4 +43,15 @@ class TransportOrder extends BaseLogic {
         return $ret;
     }
 
+    /**
+     * Auther: guanshaoqiu <94600115@qq.com>
+     * 更改订单信息
+     */
+    public function updateTransport($where, $data) {
+        $ret = $this->where($where)->update($data);
+        if ($ret === false) {
+            return resultArray(4000, '更改订单状态失败');
+        }
+        return resultArray(2000, '更改订单状态成功');
+    }
 }
