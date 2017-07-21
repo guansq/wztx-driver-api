@@ -800,6 +800,20 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
+            "field": "policy_code",
+            "description": "<p>保单编号</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Int",
+            "optional": false,
+            "field": "is_pay",
+            "description": "<p>是否支付1为已支付 0为未支付</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
             "field": "is_receipt",
             "description": "<p>货物回单1-是-默认，2-否</p>"
           },
@@ -994,6 +1008,108 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.ruitukeji.com/order/listInfo"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/order/shipping",
+    "title": "司机进行发货动作",
+    "name": "shipping",
+    "group": "Order",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>order_id</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Order",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/order/shipping"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/order/uploadCerPic",
+    "title": "上传到货凭证done",
+    "name": "uploadCerPic",
+    "group": "Order",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>order_id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "img_url",
+            "description": "<p>图片链接，多个用 | 分隔</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>order_id</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Order",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/order/uploadCerPic"
       }
     ]
   },
@@ -1402,8 +1518,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "is_place_order",
-            "description": "<p>是否立即下单</p>"
+            "field": "is_receive",
+            "description": "<p>是否立即下单 0表示不立即下单 1表示立即下单</p>"
           }
         ]
       }

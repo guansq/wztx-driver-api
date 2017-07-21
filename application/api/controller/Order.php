@@ -192,4 +192,23 @@ class Order extends BaseController {
         }
         returnJson('200', '成功',['order_id'=>$paramAll['order_id']]);
     }
+
+    /**
+     * @api     {POST}  /order/shipping             司机进行发货动作
+     * @apiName shipping
+     * @apiGroup Order
+     * @apiHeader {String} authorization-token      token.
+     * @apiParam  {Number}  order_id            order_id
+     */
+    public function order(){
+        $paramAll = $this->getReqParams(['order_id']);
+        $rule = ['order_id' => ['require', 'regex' => '^[0-9]*$']];
+        validateData($paramAll, $rule);
+        $where = [
+            'dr_id' => $this->loginUser['id'],
+            'id' => $paramAll['order_id'],
+
+        ];
+        $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo();
+    }
 }
