@@ -99,6 +99,8 @@ class Order extends BaseController {
      * @apiSuccess  {String} arr_time           到达时间
      * @apiSuccess  {String} real_name          车主姓名
      * @apiSuccess  {String} phone              联系电话
+     * @apiSuccess  {String} policy_code        保单编号
+     * @apiSuccess  {Int} is_pay                是否支付1为已支付 0为未支付
      * @apiSuccess  {String} is_receipt         货物回单1-是-默认，2-否
      * @apiSuccess  {String} system_price       系统出价
      * @apiSuccess  {String} mind_price         货主出价
@@ -146,6 +148,8 @@ class Order extends BaseController {
             'arr_time' => wztxDate($orderInfo['arr_time']),
             'real_name' => $dr_real_name,
             'phone' => $dr_phone,
+            'policy_code' => $orderInfo['policy_code'],
+            'is_pay' => $orderInfo['is_pay'],
             'is_receipt' => $orderInfo['is_receipt'],
             'system_price' => wztxMoney($orderInfo['system_price']),
             'mind_price' => wztxMoney($orderInfo['mind_price']),
