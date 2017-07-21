@@ -24,7 +24,7 @@ class TransportOrder extends BaseLogic {
     public function getTransportOrderList($where, $pageParam) {
         $dataTotal = $this->where($where)->order('create_at desc')->count();
         if (empty($dataTotal)) {
-            return resultArray(4004);
+            return false;
         }
         $list = $this->where($where)->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
             ->field('id order_id,org_city,dest_city,weight,goods_name,status,car_style_length,car_style_type,final_price,usecar_time')->select();

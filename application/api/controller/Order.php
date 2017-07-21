@@ -69,7 +69,7 @@ class Order extends BaseController {
         $pageParam = $this->getPagingParams();
         $orderInfo = model('TransportOrder', 'logic')->getTransportOrderList($where, $pageParam);
         if (empty($orderInfo)) {
-            returnJson('4000', '暂无订单信息');
+            returnJson('4004', '暂无订单信息');
         }
         returnJson('2000', '成功', $orderInfo);
     }
@@ -109,13 +109,13 @@ class Order extends BaseController {
             'order_id',
         ]);
         $rule = [
-            'order_id' => ['require', 'regex' => '\d'],
+            'order_id' => ['require', 'regex' => '^[0-9]*$'],
         ];
 
         validateData($paramAll, $rule);
         $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo(['dr_id' => $this->loginUser['id'], 'id' => $paramAll['order_id']]);
         if (empty($orderInfo)) {
-            returnJson('4000', '未获取到订单信息');
+            returnJson('4004', '未获取到订单信息');
         }
         $drBaseInfo = model('DrBaseInfo', 'logic')->findInfoByUserId($this->loginUser['id']);
         $dr_phone = $drBaseInfo['phone'];
@@ -146,5 +146,35 @@ class Order extends BaseController {
             'final_price' => wztxMoney($orderInfo['final_price']),
         ];
         returnJson('2000', '成功', $detail);
+    }
+
+    /**
+     * @api     {POST}  /order/uploadCerPic            上传凭证
+     * @apiName uploadCerPic
+     * @apiGroup Order
+     * @apiHeader {String} authorization-token           token.
+     * @apiParam    {Int}    order_id           order_id
+     * @apiParam    {String}    img_url         图片链接，多个用 | 分隔
+     * @apiParam    {String}    type            上传凭证类型 arr=到货凭证 pay=支付凭证
+     * @apiSuccess  {String} order_id         order_id
+     */
+    public function uploadCerPic() {
+        $paramAll = $this->getReqParams([
+            'order_id',
+            'img_url',
+            'type'
+        ]);
+        $rule = [
+            'order_id' => ['require', 'regex' => '^[0-9]*$'],
+            'imgurl' => 'require',
+            'type' => ['require', 'regex' => '/^(often|urgent|appoint)$/'],
+        ];
+
+        validateData($paramAll, $rule);
+        $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo(['dr_id' => $this->loginUser['id'], 'id' => $paramAll['order_id']]);
+        if (empty($orderInfo)) {
+            returnJson('4004', '未获取到订单信息');
+        }
+        returnJson('2000', '成功', []);
     }
 }
