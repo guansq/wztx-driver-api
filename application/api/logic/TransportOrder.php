@@ -43,4 +43,11 @@ class TransportOrder extends BaseLogic {
         return $ret;
     }
 
+    //获取派发订单详情
+    public function getTransportOrderQuoteInfo($where) {
+        $info = $this->alias('a')->field('a.*')->join('quote b','a.id = b.order_id','LEFT')->where($where)->find();
+        return $info;
+    }
+
+
 }
