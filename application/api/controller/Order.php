@@ -363,9 +363,12 @@ class Order extends BaseController {
      * @apiName receiveOrder
      * @apiGroup    Order
      * @apiHeader   {String}        authorization-token     token.
+     * @apiSuccess  {String}         type    quote|order.
+     *
      */
     public function receiveOrder(){
-
-
+        //先判断该司机下是否设定了路线，有路线返回订单列表，无路线返回他的未报价列表
+        $where = [];
+        $lineInfo = $this->loginUser['id'];
     }
 }
