@@ -11,6 +11,8 @@ class Quote extends BaseLogic{
 
     protected $table = 'rt_quote';
 
+
+
     /**
      * Auther: guanshaoqiu <94600115@qq.com>
      * Describe: 得到报价列表
@@ -81,6 +83,19 @@ class Quote extends BaseLogic{
         if($ret === false){
             return resultArray(4000,'更改报价信息失败');
         }
+    }
+
+    /**
+     * Auther: guanshaoqiu <94600115@qq.com>
+     * Describe:保存报价信息
+     */
+    public function saveQuote($data){
+        $ret = $this->data($data,true)->isUpdate(false)->save();
+        //echo $this->getLastSql();
+        if($ret === false){
+            returnJson('4020', '保存报价失败');
+        }
+        return resultArray(2000,'报价成功');
     }
 
 }

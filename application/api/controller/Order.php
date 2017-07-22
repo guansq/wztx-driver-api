@@ -9,6 +9,9 @@
 namespace app\api\controller;
 
 class Order extends BaseController {
+    const TITLE = '您有新的司机报价';
+    const SPTITLE = '您的订单已被接单';
+    const SPCONTENT = '您的订单已被接单';
     /*
      * @api     {POST}  /order/showQuoteInfo        显示分配中的报价信息
      * @apiName showQuoteInfo
@@ -34,7 +37,7 @@ class Order extends BaseController {
      * @apiName listInfo
      * @apiGroup Order
      * @apiHeader {String} authorization-token           token.
-     * @apiParam   {String} type        订单状态（all全部状态，quote报价中，quoted已报价，待发货 distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成））
+     * @apiParam   {String} type        订单状态（all全部状态，quote报价中，quoted已报价，待发货 distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成）） success 已完成的，包含未评论
      * @apiParam {Number} [page=1]                  页码.
      * @apiParam {Number} [pageSize=20]             每页数据量.
      * @apiSuccess {Array}  list        订单列表
@@ -58,12 +61,16 @@ class Order extends BaseController {
             'type',
         ]);
         $rule = [
-            'type' => ['require', '/^(all|quote|quoted|distribute|photo)$/'],
+            'type' => ['require', '/^(all|quote|quoted|distribute|photo|success)$/'],
         ];
         validateData($paramAll, $rule);
         $where = [];
         if ($paramAll['type'] != 'all') {
-            $where['status'] = $paramAll['type'];
+            if($paramAll['type'] == 'success'){
+                $where['status'] = ['in',['pay_success','comment']];
+            }else{
+                $where['status'] = $paramAll['type'];
+            }
         }
         $where['dr_id'] = $this->loginUser['id'];
         $pageParam = $this->getPagingParams();
@@ -231,7 +238,7 @@ class Order extends BaseController {
     }
 
     /**
-     * @api     {GET}       /order/goodsList        货源列表（根据设定路线展示）
+     * @api     {GET}       /order/goodsList        货源列表（根据设定路线展示）done
      * @apiName goodsList
      * @apiGroup Order
      * @apiHeader {String} authorization-token      token.
@@ -249,13 +256,28 @@ class Order extends BaseController {
      * @apiSuccess  {String} list.weight         总重量（吨）
      */
     public function goodsList(){
-        $this->getReqParams(['org_city','dest_city','car_style_length_id','car_style_type_id']);
-        $lineList = model('Linelist','logic')->getDrLineList(['dr_id'=>$this->loginUser['id']]);//获取该司机linelist
-
+        $paramAll = $this->getReqParams(['org_city','dest_city','car_style_length_id','car_style_type_id']);
+        $pageParam =$this->getPagingParams();
+        $where = [];
+        if(isset($paramAll['org_city'])&& !empty($paramAll['org_city'])){
+            $where['org_city'] = ['like',"%{$paramAll['org_city']}%"];
+        }
+        if(isset($paramAll['dest_city'])&& !empty($paramAll['dest_city'])){
+            $where['dest_city'] = ['like',"%{$paramAll['dest_city']}%"];
+        }
+        if(isset($paramAll['car_style_length_id'])&& !empty($paramAll['car_style_length_id'])){
+            $where['car_style_length_id'] = ['like',"%{$paramAll['car_style_length_id']}%"];
+        }
+        if(isset($paramAll['car_style_type_id'])&& !empty($paramAll['car_style_type_id'])){
+            $where['car_style_type_id'] = ['like',"%{$paramAll['car_style_type_id']}%"];
+        }
+        $where['status'] = 'quote';//待报价
+        $ret = model('TransportOrder','logic')->getTransportOrderList($where,$pageParam);
+        returnJson('2000', '成功', $ret);
     }
 
     /**
-     * @api {POST}  /order/saveQuote        提交货源报价
+     * @api {POST}  /order/saveQuote        提交货源报价done
      * @apiName saveQuote
      * @apiGroup    Order
      * @apiHeader   {String}    authorization-token     token.
@@ -264,6 +286,84 @@ class Order extends BaseController {
      * @apiParam    {String}     is_receive          是否立即下单 0表示不立即下单 1表示立即下单
      */
     public function saveQuote(){
+        //判断订单ID是否合法通过订单ID生成已报价的报价单（如果立即下单，更改订单，价格状态）->判断该订单下面的询价单是否有报价过，无报价发送短信->
+        $paramAll = $this->getReqParams(['order_id','dr_price','is_receive']);
+        $rule = ['order_id' => 'require','dr_price' => 'require','is_receive'=>'require'];
+        validateData($paramAll,$rule);
+        $orderInfo = model('TransportOrder','logic')->getTransportOrderInfo(['status'=>'quote','id'=>'order_id']);//待报价订单
+        if(empty($orderInfo)){
+            returnJson(4000,'没有该订单或该订单已被接单');
+        }
+        //查询是否是第一次报价
+        $quote_time = model('Quote','logic')->findOneQuote(['order_id'=>$paramAll['order_id'],'status'=>'quote']);//该订单的报价次数
+        $info['goods_name'] = $orderInfo['goods_name'];
+        $info['weight'] = $orderInfo['weight'];
+        $info['order_id'] = $orderInfo['id'];
+        $info['dr_id'] = $this->loginUser['id'];
+        $info['sp_id'] = $orderInfo['sp_id'];
+        $info['system_price'] = $orderInfo['system_price'];
+        $info['sp_price'] = $orderInfo['mind_price'];
+        $info['dr_price'] = $paramAll['dr_price'];
+        $info['is_receive'] = $paramAll['is_receive'];
+        $info['status'] = 'quote';
+        $info['usecar_time'] = $orderInfo['usecar_time'];
+        $info['car_style_length'] = $orderInfo['car_style_length'];
+        $info['car_style_type'] = $orderInfo['car_style_type'];
+        $info['org_city'] = $orderInfo['org_city'];
+        $info['dest_city'] = $orderInfo['dest_city'];
+        $info['org_address_name'] = $orderInfo['org_address_name'];
+        $info['dest_address_name'] = $orderInfo['dest_address_name'];
+        $info['org_address_detail'] = $orderInfo['org_address_detail'];
+        $info['dest_address_detail'] = $orderInfo['dest_address_detail'];
+        $result = model('Quote','logic')->saveQuote($info);//生成报价单
+
+        if($paramAll['is_receive'] == 1){
+            //更改订单状态
+            $data = [
+                'status' => 'quoted',
+                'final_price' => $paramAll['dr_price'],
+                'dr_id' => $this->loginUser['id'],
+            ];
+            //更改订单状态为已被接单状态
+            $result = model('TransportOrder','logic')->updateTransport(['id'=>$paramAll['order_id'],'sp_id'=>$info['sp_id'],'status'=>'quote'],$data);
+
+            if($result['code'] == 4000){
+                returnJson($result);
+            }
+            //发送订单信息给货主
+            sendMsg($orderInfo['sp_id'],self::SPTITLE,self::SPCONTENT,1);
+            //发送推送消息
+            $push_token = getSpPushToken($info['sp_id']);//得到推送token
+            if(!empty($push_token)){
+                pushInfo($push_token,self::SPTITLE,self::SPCONTENT,'wztx_shipper');//推送给司机
+            }
+            //发送短信
+            sendSMS(getSpPhone($info['sp_id']),self::SPCONTENT,'wztx_shipper');
+            returnJson(2000,'恭喜，您已获取该订单，请及时发货');
+        }else{
+            if($quote_time == 0){
+                //第一次发送报价的价格给货主,取出货主phone
+                $phone = getSpPhone($orderInfo['sp_id']);
+                sendSMS($phone,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),$rt_key='wztx_shipper');
+            }
+
+            //发送推送信息给货主
+            $push_token = getSpPushToken($orderInfo['sp_id']);
+            if(!empty($push_token)){
+                pushInfo($push_token,self::TITLE,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),$rt_key='wztx_shipper');//推送给货主端
+            }
+            returnJson($result);
+        }
+    }
+
+    /**
+     * @api {GET}   /order/receiveOrder     接收订单
+     * @apiName receiveOrder
+     * @apiGroup    Order
+     * @apiHeader   {String}        authorization-token     token.
+     */
+    public function receiveOrder(){
+
 
     }
 }
