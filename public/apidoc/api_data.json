@@ -139,6 +139,130 @@
     ]
   },
   {
+    "type": "GET",
+    "url": "/comment/commentInfo",
+    "title": "获取评论内容done",
+    "name": "commentInfo",
+    "group": "Comment",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>订单ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>订单ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "sp_id",
+            "description": "<p>评论人ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "sp_name",
+            "description": "<p>评价人的姓名</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "dr_id",
+            "description": "<p>司机ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "dr_name",
+            "description": "<p>司机姓名</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "post_time",
+            "description": "<p>提交时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "limit_ship",
+            "description": "<p>发货时效几星</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "attitude",
+            "description": "<p>服务态度几星</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "satisfaction",
+            "description": "<p>满意度 几星</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>评论文字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Int",
+            "optional": false,
+            "field": "status",
+            "description": "<p>0=正常显示，1=不显示给司机</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Comment.php",
+    "groupTitle": "Comment",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/comment/commentInfo"
+      }
+    ]
+  },
+  {
     "type": "POST",
     "url": "/file/uploadImg",
     "title": "上传图片done",
@@ -1150,6 +1274,19 @@
             "optional": false,
             "field": "authorization-token",
             "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>quote|order.</p>"
           }
         ]
       }
@@ -2729,9 +2866,9 @@
     ]
   },
   {
-    "type": "GET",
+    "type": "POST",
     "url": "/linelist/delline",
-    "title": "获取路线信息done",
+    "title": "删除路线信息done",
     "name": "delline",
     "group": "linelist",
     "parameter": {
@@ -2818,7 +2955,7 @@
     ]
   },
   {
-    "type": "GET",
+    "type": "POST",
     "url": "/linelist/showline",
     "title": "获取路线信息done",
     "name": "showline",
