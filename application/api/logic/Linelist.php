@@ -30,9 +30,9 @@ class Linelist extends BaseLogic {
         $where["status"] = 0;
         $ret = $this->where($where)->field("id drline_id,org_city,dest_city")->select();
         if (!$ret) {
-            return resultArray('4000', '数据为空');
+            return resultArray(4000, '数据为空');
         }
-        return resultArray('2000','成功',['list' => $ret]);
+        return resultArray(2000,'成功',['list' => $ret]);
     }
 
     /**
