@@ -178,7 +178,7 @@ class Order extends BaseController {
         ];
 
         validateData($paramAll, $rule);
-        $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo(['dr_id' => $this->loginUser['id'], 'id' => $paramAll['order_id']]);
+        $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo(['dr_id' => $this->loginUser['id'], 'id' => $paramAll['order_id'],'status' => 'distribute']);//配送中的订单信息
         if (empty($orderInfo)) {
             returnJson('4004', '未获取到订单信息');
         }
@@ -191,5 +191,77 @@ class Order extends BaseController {
             returnJson($changeStatus);
         }
         returnJson('200', '成功',['order_id'=>$paramAll['order_id']]);
+    }
+
+    /**
+     * @api     {POST}  /order/shipping             司机进行发货动作done
+     * @apiName shipping
+     * @apiGroup Order
+     * @apiHeader {String} authorization-token      token.
+     * @apiParam  {Number}  order_id            order_id
+     */
+    public function shipping(){
+        $paramAll = $this->getReqParams(['order_id']);
+        $rule = ['order_id' => ['require', 'regex' => '^[0-9]*$']];
+        validateData($paramAll, $rule);
+        $where = [
+            'dr_id' => $this->loginUser['id'],
+            'id' => $paramAll['order_id'],
+            'status' => 'quoted',//已确认订单状态
+        ];
+        $data = [
+            'status' => 'distribute',//更改为配送中的状态
+            'send_time' => time()
+        ];
+        //通过order_id得到sp_id
+        $spId = getSpIdByOrderId($paramAll['order_id']);
+        if(empty($spId)){
+            returnJson(4000,'发货失败');
+        }
+        $ret = model('TransportOrder', 'logic')->updateTransport($where,$data);
+        if($ret['code'] == 4000){
+            returnJson(4000,'发货失败');
+        }
+        //发送推送信息给货主
+        $push_token = getSpPushToken($spId);
+        if(!empty($push_token)){
+            pushInfo($push_token,'您的订单已经在配送中啦',$rt_key='wztx_shipper');//推送给货主端
+        }
+        returnJson(2000,'发货成功');
+    }
+
+    /**
+     * @api     {GET}       /order/goodsList        货源列表（根据设定路线展示）
+     * @apiName goodsList
+     * @apiGroup Order
+     * @apiHeader {String} authorization-token      token.
+     * @apiParam   {String} [org_city]        出发地
+     * @apiParam   {String} [dest_city]     目的地
+     * @apiParam   {Number} [car_style_length_id]     车长ID
+     * @apiParam   {Number} [car_style_type_id]     车型ID
+     * @apiSuccess  {Array} list            列表
+     * @apiSuccess  {String} list.order_id       订单ID
+     * @apiSuccess  {String} list.org_city       出发地
+     * @apiSuccess  {String} list.dest_city      目的地
+     * @apiSuccess  {String} list.mind_price     心理价格
+     * @apiSuccess  {String} list.system_price   系统价格
+     * @apiSuccess  {String} list.goods_name     货物名称
+     * @apiSuccess  {String} list.weight         总重量（吨）
+     */
+    public function goodsList(){
+
+    }
+
+    /**
+     * @api {POST}  /order/saveQuote        提交货源报价
+     * @apiName saveQuote
+     * @apiGroup    Order
+     * @apiHeader   {String}    authorization-token     token.
+     * @apiParam    {String}     order_id                订单ID。
+     * @apiParam    {String}     dr_price                司机出价
+     * @apiParam    {String}     is_receive          是否立即下单 0表示不立即下单 1表示立即下单
+     */
+    public function saveQuote(){
+
     }
 }

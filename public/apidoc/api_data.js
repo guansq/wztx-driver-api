@@ -800,6 +800,20 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
+            "field": "policy_code",
+            "description": "<p>保单编号</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Int",
+            "optional": false,
+            "field": "is_pay",
+            "description": "<p>是否支付1为已支付 0为未支付</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
             "field": "is_receipt",
             "description": "<p>货物回单1-是-默认，2-否</p>"
           },
@@ -833,6 +847,130 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.ruitukeji.com/order/detail"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/order/goodsList",
+    "title": "货源列表（根据设定路线展示）",
+    "name": "goodsList",
+    "group": "Order",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "org_city",
+            "description": "<p>出发地</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "dest_city",
+            "description": "<p>目的地</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "car_style_length_id",
+            "description": "<p>车长ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "car_style_type_id",
+            "description": "<p>车型ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "list",
+            "description": "<p>列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.order_id",
+            "description": "<p>订单ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.org_city",
+            "description": "<p>出发地</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.dest_city",
+            "description": "<p>目的地</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.mind_price",
+            "description": "<p>心理价格</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.system_price",
+            "description": "<p>系统价格</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.goods_name",
+            "description": "<p>货物名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.weight",
+            "description": "<p>总重量（吨）</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Order",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/order/goodsList"
       }
     ]
   },
@@ -994,6 +1132,163 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.ruitukeji.com/order/listInfo"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/order/saveQuote",
+    "title": "提交货源报价",
+    "name": "saveQuote",
+    "group": "Order",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>订单ID。</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "dr_price",
+            "description": "<p>司机出价</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "is_receive",
+            "description": "<p>是否立即下单 0表示不立即下单 1表示立即下单</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Order",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/order/saveQuote"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/order/shipping",
+    "title": "司机进行发货动作done",
+    "name": "shipping",
+    "group": "Order",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>order_id</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Order",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/order/shipping"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/order/uploadCerPic",
+    "title": "上传到货凭证done",
+    "name": "uploadCerPic",
+    "group": "Order",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>order_id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "img_url",
+            "description": "<p>图片链接，多个用 | 分隔</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>order_id</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Order",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/order/uploadCerPic"
       }
     ]
   },
@@ -1402,8 +1697,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "is_place_order",
-            "description": "<p>是否立即下单</p>"
+            "field": "is_receive",
+            "description": "<p>是否立即下单 0表示不立即下单 1表示立即下单</p>"
           }
         ]
       }
