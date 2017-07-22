@@ -21,7 +21,7 @@ class File extends BaseLogic{
         $info = $file->move(ROOT_PATH . 'public' . DS . 'upload');
         //$filePath = ROOT_PATH . 'public' . DS . 'upload'. DS .$info->getSaveName();
         $data = [
-            'rt_appkey' => 'wztx',
+            'rt_appkey' => 'wztx_driver',
             'file' => '@'.$info->getPathname()
         ];
 
