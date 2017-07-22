@@ -37,7 +37,7 @@ class Linelist extends BaseController {
     }
 
     /**
-     * @api     {GET} /linelist/showline       获取路线信息done
+     * @api     {POST} /linelist/showline       获取路线信息done
      * @apiName    showline
      * @apiGroup    linelist
      * @apiSuccess  {Array}     list                            路线列表
@@ -54,7 +54,7 @@ class Linelist extends BaseController {
     }
 
     /**
-     * @api     {GET} /linelist/delline       获取路线信息done
+     * @api     {POST} /linelist/delline      删除路线信息done
      * @apiName    delline
      * @apiGroup    linelist
      * @apiParam   {String} drline_id             路线ID
