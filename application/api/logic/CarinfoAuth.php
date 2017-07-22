@@ -20,4 +20,10 @@ class CarinfoAuth extends BaseLogic{
         }
         return $this->getLastInsID();
     }
+    /**
+     * Describe:获取车辆验证的信息
+     */
+    public function getCarAuth($car_id){
+        return $this->where("id",$car_id)->find();
+    }
 }

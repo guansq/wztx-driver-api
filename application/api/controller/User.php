@@ -195,6 +195,66 @@ class User extends BaseController{
         returnJson($result);
     }
     /**
+     * @api {GET} /user/getAuthInfo    获取认证信息done
+     * @apiName getAuthInfo
+     * @apiGroup User
+     *
+     * @apiHeader {String}  authorization-token         token.
+     * @apiSuccess {String} real_name                   真实姓名
+     * @apiSuccess {String} phone                       手机号码
+     * @apiSuccess {String} identity                    身份证号
+     * @apiSuccess {Number} sex                         性别 1=男 2=女 0=未知
+     * @apiSuccess {String} address                     常驻地址
+     *
+     * @apiSuccess {String} card_number                  车牌号码
+     * @apiSuccess {String} car_type                     车型
+     * @apiSuccess {String} car_length                   车长
+     * @apiSuccess {String} weight                       载重
+     * @apiSuccess {String} volume                       可载体积
+     *
+     * @apiSuccess {String} front_pic                    身份证正
+     * @apiSuccess {String} back_pic                     身份证反
+     * @apiSuccess {String} policy_pic                   保险单照片
+     * @apiSuccess {String} index_pic                    车头和车牌号照片
+     * @apiSuccess {String} vehicle_license_pic          行驶证照片
+     * @apiSuccess {String} driving_licence_pic          驾驶证照片
+     * @apiSuccess {String} operation_pic                营运证照片
+     */
+    public function getAuthInfo(){
+        $drBaseInfoLogic = model('DrBaseInfo','logic');
+        $result = $drBaseInfoLogic->findInfoByUserId($this->loginUser['id']);
+        if (empty($result)){
+            returnJson(4004, '未获取到用户信息');
+        }
+        $carauth = '';
+        if(!empty($result['car_id'])){
+            $carauth =  model('CarinfoAuth','logic')->getCarAuth($result['car_id']);
+        }
+        $detail = [
+            'real_name' => $result['real_name'],
+            'phone' => $result['phone'],
+            'identity' => $result['identity'],
+            'sex' => $result['sex'],
+            'address' => $result['address'],
+            'card_number' => $carauth['card_number'],
+            'car_type' => $carauth['car_type'],
+            'car_length' => $carauth['car_length'],
+            'weight' => strval($carauth['weight']),
+            'volume' => strval($carauth['volume']),
+            'front_pic' => $result['front_pic'],
+            'back_pic' => $result['back_pic'],
+            'policy_pic' => $carauth['policy_pic'],
+            'index_pic' => $carauth['index_pic'],
+            'vehicle_license_pic' => $carauth['vehicle_license_pic'],
+            'driving_licence_pic' => $carauth['driving_licence_pic'],
+            'operation_pic' => $carauth['operation_pic'],
+        ];
+        returnJson('2000', '成功', $detail);
+    }
+
+
+
+    /**
      * @api      {POST} /User/login 用户登录done
      * @apiName  login
      * @apiGroup User
