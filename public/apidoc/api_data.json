@@ -1001,7 +1001,7 @@
             "type": "String",
             "optional": false,
             "field": "type",
-            "description": "<p>订单状态（all全部状态，quote报价中，quoted已报价，待发货 distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成））</p>"
+            "description": "<p>订单状态（all全部状态，quote报价中，quoted已报价，待发货 distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成）） success 已完成的，包含未评论</p>"
           },
           {
             "group": "Parameter",
@@ -1132,6 +1132,34 @@
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.ruitukeji.com/order/listInfo"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/order/receiveOrder",
+    "title": "接收订单",
+    "name": "receiveOrder",
+    "group": "Order",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Order",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/order/receiveOrder"
       }
     ]
   },
@@ -2697,6 +2725,144 @@
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.ruitukeji.com/user/uploadAvatar"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/linelist/delline",
+    "title": "获取路线信息done",
+    "name": "delline",
+    "group": "linelist",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "drline_id",
+            "description": "<p>路线ID</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Linelist.php",
+    "groupTitle": "linelist",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/linelist/delline"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/linelist/setline",
+    "title": "设置路线done",
+    "name": "setline",
+    "group": "linelist",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "org_city",
+            "description": "<p>路线的起始地省市区</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "dest_city",
+            "description": "<p>路线的到达地省市区</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "drline_id",
+            "description": "<p>路线ID</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Linelist.php",
+    "groupTitle": "linelist",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/linelist/setline"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/linelist/showline",
+    "title": "获取路线信息done",
+    "name": "showline",
+    "group": "linelist",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "list",
+            "description": "<p>路线列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "list.drline_id",
+            "description": "<p>路线ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.org_city",
+            "description": "<p>路线的起始地省市区</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.dest_city",
+            "description": "<p>路线的到达地省市区</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Linelist.php",
+    "groupTitle": "linelist",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/linelist/showline"
       }
     ]
   }

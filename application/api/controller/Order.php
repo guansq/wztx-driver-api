@@ -34,7 +34,7 @@ class Order extends BaseController {
      * @apiName listInfo
      * @apiGroup Order
      * @apiHeader {String} authorization-token           token.
-     * @apiParam   {String} type        订单状态（all全部状态，quote报价中，quoted已报价，待发货 distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成））
+     * @apiParam   {String} type        订单状态（all全部状态，quote报价中，quoted已报价，待发货 distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成）） success 已完成的，包含未评论
      * @apiParam {Number} [page=1]                  页码.
      * @apiParam {Number} [pageSize=20]             每页数据量.
      * @apiSuccess {Array}  list        订单列表
@@ -58,12 +58,16 @@ class Order extends BaseController {
             'type',
         ]);
         $rule = [
-            'type' => ['require', '/^(all|quote|quoted|distribute|photo)$/'],
+            'type' => ['require', '/^(all|quote|quoted|distribute|photo|success)$/'],
         ];
         validateData($paramAll, $rule);
         $where = [];
         if ($paramAll['type'] != 'all') {
-            $where['status'] = $paramAll['type'];
+            if($paramAll['type'] == 'success'){
+                $where['status'] = ['in',['pay_success','comment']];
+            }else{
+                $where['status'] = $paramAll['type'];
+            }
         }
         $where['dr_id'] = $this->loginUser['id'];
         $pageParam = $this->getPagingParams();
@@ -249,9 +253,23 @@ class Order extends BaseController {
      * @apiSuccess  {String} list.weight         总重量（吨）
      */
     public function goodsList(){
-        $this->getReqParams(['org_city','dest_city','car_style_length_id','car_style_type_id']);
-        $lineList = model('Linelist','logic')->getDrLineList(['dr_id'=>$this->loginUser['id']]);//获取该司机linelist
-
+        $paramAll = $this->getReqParams(['org_city','dest_city','car_style_length_id','car_style_type_id']);
+        $pageParam =$this->getPagingParams();
+        $where = [];
+        if(isset($paramAll['org_city'])&& !empty($paramAll['org_city'])){
+            $where['org_city'] = ['like',"%{$paramAll['org_city']}%"];
+        }
+        if(isset($paramAll['dest_city'])&& !empty($paramAll['dest_city'])){
+            $where['dest_city'] = ['like',"%{$paramAll['dest_city']}%"];
+        }
+        if(isset($paramAll['car_style_length_id'])&& !empty($paramAll['car_style_length_id'])){
+            $where['car_style_length_id'] = ['like',"%{$paramAll['car_style_length_id']}%"];
+        }
+        if(isset($paramAll['car_style_type_id'])&& !empty($paramAll['car_style_type_id'])){
+            $where['car_style_type_id'] = ['like',"%{$paramAll['car_style_type_id']}%"];
+        }
+        $ret = model('TransportOrder','logic')->getTransportOrderList($where,$pageParam);
+        returnJson('2000', '成功', $ret);
     }
 
     /**
@@ -264,6 +282,16 @@ class Order extends BaseController {
      * @apiParam    {String}     is_receive          是否立即下单 0表示不立即下单 1表示立即下单
      */
     public function saveQuote(){
+
+    }
+
+    /**
+     * @api {GET}   /order/receiveOrder     接收订单
+     * @apiName receiveOrder
+     * @apiGroup    Order
+     * @apiHeader   {String}        authorization-token     token.
+     */
+    public function receiveOrder(){
 
     }
 }
