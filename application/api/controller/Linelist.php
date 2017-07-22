@@ -47,7 +47,10 @@ class Linelist extends BaseController {
      */
     public function showline() {
         $ret = model('Linelist', 'logic')->getDrLineList(['dr_id' => $this->loginUser['id']]);
-        returnJson('2000','成功',$ret);
+        if($ret['code'] != 2000){
+            returnJson(4004, '未获取到路线信息');
+        }
+        returnJson($ret);
     }
 
     /**
