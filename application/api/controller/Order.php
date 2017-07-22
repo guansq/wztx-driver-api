@@ -180,17 +180,17 @@ class Order extends BaseController {
         validateData($paramAll, $rule);
         $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo(['dr_id' => $this->loginUser['id'], 'id' => $paramAll['order_id'],'status' => 'distribute']);//配送中的订单信息
         if (empty($orderInfo)) {
-            returnJson('4004', '未获取到订单信息');
+            returnJson(4004, '未获取到订单信息');
         }
         if($orderInfo['status'] != 'distribute'){
-            returnJson('4000', '当前状态不能拍照上传');
+            returnJson(4000, '当前状态不能拍照上传');
         }
         //没有问题存入数据库
         $changeStatus = model('TransportOrder', 'logic')->updateTransport(['id' => $paramAll['order_id']], ['status' => 'photo','arr_cer_pic'=>$paramAll['img_url']]);
-        if ($changeStatus['code'] != '2000') {
+        if ($changeStatus['code'] != 2000) {
             returnJson($changeStatus);
         }
-        returnJson('200', '成功',['order_id'=>$paramAll['order_id']]);
+        returnJson(2000, '成功',['order_id'=>$paramAll['order_id']]);
     }
 
     /**
@@ -249,6 +249,8 @@ class Order extends BaseController {
      * @apiSuccess  {String} list.weight         总重量（吨）
      */
     public function goodsList(){
+        $this->getReqParams(['org_city','dest_city','car_style_length_id','car_style_type_id']);
+        $lineList = model('Linelist','logic')->getDrLineList(['dr_id'=>$this->loginUser['id']]);//获取该司机linelist
 
     }
 

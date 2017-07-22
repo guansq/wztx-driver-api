@@ -32,7 +32,7 @@ class Linelist extends BaseLogic {
         if (!$ret) {
             return resultArray('4000', '数据为空');
         }
-        return ['list' => $ret];
+        return resultArray('2000','成功',['list' => $ret]);
     }
 
     /**
