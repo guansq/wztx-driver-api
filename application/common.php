@@ -462,5 +462,30 @@ function createSign($sendData){
  * 得到货主ID通过orderId
  */
 function getSpIdByOrderId($id){
-    return Db('transport_order')->where("id",$id)->value('sp_id');
+    return Db::name('transport_order')->where("id",$id)->value('sp_id');
+}
+
+/**
+ * 生成唯一订单号
+ * @return string
+ */
+function order_num(){
+    return date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+}
+
+function getBaseSpUserInfo($sp_id){
+    return Db::name('sp_base_info')->where("id",$sp_id)->find();
+}
+
+/*
+ * 得到公司名称
+ */
+function getCompanyName($userInfo){
+    if(!empty($userInfo)){
+        if(!empty($userInfo['company_id'])){
+            return Db::name('sp_company_auth')->where("sp_id",$userInfo['id'])->value('com_name');
+        }
+        return '';
+    }
+    return '';
 }
