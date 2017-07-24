@@ -12,7 +12,7 @@ use think\Request;
 use service\MsgService;
 use service\MapService;
 
-class User extends BaseController{
+class User extends BaseController {
 
     /**
      * @api     {POST} /User/reg            用户注册done
@@ -26,28 +26,28 @@ class User extends BaseController{
      * @apiSuccess {Number} userId          用户id.
      * @apiSuccess {String} accessToken     接口调用凭证.
      */
-    public function reg(Request $request){
+    public function reg(Request $request) {
         //校验参数
-        $paramAll = $this->getReqParams(['type','user_name', 'password', 'recomm_code', 'pushToken', 'captcha']);
+        $paramAll = $this->getReqParams(['type', 'user_name', 'password', 'recomm_code', 'pushToken', 'captcha']);
         //$result=$this->validate($paramAll,'User');
         $rule = [
-            'user_name'=>['regex'=>'/^[1]{1}[3|5|7|8]{1}[0-9]{9}$/','require','unique:system_user_driver'],
+            'user_name' => ['regex' => '/^[1]{1}[3|5|7|8]{1}[0-9]{9}$/', 'require', 'unique:system_user_driver'],
             'password' => 'require|length:6,128',
             'captcha' => 'require|length:4,8',
         ];
         validateData($paramAll, $rule);
         //校验验证码
-        $result = MsgService::verifyCaptcha($paramAll['user_name'],'reg',$paramAll['captcha']);
-        if($result['code'] != 2000){
+        $result = MsgService::verifyCaptcha($paramAll['user_name'], 'reg', $paramAll['captcha']);
+        if ($result['code'] != 2000) {
             returnJson($result);
         }
         //写入数据库
         //进行注册
-        $userLogic = model('User','logic');
+        $userLogic = model('User', 'logic');
         $result = $userLogic->reg($paramAll);
         //$userLogic
-        if($result === false){
-            returnJson(['4020','注册失败',[]]);
+        if ($result === false) {
+            returnJson(['4020', '注册失败', []]);
         }
 
         returnJson($result);
@@ -67,27 +67,27 @@ class User extends BaseController{
      * @apiParam {String} back_pic         身份证反面照.
      *
      */
-    public function driverAuth(){
+    public function driverAuth() {
         //校验参数
-        $paramAll = $this->getReqParams(['logistics_type','real_name','sex', 'identity', 'hold_pic', 'front_pic','back_pic']);
+        $paramAll = $this->getReqParams(['logistics_type', 'real_name', 'sex', 'identity', 'hold_pic', 'front_pic', 'back_pic']);
         $rule = [
-            'logistics_type' => ['require','regex'=>'/^(1|2)$/'],
+            'logistics_type' => ['require', 'regex' => '/^(1|2)$/'],
             'real_name' => 'require|max:10',
-            'sex' => ['require','regex'=>'/^(0|1|2)$/'],
-            'identity' =>['require','regex'=>'/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/'],
-            'hold_pic' =>'require',
-            'front_pic' =>'require',
-            'back_pic' =>'require',
+            'sex' => ['require', 'regex' => '/^(0|1|2)$/'],
+            'identity' => ['require', 'regex' => '/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/'],
+            'hold_pic' => 'require',
+            'front_pic' => 'require',
+            'back_pic' => 'require',
         ];
         validateData($paramAll, $rule);
         //查看验证状态为init才可以进行验证
-        $drBaseInfoLogic = model('DrBaseInfo','logic');
+        $drBaseInfoLogic = model('DrBaseInfo', 'logic');
         $authStatus = $drBaseInfoLogic->getAuthStatus($this->loginUser['id']);
-        if($authStatus != 'init'){
+        if ($authStatus != 'init') {
             $ret = [
                 'code' => '4022',
                 'msg' => '状态不合法',
-                'result' => ['auth_status'=>$authStatus]
+                'result' => ['auth_status' => $authStatus]
             ];
             returnJson($ret);
         }
@@ -96,7 +96,7 @@ class User extends BaseController{
         $where = [
             'id' => $this->loginUser['id']
         ];
-        $result = $drBaseInfoLogic->saveDriverAuth($where,$paramAll);
+        $result = $drBaseInfoLogic->saveDriverAuth($where, $paramAll);
         returnJson($result);
     }
 
@@ -126,7 +126,7 @@ class User extends BaseController{
      * @apiParam {String} driving_licence_pic            驾驶证照片.
      * @apiParam {String} operation_pic                  营运证照片.
      */
-    public function carAuth(){
+    public function carAuth() {
         //校验参数
         $paramAll = $this->getReqParams(['car_type',
             'car_style_type_id',
@@ -177,23 +177,24 @@ class User extends BaseController{
             'card_number' => $paramAll['card_number']
         ];
         $map_code = MapService::saveMapData($mapInfo);//当前坐标.  104.394729,31.125698
-        $carinfoAuthLogic = model('CarinfoAuth','logic');
+        $carinfoAuthLogic = model('CarinfoAuth', 'logic');
         $where = [
             'id' => $this->loginUser['id']
         ];
         $carId = $carinfoAuthLogic->saveCarAuth($paramAll);
-        $drBaseInfoLogic = model('DrBaseInfo','logic');
+        $drBaseInfoLogic = model('DrBaseInfo', 'logic');
         $data = [
-            'car_id'=>$carId,
-            'map_code'=>$map_code,
-            'auth_status'=>'check'
+            'car_id' => $carId,
+            'map_code' => $map_code,
+            'auth_status' => 'check'
         ];
-        $result = $drBaseInfoLogic->saveDriverAuth($where,$data);
-        if($result['code'] == 2000){
+        $result = $drBaseInfoLogic->saveDriverAuth($where, $data);
+        if ($result['code'] == 2000) {
             $result['result'] = $map_code;
         }
         returnJson($result);
     }
+
     /**
      * @api {GET} /user/getAuthInfo    获取认证信息done
      * @apiName getAuthInfo
@@ -229,15 +230,15 @@ class User extends BaseController{
      * @apiSuccess {String} driving_startline             驾驶证开始日期
      * @apiSuccess {String} driving_deadline              驾驶证截止日期
      */
-    public function getAuthInfo(){
-        $drBaseInfoLogic = model('DrBaseInfo','logic');
+    public function getAuthInfo() {
+        $drBaseInfoLogic = model('DrBaseInfo', 'logic');
         $result = $drBaseInfoLogic->findInfoByUserId($this->loginUser['id']);
-        if (empty($result)){
+        if (empty($result)) {
             returnJson(4004, '未获取到用户信息');
         }
         $carauth = '';
-        if(!empty($result['car_id'])){
-            $carauth =  model('CarinfoAuth','logic')->getCarAuth($result['car_id']);
+        if (!empty($result['car_id'])) {
+            $carauth = model('CarinfoAuth', 'logic')->getCarAuth($result['car_id']);
         }
         $detail = [
             'real_name' => $result['real_name'],
@@ -257,14 +258,14 @@ class User extends BaseController{
             'vehicle_license_pic' => $carauth['vehicle_license_pic'],
             'driving_licence_pic' => $carauth['driving_licence_pic'],
             'operation_pic' => $carauth['operation_pic'],
-            'policy_startline' => $carauth['policy_startline'],
-            'policy_deadline' => $carauth['policy_deadline'],
-            'license_startline' => $carauth['license_startline'],
-            'license_deadline' => $carauth['license_deadline'],
-            'operation_startline' => $carauth['operation_startline'],
-            'operation_deadline' => $carauth['operation_deadline'],
-            'driving_startline' => $carauth['driving_startline'],
-            'driving_deadline' => $carauth['driving_deadline'],
+            'policy_startline' => wztxDate($carauth['policy_startline']),
+            'policy_deadline' => wztxDate($carauth['policy_deadline']),
+            'license_startline' => wztxDate($carauth['license_startline']),
+            'license_deadline' => wztxDate($carauth['license_deadline']),
+            'operation_startline' => wztxDate($carauth['operation_startline']),
+            'operation_deadline' => wztxDate($carauth['operation_deadline']),
+            'driving_startline' => wztxDate($carauth['driving_startline']),
+            'driving_deadline' => wztxDate($carauth['driving_deadline']),
         ];
         returnJson('2000', '成功', $detail);
     }
@@ -282,7 +283,7 @@ class User extends BaseController{
      * @apiSuccess {Number} expireTime      有效期.
      * @apiSuccess {Number} userId          用户id.
      */
-    public function login(Request $request){
+    public function login(Request $request) {
         //校验参数
         $paramAll = $this->getReqParams(['account', 'password', 'wxOpenid', 'pushToken']);
         $rule = [
@@ -303,23 +304,23 @@ class User extends BaseController{
      * @apiParam {String} new_password          加密的密码. 加密方式：MD5("RUITU"+明文密码+"KEJI").
      * @apiParam {String} captcha           验证码.
      */
-    public function forget(Request $request){
+    public function forget(Request $request) {
         //校验参数
         $paramAll = $this->getReqParams(['account', 'new_password', 'captcha']);
         $rule = [
-            'account' => ['regex'=>'/^[1]{1}[3|5|7|8]{1}[0-9]{9}$/','require'],
+            'account' => ['regex' => '/^[1]{1}[3|5|7|8]{1}[0-9]{9}$/', 'require'],
             'new_password' => 'require|length:6,128',
             'captcha' => 'require|length:4,8',
         ];
         validateData($paramAll, $rule);
         //校验验证码
-        $result = MsgService::verifyCaptcha($paramAll['account'],'resetpwd',$paramAll['captcha']);
-        if($result['code'] != 2000){
+        $result = MsgService::verifyCaptcha($paramAll['account'], 'resetpwd', $paramAll['captcha']);
+        if ($result['code'] != 2000) {
             returnJson($result);
         }
-        $userLogic = model('User','logic');
+        $userLogic = model('User', 'logic');
 
-        $ret = $userLogic->resetPwd($paramAll['account'],$paramAll);
+        $ret = $userLogic->resetPwd($paramAll['account'], $paramAll);
         returnJson($ret);
     }
 
@@ -337,12 +338,12 @@ class User extends BaseController{
      * @apiSuccess {String} auth_status         认证状态（init=未认证， check=认证中，pass=认证通过，refuse=认证失败，delete=后台删除）
      */
 
-    public function info(Request $request){
+    public function info(Request $request) {
         $ret = model('DrBaseInfo', 'logic')->findInfoByUserId($this->loginUser['id']);
-        if($ret !== false){
-            returnJson(2000,'成功',$ret);
+        if ($ret !== false) {
+            returnJson(2000, '成功', $ret);
         }
-        returnJson(4000,'获取数据失败');
+        returnJson(4000, '获取数据失败');
     }
 
     /**
@@ -354,13 +355,13 @@ class User extends BaseController{
      * @apiParam  {Number} [retType=json]   返回数据格式 默认=json  jsonp
      * @apiSuccess {String} url             下载链接(绝对路径)
      */
-    public function uploadAvatar(){
+    public function uploadAvatar() {
         $file = $this->request->file('file');
 
-        if(empty($file)){
+        if (empty($file)) {
             returnJson(4001);
         }
-        $rule = ['size' => 1024*1024*5, 'ext' => 'jpg,gif,png,jpeg'];
+        $rule = ['size' => 1024 * 1024 * 5, 'ext' => 'jpg,gif,png,jpeg'];
         validateFile($file, $rule);
         $userLogic = model('User', 'logic');
         returnJson($userLogic->uploadAvatar($this->loginUser, $file));
@@ -376,7 +377,7 @@ class User extends BaseController{
      * @apiParam {String} new_password      加密的密码. 加密方式：MD5("RUITU"+明文密码+"KEJI").
      * @apiParam {String} repeat_password   重复密码.
      */
-    public function updatePwd(Request $request){
+    public function updatePwd(Request $request) {
         //校验参数
         $paramAll = $this->getReqParams(['old_password', 'new_password', 'repeat_password']);
         $rule = [
@@ -388,8 +389,8 @@ class User extends BaseController{
 
         validateData($paramAll, $rule);
         //校验验证码
-        $userLogic = model('User','logic');
-        $ret = $userLogic->resetPwd($this->loginUser,$paramAll);
+        $userLogic = model('User', 'logic');
+        $ret = $userLogic->resetPwd($this->loginUser, $paramAll);
         //$loginRet = \think\Loader::model('User', 'logic')->login($paramAll);
         returnJson($ret);
     }
@@ -400,7 +401,7 @@ class User extends BaseController{
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
      */
-    public function isWork(){
+    public function isWork() {
 
     }
 
