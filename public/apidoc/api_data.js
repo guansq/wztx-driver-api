@@ -2617,7 +2617,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "operation_pic",
-            "description": "<p>营运证照片     *</p>"
+            "description": "<p>营运证照片</p>"
           },
           {
             "group": "Success 200",

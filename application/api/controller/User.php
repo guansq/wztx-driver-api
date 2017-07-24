@@ -219,7 +219,7 @@ class User extends BaseController {
      * @apiSuccess {String} index_pic                    车头和车牌号照片
      * @apiSuccess {String} vehicle_license_pic          行驶证照片
      * @apiSuccess {String} driving_licence_pic          驾驶证照片
-     * @apiSuccess {String} operation_pic                营运证照片     *
+     * @apiSuccess {String} operation_pic                营运证照片
      *
      * @apiSuccess {String} policy_startline              保单开始时间
      * @apiSuccess {String} policy_deadline               保单截止时间
