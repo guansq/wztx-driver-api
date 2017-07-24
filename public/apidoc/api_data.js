@@ -318,6 +318,109 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "/goods/enableQuoteList",
+    "title": "司机接单（可以报价）列表（有路线展示司机附近的货源信息，没有展示附近货源信息）done",
+    "name": "enableQuoteList",
+    "group": "Goods",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>all所有,init未报价,quote已报价</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>报价ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "org_city",
+            "description": "<p>起始地</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "dest_city",
+            "description": "<p>目的地</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "goods_name",
+            "description": "<p>货品名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "weight",
+            "description": "<p>货品重量</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "system_price",
+            "description": "<p>系统出价</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "sp_price",
+            "description": "<p>货主出价</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "usecar_time",
+            "description": "<p>用车时间</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Goods.php",
+    "groupTitle": "Goods",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/goods/enableQuoteList"
+      }
+    ]
+  },
+  {
+    "type": "GET",
     "url": "/index/home",
     "title": "首页(ok)",
     "description": "<p>@apiName  home</p>",
@@ -976,23 +1079,10 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/order/goodsList",
+    "url": "/goods/goodsList",
     "title": "货源列表（根据设定路线展示）done",
     "name": "goodsList",
     "group": "Order",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1090,11 +1180,11 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "application/api/controller/Order.php",
+    "filename": "application/api/controller/Goods.php",
     "groupTitle": "Order",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/order/goodsList"
+        "url": "http://wztx.drv.api.ruitukeji.com/goods/goodsList"
       }
     ]
   },
@@ -1292,7 +1382,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "application/api/controller/Order.php",
+    "filename": "application/api/controller/Quote.php",
     "groupTitle": "Order",
     "sampleRequest": [
       {
@@ -1302,7 +1392,7 @@ define({ "api": [
   },
   {
     "type": "POST",
-    "url": "/order/saveQuote",
+    "url": "/quote/saveQuote",
     "title": "提交货源报价done",
     "name": "saveQuote",
     "group": "Order",
@@ -1326,8 +1416,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "order_id",
-            "description": "<p>订单ID。</p>"
+            "field": "goods_id",
+            "description": "<p>货源ID。</p>"
           },
           {
             "group": "Parameter",
@@ -1347,11 +1437,11 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "application/api/controller/Order.php",
+    "filename": "application/api/controller/Quote.php",
     "groupTitle": "Order",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/order/saveQuote"
+        "url": "http://wztx.drv.api.ruitukeji.com/quote/saveQuote"
       }
     ]
   },
@@ -1819,61 +1909,6 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.ruitukeji.com/pay/withDraw"
-      }
-    ]
-  },
-  {
-    "type": "POST",
-    "url": "/quote/add",
-    "title": "提交司机报价done",
-    "name": "add",
-    "group": "Quote",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "quote_id",
-            "description": "<p>报价ID。</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "dr_price",
-            "description": "<p>司机出价</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "is_receive",
-            "description": "<p>是否立即下单 0表示不立即下单 1表示立即下单</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Quote.php",
-    "groupTitle": "Quote",
-    "sampleRequest": [
-      {
-        "url": "http://wztx.drv.api.ruitukeji.com/quote/add"
       }
     ]
   },
@@ -2440,6 +2475,159 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.ruitukeji.com/User/driverAuth"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/user/getAuthInfo",
+    "title": "获取认证信息done",
+    "name": "getAuthInfo",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "real_name",
+            "description": "<p>真实姓名</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>手机号码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "identity",
+            "description": "<p>身份证号</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "sex",
+            "description": "<p>性别 1=男 2=女 0=未知</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>常驻地址</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "card_number",
+            "description": "<p>车牌号码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "car_type",
+            "description": "<p>车型</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "car_length",
+            "description": "<p>车长</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "weight",
+            "description": "<p>载重</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "volume",
+            "description": "<p>可载体积</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "front_pic",
+            "description": "<p>身份证正</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "back_pic",
+            "description": "<p>身份证反</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "policy_pic",
+            "description": "<p>保险单照片</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "index_pic",
+            "description": "<p>车头和车牌号照片</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "vehicle_license_pic",
+            "description": "<p>行驶证照片</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driving_licence_pic",
+            "description": "<p>驾驶证照片</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "operation_pic",
+            "description": "<p>营运证照片</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/user/getAuthInfo"
       }
     ]
   },
