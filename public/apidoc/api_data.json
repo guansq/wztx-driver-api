@@ -2617,7 +2617,63 @@
             "type": "String",
             "optional": false,
             "field": "operation_pic",
-            "description": "<p>营运证照片</p>"
+            "description": "<p>营运证照片     *</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "policy_startline",
+            "description": "<p>保单开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "policy_deadline",
+            "description": "<p>保单截止时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "license_startline",
+            "description": "<p>行驶证开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "license_deadline",
+            "description": "<p>行驶证截止时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "operation_startline",
+            "description": "<p>营运证开始日期</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "operation_deadline",
+            "description": "<p>营运证截止日期</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driving_startline",
+            "description": "<p>驾驶证开始日期</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driving_deadline",
+            "description": "<p>驾驶证截止日期</p>"
           }
         ]
       }

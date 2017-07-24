@@ -218,7 +218,16 @@ class User extends BaseController{
      * @apiSuccess {String} index_pic                    车头和车牌号照片
      * @apiSuccess {String} vehicle_license_pic          行驶证照片
      * @apiSuccess {String} driving_licence_pic          驾驶证照片
-     * @apiSuccess {String} operation_pic                营运证照片
+     * @apiSuccess {String} operation_pic                营运证照片     *
+     *
+     * @apiSuccess {String} policy_startline              保单开始时间
+     * @apiSuccess {String} policy_deadline               保单截止时间
+     * @apiSuccess {String} license_startline             行驶证开始时间
+     * @apiSuccess {String} license_deadline              行驶证截止时间
+     * @apiSuccess {String} operation_startline           营运证开始日期
+     * @apiSuccess {String} operation_deadline            营运证截止日期
+     * @apiSuccess {String} driving_startline             驾驶证开始日期
+     * @apiSuccess {String} driving_deadline              驾驶证截止日期
      */
     public function getAuthInfo(){
         $drBaseInfoLogic = model('DrBaseInfo','logic');
@@ -248,11 +257,17 @@ class User extends BaseController{
             'vehicle_license_pic' => $carauth['vehicle_license_pic'],
             'driving_licence_pic' => $carauth['driving_licence_pic'],
             'operation_pic' => $carauth['operation_pic'],
+            'policy_startline' => $carauth['policy_startline'],
+            'policy_deadline' => $carauth['policy_deadline'],
+            'license_startline' => $carauth['license_startline'],
+            'license_deadline' => $carauth['license_deadline'],
+            'operation_startline' => $carauth['operation_startline'],
+            'operation_deadline' => $carauth['operation_deadline'],
+            'driving_startline' => $carauth['driving_startline'],
+            'driving_deadline' => $carauth['driving_deadline'],
         ];
         returnJson('2000', '成功', $detail);
     }
-
-
 
     /**
      * @api      {POST} /User/login 用户登录done
