@@ -40,22 +40,11 @@ class TransportOrder extends BaseLogic {
         if (empty($dataTotal)) {
             return false;
         }
-        if(!empty($where)){
-            $list = $this->where($where)->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
-                ->field('id order_id,org_city,mind_price,system_price,dest_city,weight,goods_name,status,car_style_length,car_style_type,final_price,usecar_time')->select();
-        }else{
-            $list = $this->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
-                ->field('id order_id,org_city,mind_price,system_price,dest_city,weight,goods_name,status,car_style_length,car_style_type,final_price,usecar_time')->select();
-        }
+        $list = $this->where($where)->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
+            ->field('id order_id,*')->select();
+
         if(empty($list)){
-            return returnJson(4000,'暂无数据');
-        }
-        foreach ($list as $k =>$v){
-            $v['weight'] =strval($v['weight']);
-            $v['final_price']= wztxMoney( $v['final_price']);
-            $v['mind_price'] = wztxMoney( $v['mind_price']);
-            $v['system_price'] = wztxMoney( $v['system_price']);
-            $v['usecar_time'] =wztxDate($v['usecar_time']);
+            return false;
         }
         $ret = [
             'list' => $list,

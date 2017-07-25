@@ -5,6 +5,7 @@ Route::any('apiCode','Index/apiCode');
 Route::any('appConfig','Index/appConfig');
 Route::any('lastApk','Index/lastApk');
 Route::get('index/home','Index/home');
+Route::get('index/getAdvertisement','Index/getAdvertisement');
 Route::post('index/sendCaptcha','Index/sendCaptcha');
 
 Route::get('u9api/syncAll','U9Api/syncAll');

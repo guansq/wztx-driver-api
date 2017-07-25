@@ -106,7 +106,27 @@ class Index extends BaseController{
         validateData($data, $rule);
         returnJson(MsgService::sendCaptcha($data['mobile'],$data['opt']));
     }
+    /**
+     * @api      {GET} /index/getAdvertisement 首页轮播图done
+     * @apiDescription
+     * @apiName  getAdvertisement
+     * @apiGroup Index
+     *
+     * @apiSuccess {Array} list        轮播图.
+     * @apiSuccess {Number} list.id      id.
+     * @apiSuccess {Number} list.position   序号.
+     * @apiSuccess {String} list.url    跳转链接.
+     * @apiSuccess {String} list.src     图片.
+     */
+    public function getAdvertisement(){
+        $ret = model('Advertisement', 'logic')->getAdInfo();
 
+        if(!$ret){
+            return returnJson('4000','数据为空');
+        }
+        //dump($newArr);die;
+        return returnJson('2000','成功',['list'=>$ret]);
+    }
     /**
      * 显示创建资源表单页.
      *
