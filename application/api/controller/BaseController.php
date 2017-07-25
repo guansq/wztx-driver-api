@@ -56,6 +56,7 @@ class BaseController extends Controller{
             }*/
             $this->loginUser['type'] = $drBaseInfo['type'];
             $this->loginUser['map_code'] = $drBaseInfo['map_code'];
+            $this->loginUser['online'] = $drBaseInfo['online'];//上班状态 0=上班，1=不上班
         }
     }
 

@@ -2695,6 +2695,47 @@ define({ "api": [
   },
   {
     "type": "POST",
+    "url": "/User/changeWork",
+    "title": "改变工作状态",
+    "name": "isWork",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "online",
+            "description": "<p>上班状态 0=上班，1=不上班</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/User/changeWork"
+      }
+    ]
+  },
+  {
+    "type": "POST",
     "url": "/User/isWork",
     "title": "工作状态",
     "name": "isWork",
@@ -2708,6 +2749,19 @@ define({ "api": [
             "optional": false,
             "field": "authorization-token",
             "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "online",
+            "description": "<p>上班状态 0=上班，1=不上班</p>"
           }
         ]
       }

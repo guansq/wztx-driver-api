@@ -400,9 +400,28 @@ class User extends BaseController {
      * @apiName  isWork
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
+     * @apiSuccess  {String} online 上班状态 0=上班，1=不上班
      */
     public function isWork() {
+        $ret = model('DrBaseInfo','logic')->getWorkInfo(['id'=>$this->loginUser['id']]);
+        returnJson($ret);
+    }
 
+    /**
+     * @api      {POST} /User/changeWork   改变工作状态
+     * @apiName  isWork
+     * @apiGroup User
+     * @apiHeader {String} authorization-token           token.
+     * @apiParam  {String} online 上班状态 0=上班，1=不上班
+     */
+    public function changeWork() {
+        $paramAll = $this->getReqParams(['online']);
+        $rule = [
+            'online' => ['regex'=>'/^(0|1)$/','require'],
+        ];
+        validateData($paramAll, $rule);
+        $ret = model('DrBaseInfo','logic')->changeWork(['id'=>$this->loginUser['id'],'online'=>$paramAll['online']]);
+        returnJson($ret);
     }
 
 }

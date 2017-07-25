@@ -12,20 +12,21 @@ class Goods extends BaseLogic{
 
 
     //获取货源列表
-    public function getGoodsList($where, $pageParam) {
+    public function getGoodsList($where=[], $pageParam) {
         $dataTotal = $this->where($where)->order('create_at desc')->count();
         if (empty($dataTotal)) {
-            return false;
+            return resultArray(4000,'暂无数据');
         }
-        if(!empty($where)){
-            $list = $this->where($where)->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
-                ->field('id order_id,org_city,mind_price,system_price,dest_city,weight,goods_name,status,car_style_length,car_style_type,final_price,usecar_time')->select();
+        /*if(!empty($where)){
+
         }else{
             $list = $this->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
                 ->field('id order_id,org_city,mind_price,system_price,dest_city,weight,goods_name,status,car_style_length,car_style_type,final_price,usecar_time')->select();
-        }
+        }*/
+        $list = $this->where($where)->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
+            ->field('id order_id,org_city,mind_price,system_price,dest_city,weight,goods_name,status,car_style_length,car_style_type,final_price,usecar_time')->select();
         if(empty($list)){
-            return returnJson(4000,'暂无数据');
+            return resultArray(4000,'暂无数据');
         }
         foreach ($list as $k =>$v){
             $v['weight'] =strval($v['weight']);
@@ -41,7 +42,7 @@ class Goods extends BaseLogic{
             'dataTotal' => $dataTotal,
             'pageTotal' => intval(($dataTotal + $pageParam['pageSize'] - 1) / $pageParam['pageSize']),
         ];
-        return $ret;
+        return resultArray(2000,'成功',$ret);
     }
 
     /**
@@ -111,6 +112,6 @@ class Goods extends BaseLogic{
             'dataTotal' => $dataTotal,
             'pageTotal' => intval(($dataTotal + $pageParam['pageSize'] - 1) / $pageParam['pageSize']),
         ];
-        return resultArray('2000',$ret);
+        return resultArray('2000','',$ret);
     }
 }

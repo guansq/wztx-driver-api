@@ -25,6 +25,11 @@ class Goods extends BaseController{
      * @apiSuccess  {String}    usecar_time     用车时间
      */
     public function enableQuoteList(){
+        //判断是否上下班时间
+        //dump($this->loginUser);die;
+        if($this->loginUser['online'] == 1){
+            returnJson(4000,'您现在是下班状态不能接单');
+        }
         $pathInfo = model('Linelist','logic')->getDrLineList(['dr_id'=>$this->loginUser['id']]);
         $paramAll = $this->getReqParams(['line_id']);
         $pageParam = $this->getPagingParams();
@@ -51,7 +56,8 @@ class Goods extends BaseController{
                 $where['org_city'] = ['like',"%{$info['org_city']}%"];
                 $where['dest_city'] = ['like',"%{$info['dest_city']}%"];
             }else{
-                $info = $pathInfo['result'][0];
+                //dump($pathInfo);die;
+                $info = $pathInfo['result']['list'][0];
                 $where['org_city'] = ['like',"%{$info['org_city']}%"];
                 $where['dest_city'] = ['like',"%{$info['dest_city']}%"];
             }

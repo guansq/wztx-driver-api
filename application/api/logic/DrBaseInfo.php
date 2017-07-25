@@ -138,4 +138,22 @@ class DrBaseInfo extends BaseLogic{
         }
         return $ret;
     }
+
+    /*
+     * 得到工作状态
+     */
+    public function getWorkInfo($where){
+        $online = $this->where($where)->value('online');
+        return resultArray(2000,'成功',$online);
+    }
+    /*
+     * 改变工作状态
+     */
+    public function changeWork($where,$data){
+        $ret = $this->where($where)->update($data);
+        if($ret !== false){
+            return resultArray(2000,'成功');
+        }
+        return resultArray(4000,'更改状态失败');
+    }
 }
