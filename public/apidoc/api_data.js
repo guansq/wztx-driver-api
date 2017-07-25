@@ -421,6 +421,63 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "/index/getAdvertisement",
+    "title": "首页轮播图done",
+    "description": "<p>@apiName  getAdvertisement</p>",
+    "group": "Index",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "list",
+            "description": "<p>轮播图.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "list.id",
+            "description": "<p>id.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "list.position",
+            "description": "<p>序号.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.url",
+            "description": "<p>跳转链接.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.src",
+            "description": "<p>图片.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Index.php",
+    "groupTitle": "Index",
+    "name": "GetIndexGetadvertisement",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/index/getAdvertisement"
+      }
+    ]
+  },
+  {
+    "type": "GET",
     "url": "/index/home",
     "title": "首页(ok)",
     "description": "<p>@apiName  home</p>",
@@ -1250,6 +1307,13 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
+            "field": "list.order_id",
+            "description": "<p>订单ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
             "field": "list.org_address_name",
             "description": "<p>出发地名称</p>"
           },
@@ -1293,7 +1357,21 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "list.final_price",
-            "description": "<p>出价</p>"
+            "description": "<p>最终报价</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.system_price",
+            "description": "<p>系统价</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.mind_price",
+            "description": "<p>心理价位</p>"
           },
           {
             "group": "Success 200",
@@ -1301,6 +1379,13 @@ define({ "api": [
             "optional": false,
             "field": "list.usecar_time",
             "description": "<p>用车时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.status",
+            "description": "<p>init             初始状态（未分发订单前）quote报价中（分发订单后）quoted已报价-未配送（装货中）distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成）pay_failed（支付失败）/pay_success（支付成功）comment（已评论）</p>"
           },
           {
             "group": "Success 200",
@@ -1329,13 +1414,6 @@ define({ "api": [
             "optional": false,
             "field": "pageTotal",
             "description": "<p>总页码数.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.status",
-            "description": "<p>init 初始状态（未分发订单前）quote报价中（分发订单后）quoted已报价-未配送（装货中）distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成）pay_failed（支付失败）/pay_success（支付成功）comment（已评论）</p>"
           }
         ]
       }
@@ -1770,7 +1848,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/pay/showPayRecord",
-    "title": "查看账单",
+    "title": "查看账单done",
     "name": "showPayRecord",
     "group": "Pay",
     "header": {
@@ -1782,6 +1860,35 @@ define({ "api": [
             "optional": false,
             "field": "authorization-token",
             "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "page",
+            "defaultValue": "1",
+            "description": "<p>页码.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageSize",
+            "defaultValue": "20",
+            "description": "<p>每页数据量.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "is_pay",
+            "description": "<p>是否支付1为已支付 0为未支付</p>"
           }
         ]
       }
@@ -1805,24 +1912,38 @@ define({ "api": [
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "list.is_pay",
-            "description": "<p>1为已支付   0为未支付</p>"
+            "field": "list.real_name",
+            "description": "<p>货主姓名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.send_name",
-            "description": "<p>发货人姓名</p>"
+            "field": "list.company_name",
+            "description": "<p>货主公司名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.org_address_name",
+            "field": "list.customer_type",
+            "description": "<p>货主类型</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.org_city",
             "description": "<p>发货地址</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.dest_city",
+            "description": "<p>收货地址</p>"
           },
           {
             "group": "Success 200",
@@ -1837,6 +1958,55 @@ define({ "api": [
             "optional": false,
             "field": "list.pay_time",
             "description": "<p>订单完成时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.usecar_time",
+            "description": "<p>用车时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Int",
+            "optional": false,
+            "field": "list.is_pay",
+            "description": "<p>是否支付1为已支付 0为未支付</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.status",
+            "description": "<p>photo 拍照完毕（订单已完成） sucess(完成后的所有状态)pay_failed（支付失败）/pay_success（支付成功）comment（已评论）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "page",
+            "description": "<p>页码.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页数据量.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "dataTotal",
+            "description": "<p>数据总数.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pageTotal",
+            "description": "<p>总页码数.</p>"
           }
         ]
       }
