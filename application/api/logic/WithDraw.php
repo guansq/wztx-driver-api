@@ -11,7 +11,6 @@ class WithDraw extends BaseLogic {
     protected $table = 'rt_withdraw';
 
     /**
-     * Auther: guanshaoqiu <94600115@qq.com>
      * Describe: 保存提现信息
      */
     public function saveWithDraw($param) {
@@ -23,5 +22,11 @@ class WithDraw extends BaseLogic {
         return resultArray(4000, '保存提现信息失败');
     }
 
-
+    /**
+     * Describe: 获取提现中
+     */
+    public function getWithDrawList($where) {
+        $ret = $this->where($where)->select();
+        return $ret;
+    }
 }

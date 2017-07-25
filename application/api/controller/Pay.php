@@ -68,6 +68,13 @@ class Pay extends BaseController {
         if (wztxMoney($baseUserInfo['cash']) < wztxMoney($paramAll['withdrawal_amount'])) {
             returnJson(4000, '提现金额大于可提现金额');
         }
+        //当前有提现订单不能申请提现
+        $where['status'] = ['in',['init','agree']];
+        $where['base_id'] = $this->loginUser['id'];
+        $ret = model('WithDraw', 'logic')->getWithDrawList($where);
+        if(!empty($ret)){
+            returnJson(4000, '当前有提现订单存在，不能提现');
+        }
         //完善个人信息填写  sp_id
         $paramAll['base_id'] = $this->loginUser['id'];
         $paramAll['real_name'] = $baseUserInfo['real_name'];
