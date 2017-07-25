@@ -396,7 +396,7 @@ class User extends BaseController {
     }
 
     /**
-     * @api      {POST} /User/isWork   工作状态
+     * @api      {GET} /User/isWork   工作状态
      * @apiName  isWork
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
@@ -420,7 +420,7 @@ class User extends BaseController {
             'online' => ['regex'=>'/^(0|1)$/','require'],
         ];
         validateData($paramAll, $rule);
-        $ret = model('DrBaseInfo','logic')->changeWork(['id'=>$this->loginUser['id'],'online'=>$paramAll['online']]);
+        $ret = model('DrBaseInfo','logic')->changeWork(['id'=>$this->loginUser['id']],['online'=>$paramAll['online']]);
         returnJson($ret);
     }
 

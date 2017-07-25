@@ -144,13 +144,14 @@ class DrBaseInfo extends BaseLogic{
      */
     public function getWorkInfo($where){
         $online = $this->where($where)->value('online');
-        return resultArray(2000,'成功',$online);
+        return resultArray(2000,'成功',['online'=>$online]);
     }
     /*
      * 改变工作状态
      */
     public function changeWork($where,$data){
         $ret = $this->where($where)->update($data);
+        //echo $this->getLastSql();die;
         if($ret !== false){
             return resultArray(2000,'成功');
         }
