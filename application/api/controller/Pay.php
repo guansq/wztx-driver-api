@@ -89,12 +89,14 @@ class Pay extends BaseController {
             $ret = model('WithDraw', 'logic')->saveWithDraw($paramAll);
             if ($ret["code"] == 2000) {
                 $changeStatus = model('DrBaseInfo', 'logic')->updateBaseUserInfo(['id' => $paramAll['base_id']], ['cash' => $paramAll['balance'], 'update_at' => time()]);
-                returnJson($changeStatus);
+                if ($changeStatus["code"] == 2000) {// 提交事务
+                    Db::commit();
+                    returnJson($changeStatus);
+                }
             } else {
                 returnJson(4000, '提交提现失败，稍后重试');
             }
-            // 提交事务
-            Db::commit();
+
         } catch (\Exception $e) {
             // 回滚事务
             Db::rollback();
