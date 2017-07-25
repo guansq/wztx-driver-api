@@ -218,7 +218,7 @@ class Quote extends BaseController{
         return $result;
     }
 
-    /**
+    /*
      * @api {GET}   /order/receiveOrder     接收订单
      * @apiName receiveOrder
      * @apiGroup    Order
@@ -228,22 +228,5 @@ class Quote extends BaseController{
      */
     public function receiveOrder(){
         //先判断该司机下是否设定了路线，有路线返回订单列表，无路线返回他的未报价列表
-        $where = ['dr_id'=> $this->loginUser['id'],'status'=>0];
-        $lineInfo = model('Linelist','logic')->getDrLineList($where);
-        if($lineInfo['code'] == 4000){//获取报价列表
-
-        }else{//获取订单列表
-            $pageParam = $this->getPagingParams();
-            $list = $lineInfo['result']['list'];
-            $transportLogic = model('TransportOrder','logic');
-            $quote = [];
-            foreach($list as $k =>$v){
-                $where = [
-                    'status' => 'quote',
-                    'org_city' => ['like',"%{$v['org_city']}%"],
-                    'dest_city' => ['like',"%{$v['dest_city']}%"]
-                ];
-            }
-        }
     }
 }

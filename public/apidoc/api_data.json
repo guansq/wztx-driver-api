@@ -1428,47 +1428,6 @@
     ]
   },
   {
-    "type": "GET",
-    "url": "/order/receiveOrder",
-    "title": "接收订单",
-    "name": "receiveOrder",
-    "group": "Order",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "type",
-            "description": "<p>quote|order.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Quote.php",
-    "groupTitle": "Order",
-    "sampleRequest": [
-      {
-        "url": "http://wztx.drv.api.ruitukeji.com/order/receiveOrder"
-      }
-    ]
-  },
-  {
     "type": "POST",
     "url": "/order/shipping",
     "title": "司机进行发货动作done",
