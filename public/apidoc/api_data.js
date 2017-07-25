@@ -341,9 +341,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>all所有,init未报价,quote已报价</p>"
+            "optional": true,
+            "field": "line_id",
+            "description": "<p>路线ID</p>"
           }
         ]
       }
