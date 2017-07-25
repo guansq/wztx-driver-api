@@ -28,7 +28,7 @@ class Linelist extends BaseLogic {
      */
     public function getDrLineList($where = []) {
         $where["status"] = 0;
-        $ret = $this->where($where)->field("id drline_id,org_city,dest_city")->select();
+        $ret = $this->where($where)->field("id drline_id,org_city,dest_city")->order('update_at desc')->select();
         if (!$ret) {
             return resultArray(4000, '数据为空');
         }
@@ -45,6 +45,18 @@ class Linelist extends BaseLogic {
             return resultArray(4000, '删除路线失败');
         }
         return resultArray(2000, '删除路线成功');
+    }
+
+    /*
+     * 根据路线ID获取路线信息
+     */
+    public function getLineInfo($where){
+        $ret = $this->where($where)->find();
+        if(!$ret){
+            return resultArray(4000,'数据为空');
+        }else{
+            return resultArray(2000,'成功',$ret);
+        }
     }
 
 }

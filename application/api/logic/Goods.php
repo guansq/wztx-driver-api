@@ -66,4 +66,51 @@ class Goods extends BaseLogic{
         }
         return resultArray(2000, '更改货源状态成功');
     }
+
+    /*
+     * 司机得到附近的订单
+     */
+    public function findGoodsList($curLongitude,$curLatitude,$pageParam){
+        $grab_rang = getSysconf('grab_range');
+        $sql = "select count(*) as num from rt_goods where sqrt(
+            (
+                (($curLongitude-org_longitude)*PI()*12656*cos(((22.50128+org_latitude)/2)*PI()/180)/180)
+                *
+                (($curLongitude-org_longitude)*PI()*12656*cos (((22.50128+org_latitude)/2)*PI()/180)/180)
+            )
+            +
+            (
+                (($curLatitude-org_latitude)*PI()*12656/180)
+                *
+                (($curLatitude-org_latitude)*PI()*12656/180)
+            )
+        )<$grab_rang AND status = 'quote'";
+        $dataTotal = Db::query($sql)[0]['num'];
+        $pageLimit = ($pageParam['page']-1)*$pageParam['pageSize'];
+        $sql = "select * from rt_goods where sqrt(
+            (
+                (($curLongitude-org_longitude)*PI()*12656*cos(((22.50128+org_latitude)/2)*PI()/180)/180)
+                *
+                (($curLongitude-org_longitude)*PI()*12656*cos (((22.50128+org_latitude)/2)*PI()/180)/180)
+            )
+            +
+            (
+                (($curLatitude-org_latitude)*PI()*12656/180)
+                *
+                (($curLatitude-org_latitude)*PI()*12656/180)
+            )
+        )<$grab_rang AND status = 'quote' ORDER BY update_at DESC LIMIT $pageLimit,{$pageParam['pageSize']}";
+        $list = Db::query($sql);
+        if(empty($list)){
+            return resultArray('4000','没有找到附近的订单');
+        }
+        $ret = [
+            'list' => $list,
+            'page' => $pageParam['page'],
+            'pageSize' => $pageParam['pageSize'],
+            'dataTotal' => $dataTotal,
+            'pageTotal' => intval(($dataTotal + $pageParam['pageSize'] - 1) / $pageParam['pageSize']),
+        ];
+        return resultArray('2000',$ret);
+    }
 }

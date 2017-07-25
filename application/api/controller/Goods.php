@@ -7,13 +7,14 @@
  */
 namespace app\api\controller;
 use think\Request;
+use service\MapService;
 class Goods extends BaseController{
     /**
      * @api {GET}   /goods/enableQuoteList     司机接单（可以报价）列表（有路线展示司机附近的货源信息，没有展示附近货源信息）done
      * @apiName     enableQuoteList
      * @apiGroup    Goods
      * @apiHeader   {String}    authorization-token     token.
-     * @apiParam    {String}    status          all所有,init未报价,quote已报价
+     * @apiParam    {String}    [line_id]               路线ID
      * @apiSuccess  {String}    id  报价ID
      * @apiSuccess  {String}    org_city  起始地
      * @apiSuccess  {String}    dest_city 目的地
@@ -24,19 +25,39 @@ class Goods extends BaseController{
      * @apiSuccess  {String}    usecar_time     用车时间
      */
     public function enableQuoteList(){
-        $paramAll = $this->getReqParams(['status']);
+        $pathInfo = model('Linelist','logic')->getDrLineList(['dr_id'=>$this->loginUser['id']]);
+        $paramAll = $this->getReqParams(['line_id']);
         $pageParam = $this->getPagingParams();
-        $rule = ['status' => 'require'];
-        validateData($paramAll,$rule);
-
-        $where = [
-            'dr_id' => $this->loginUser['id'],
-        ];
-        if(in_array($paramAll['status'],['init','quote'])){
-            $where['status'] = $paramAll['status'];
+        if($pathInfo['code'] == 4000){
+            //没有路线的司机
+            $map_code = $this->loginUser['map_code'];
+            if(empty($map_code)){
+                returnJson(4000,'司机地图ID为空');
+            }
+            $mapInfo = MapService::getCurLocal($map_code);
+            //$mapInfo[0]
+            $curMapInfo = explode(',',$mapInfo[0]['_location']);
+            $curLongitude = $curMapInfo[0];
+            $curLatitude = $curMapInfo[1];
+            $result = model('Goods','logic')->findGoodsList($curLongitude,$curLatitude,$pageParam);
+        }else{
+            //有路线的司机返回最新的司机
+            if(isset($paramAll['line_id']) && !empty($paramAll['line_id'])){
+                $info = model('Linelist','logic')->getLineInfo(['dr_id'=>$this->loginUser['id'],'id'=>$paramAll['line_id'],'status'=>0]);
+                if($info['code'] == 4000){
+                    returnJson($info);
+                }
+                $info = $info['result'];
+                $where['org_city'] = ['like',"%{$info['org_city']}%"];
+                $where['dest_city'] = ['like',"%{$info['dest_city']}%"];
+            }else{
+                $info = $pathInfo['result'][0];
+                $where['org_city'] = ['like',"%{$info['org_city']}%"];
+                $where['dest_city'] = ['like',"%{$info['dest_city']}%"];
+            }
+            $where['status'] = 'quote';//待报价
+            $result = model('Goods','logic')->getGoodsList($where,$pageParam);
         }
-        $result = model('Quote','logic')->geteQuoteList($where,$pageParam);
-
         returnJson($result);
     }
 
@@ -77,4 +98,5 @@ class Goods extends BaseController{
         $ret = model('Goods','logic')->getGoodsList($where,$pageParam);
         returnJson('2000', '成功', $ret);
     }
+
 }
