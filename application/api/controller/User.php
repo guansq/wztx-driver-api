@@ -396,7 +396,7 @@ class User extends BaseController {
     }
 
     /**
-     * @api      {GET} /User/isWork   工作状态done
+     * @api      {GET} /User/isWork   获取工作状态done
      * @apiName  isWork
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
@@ -409,7 +409,7 @@ class User extends BaseController {
 
     /**
      * @api      {POST} /User/changeWork   改变工作状态done
-     * @apiName  isWork
+     * @apiName  changeWork
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
      * @apiParam  {String} online 上班状态 0=上班，1=不上班
