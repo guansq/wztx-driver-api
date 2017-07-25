@@ -2327,6 +2327,47 @@
   },
   {
     "type": "POST",
+    "url": "/User/changeWork",
+    "title": "改变工作状态done",
+    "name": "changeWork",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "online",
+            "description": "<p>上班状态 0=上班，1=不上班</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/User/changeWork"
+      }
+    ]
+  },
+  {
+    "type": "POST",
     "url": "/User/driverAuth",
     "title": "司机认证done",
     "name": "driverAuth",
@@ -2694,50 +2735,9 @@
     ]
   },
   {
-    "type": "POST",
-    "url": "/User/changeWork",
-    "title": "改变工作状态done",
-    "name": "isWork",
-    "group": "User",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "online",
-            "description": "<p>上班状态 0=上班，1=不上班</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/User.php",
-    "groupTitle": "User",
-    "sampleRequest": [
-      {
-        "url": "http://wztx.drv.api.ruitukeji.com/User/changeWork"
-      }
-    ]
-  },
-  {
     "type": "GET",
     "url": "/User/isWork",
-    "title": "工作状态done",
+    "title": "获取工作状态done",
     "name": "isWork",
     "group": "User",
     "header": {
