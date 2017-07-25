@@ -64,7 +64,7 @@ class Goods extends BaseController{
     /**
      * @api     {GET}       /goods/goodsList        货源列表（根据设定路线展示）done
      * @apiName goodsList
-     * @apiGroup Order
+     * @apiGroup Goods
      * @apiParam   {String} [org_city]        出发地
      * @apiParam   {String} [dest_city]     目的地
      * @apiParam   {Number} [car_style_length_id]     车长ID
