@@ -396,7 +396,7 @@ class User extends BaseController {
     }
 
     /**
-     * @api      {GET} /User/isWork   工作状态
+     * @api      {GET} /User/isWork   工作状态done
      * @apiName  isWork
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
@@ -408,7 +408,7 @@ class User extends BaseController {
     }
 
     /**
-     * @api      {POST} /User/changeWork   改变工作状态
+     * @api      {POST} /User/changeWork   改变工作状态done
      * @apiName  isWork
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.

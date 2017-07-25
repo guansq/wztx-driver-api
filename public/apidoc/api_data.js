@@ -2696,7 +2696,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/User/changeWork",
-    "title": "改变工作状态",
+    "title": "改变工作状态done",
     "name": "isWork",
     "group": "User",
     "header": {
@@ -2735,9 +2735,9 @@ define({ "api": [
     ]
   },
   {
-    "type": "POST",
+    "type": "GET",
     "url": "/User/isWork",
-    "title": "工作状态",
+    "title": "工作状态done",
     "name": "isWork",
     "group": "User",
     "header": {
