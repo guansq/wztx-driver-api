@@ -5,9 +5,12 @@
  * Date: 2017/7/7
  * Time: 9:59
  */
+
 namespace app\api\controller;
 
-class Pay extends BaseController{
+use  think\Db;
+
+class Pay extends BaseController {
     /**
      * @api {GET} /pay 我的钱包
      * @apiName index
@@ -24,7 +27,7 @@ class Pay extends BaseController{
      * @apiSuccess {String}  withdrawal_money        可提现金额
      * @apiSuccess {String}  bonus                   我的推荐奖励
      */
-    public function index(){
+    public function index() {
 
     }
 
@@ -39,8 +42,64 @@ class Pay extends BaseController{
      * @apiParam  {String} account_name        开户名
      *
      */
-    public function withDraw(){
+    public function withDraw() {
 
+        $paramAll = $this->getReqParams([
+            'withdrawal_amount',
+            'bank_name',
+            'payment_account',
+            'account_name',
+        ]);
+        $rule = [
+            'withdrawal_amount' => 'require',
+            'bank_name' => 'require',
+            'payment_account' => 'require',
+            'account_name' => 'require',
+        ];
+        validateData($paramAll, $rule);
+        $drBaseInfoLogic = model('DrBaseInfo', 'logic');
+        $baseUserInfo = $drBaseInfoLogic->findInfoByUserId($this->loginUser['id']);
+        if (empty($baseUserInfo)) {
+            returnJson(4000, '未找到用户信息');
+        }
+        if ($baseUserInfo['auth_status'] != 'pass') {
+            returnJson(4000, '当前认证状态不支持提现');
+        }
+        if (wztxMoney($baseUserInfo['cash']) < wztxMoney($paramAll['withdrawal_amount'])) {
+            returnJson(4000, '提现金额大于可提现金额');
+        }
+        //完善个人信息填写  sp_id
+        $paramAll['base_id'] = $this->loginUser['id'];
+        $paramAll['real_name'] = $baseUserInfo['real_name'];
+        $paramAll['phone'] = $baseUserInfo['phone'];
+        $paramAll['withdraw_code'] = order_num();
+        $paramAll['type'] = 2;
+        $paramAll['status'] = 'init';
+        $paramAll['amount'] = wztxMoney($paramAll['withdrawal_amount']);
+        //  $paramAll['deposit_name'] =  $baseUserInfo['amount'];
+        $paramAll['bank'] = $paramAll['bank_name'];
+        $paramAll['account'] = $paramAll['payment_account'];
+        $paramAll['bank_person_name'] = $paramAll['account_name'];
+        $paramAll['balance'] = wztxMoney($baseUserInfo['cash']) - wztxMoney($paramAll['withdrawal_amount']);
+
+        //没有问题存入数据库 更新用户可提现金额
+        // 启动事务
+        Db::startTrans();
+        try {
+            $ret = model('WithDraw', 'logic')->saveWithDraw($paramAll);
+            if ($ret["code"] == 2000) {
+                $changeStatus = model('DrBaseInfo', 'logic')->updateBaseUserInfo(['id' => $paramAll['base_id']], ['cash' => $paramAll['balance'], 'update_at' => time()]);
+                returnJson($changeStatus);
+            } else {
+                returnJson(4000, '提交提现失败，稍后重试');
+            }
+            // 提交事务
+            Db::commit();
+        } catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            returnJson(4000, '提交提现失败，稍后重试');
+        }
     }
 
     /**
@@ -54,7 +113,7 @@ class Pay extends BaseController{
      * @apiSuccess {Int}   balance                  充值之前的金额
      * @apiSuccess {Array} pay_info                 支付返回信息
      */
-    public function recharge(){
+    public function recharge() {
 
     }
 
@@ -83,16 +142,16 @@ class Pay extends BaseController{
      * @apiSuccess {Number} dataTotal                   数据总数.
      * @apiSuccess {Number} pageTotal                   总页码数.
      */
-    public function showPayRecord(){
+    public function showPayRecord() {
         $paramAll = $this->getReqParams([
             'is_pay',
         ]);
         $rule = [
-            'is_pay' => ['require',  '/^(0|1)$/'],
+            'is_pay' => ['require', '/^(0|1)$/'],
         ];
 
         validateData($paramAll, $rule);
-        $where['status'] = ['in',['photo','pay_failed','pay_success','comment']];
+        $where['status'] = ['in', ['photo', 'pay_failed', 'pay_success', 'comment']];
         $where['is_pay'] = $paramAll['is_pay'];
         $where['dr_id'] = $this->loginUser['id'];
         $pageParam = $this->getPagingParams();
@@ -101,7 +160,7 @@ class Pay extends BaseController{
             returnJson('4004', '暂无订单信息');
         }
         $list = [];
-        foreach ($orderInfo['list'] as $k =>$v){
+        foreach ($orderInfo['list'] as $k => $v) {
             $list[$k]['order_id'] = $v['id'];
             $list[$k]['org_city'] = $v['org_city'];
             $list[$k]['dest_city'] = $v['dest_city'];
@@ -110,7 +169,7 @@ class Pay extends BaseController{
                 $list[$k]['real_name'] = $baseUserInfo['real_name'];
                 $list[$k]['company_name'] = getCompanyName($baseUserInfo);
                 $list[$k]['customer_type'] = $baseUserInfo['type'];
-            }else{
+            } else {
                 $list[$k]['real_name'] = '';
                 $list[$k]['company_name'] = '';
                 $list[$k]['customer_type'] = '';
@@ -132,7 +191,7 @@ class Pay extends BaseController{
      * @apiHeader {String} authorization-token          token.
      * @apiSuccess {Array}   list                       提现记录
      */
-    public function showCashRecord(){
+    public function showCashRecord() {
 
     }
 }
