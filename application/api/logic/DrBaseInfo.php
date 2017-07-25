@@ -157,4 +157,12 @@ class DrBaseInfo extends BaseLogic{
         }
         return resultArray(4000,'更改状态失败');
     }
+    //更新用户信息
+    public function updateBaseUserInfo($where,$data){
+        $ret = $this->where($where)->update($data);
+        if($ret !== false){
+            return resultArray(2000,'成功');
+        }
+        return resultArray(4000,'更改状态失败');
+    }
 }

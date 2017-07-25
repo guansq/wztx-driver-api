@@ -41,7 +41,7 @@ class TransportOrder extends BaseLogic {
             return false;
         }
         $list = $this->where($where)->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
-            ->field('id order_id,*')->select();
+            ->field('*,id order_id')->select();
 
         if(empty($list)){
             return false;
