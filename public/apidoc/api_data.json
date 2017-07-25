@@ -1470,61 +1470,6 @@
   },
   {
     "type": "POST",
-    "url": "/quote/saveQuote",
-    "title": "提交货源报价done",
-    "name": "saveQuote",
-    "group": "Order",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "goods_id",
-            "description": "<p>货源ID。</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "dr_price",
-            "description": "<p>司机出价</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "is_receive",
-            "description": "<p>是否立即下单 0表示不立即下单 1表示立即下单</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Quote.php",
-    "groupTitle": "Order",
-    "sampleRequest": [
-      {
-        "url": "http://wztx.drv.api.ruitukeji.com/quote/saveQuote"
-      }
-    ]
-  },
-  {
-    "type": "POST",
     "url": "/order/shipping",
     "title": "司机进行发货动作done",
     "name": "shipping",
@@ -2083,106 +2028,10 @@
     ]
   },
   {
-    "type": "GET",
-    "url": "/quote/getInfo",
-    "title": "获得报价信息done",
-    "name": "getInfo",
-    "group": "Quote",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Int",
-            "optional": false,
-            "field": "quote_id",
-            "description": "<p>报价ID</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "org_city",
-            "description": "<p>起始地</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "dest_city",
-            "description": "<p>目的地</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "goods_name",
-            "description": "<p>货品名称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "weight",
-            "description": "<p>货品重量</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "system_price",
-            "description": "<p>系统出价</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "sp_price",
-            "description": "<p>货主出价</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "usecar_time",
-            "description": "<p>用车时间</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Quote.php",
-    "groupTitle": "Quote",
-    "sampleRequest": [
-      {
-        "url": "http://wztx.drv.api.ruitukeji.com/quote/getInfo"
-      }
-    ]
-  },
-  {
-    "type": "GET",
-    "url": "/quote/quoteList",
-    "title": "司机报价列表done",
-    "name": "quoteList",
+    "type": "POST",
+    "url": "/quote/saveQuote",
+    "title": "提交货源报价done",
+    "name": "saveQuote",
     "group": "Quote",
     "header": {
       "fields": {
@@ -2204,70 +2053,22 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "status",
-            "description": "<p>all所有,init未报价,quote已报价</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p>报价ID</p>"
+            "field": "goods_id",
+            "description": "<p>货源ID。</p>"
           },
           {
-            "group": "Success 200",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "org_city",
-            "description": "<p>起始地</p>"
+            "field": "dr_price",
+            "description": "<p>司机出价</p>"
           },
           {
-            "group": "Success 200",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "dest_city",
-            "description": "<p>目的地</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "goods_name",
-            "description": "<p>货品名称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "weight",
-            "description": "<p>货品重量</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "system_price",
-            "description": "<p>系统出价</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "sp_price",
-            "description": "<p>货主出价</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "usecar_time",
-            "description": "<p>用车时间</p>"
+            "field": "is_receive",
+            "description": "<p>是否立即下单 0表示不立即下单 1表示立即下单</p>"
           }
         ]
       }
@@ -2277,7 +2078,7 @@
     "groupTitle": "Quote",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/quote/quoteList"
+        "url": "http://wztx.drv.api.ruitukeji.com/quote/saveQuote"
       }
     ]
   },

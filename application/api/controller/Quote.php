@@ -13,7 +13,7 @@ class Quote extends BaseController{
     const TITLE = '您有新的司机报价';
     const SPTITLE = '您的订单已被接单';
     const SPCONTENT = '您的订单已被接单';
-    /**
+    /*
      * @api {GET}    /quote/getInfo     获得报价信息done
      * @apiName     getInfo
      * @apiGroup    Quote
@@ -42,7 +42,7 @@ class Quote extends BaseController{
     /**
      * @api {POST}  /quote/saveQuote        提交货源报价done
      * @apiName saveQuote
-     * @apiGroup    Order
+     * @apiGroup    Quote
      * @apiHeader   {String}    authorization-token     token.
      * @apiParam    {String}     goods_id                货源ID。
      * @apiParam    {String}     dr_price                司机出价
@@ -124,7 +124,7 @@ class Quote extends BaseController{
             returnJson($result);
         }
     }
-    /**
+    /*
      * @api {GET}   /quote/quoteList     司机报价列表done
      * @apiName     quoteList
      * @apiGroup    Quote
