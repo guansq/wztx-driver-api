@@ -489,3 +489,10 @@ function getCompanyName($userInfo){
     }
     return '';
 }
+
+/*
+ * 判断司机是否通过了认证
+ */
+function ispassAuth(){
+
+}
