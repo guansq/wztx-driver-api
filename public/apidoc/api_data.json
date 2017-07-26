@@ -1736,6 +1736,34 @@
             "optional": false,
             "field": "list",
             "description": "<p>提现记录</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.withdrawal_amount",
+            "description": "<p>提现金额</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.bank_name",
+            "description": "<p>银行名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.payment_account",
+            "description": "<p>收款账号</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.result_time",
+            "description": "<p>提现成功时间</p>"
           }
         ]
       }
@@ -1927,7 +1955,7 @@
   {
     "type": "POST",
     "url": "/pay/withDraw",
-    "title": "提现",
+    "title": "提现done",
     "name": "withDraw",
     "group": "Pay",
     "header": {
@@ -2043,8 +2071,8 @@
   },
   {
     "type": "GET",
-    "url": "recommend/showMyRecommList",
-    "title": "显示我的推荐列表",
+    "url": "/recommend/showMyRecommList",
+    "title": "显示我的推荐列表done",
     "name": "showMyRecommList",
     "group": "Recommend",
     "header": {
@@ -2099,7 +2127,7 @@
     "groupTitle": "Recommend",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.comrecommend/showMyRecommList"
+        "url": "http://wztx.drv.api.ruitukeji.com/recommend/showMyRecommList"
       }
     ]
   },
