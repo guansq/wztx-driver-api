@@ -1919,7 +1919,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/pay/showCashRecord",
-    "title": "提现记录",
+    "title": "提现记录done",
     "name": "showCashRecord",
     "group": "Pay",
     "header": {

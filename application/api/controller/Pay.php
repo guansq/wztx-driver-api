@@ -194,7 +194,7 @@ class Pay extends BaseController {
     }
 
     /**
-     * @api {POST}  /pay/showCashRecord 提现记录
+     * @api {POST}  /pay/showCashRecord 提现记录done
      * @apiName showCashRecord
      * @apiGroup Pay
      * @apiHeader {String} authorization-token          token.
