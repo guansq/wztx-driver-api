@@ -681,7 +681,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.order_id",
+            "field": "list.id",
             "description": "<p>订单ID</p>"
           },
           {

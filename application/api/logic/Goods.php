@@ -24,7 +24,7 @@ class Goods extends BaseLogic{
                 ->field('id order_id,org_city,mind_price,system_price,dest_city,weight,goods_name,status,car_style_length,car_style_type,final_price,usecar_time')->select();
         }*/
         $list = $this->where($where)->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
-            ->field('id order_id,org_city,volume,mind_price,system_price,dest_city,weight,goods_name,status,car_style_length,car_style_type,final_price,usecar_time')->select();
+            ->field('id,org_city,volume,mind_price,system_price,dest_city,weight,goods_name,status,car_style_length,car_style_type,final_price,usecar_time')->select();
         if(empty($list)){
             return resultArray(4000,'暂无数据');
         }

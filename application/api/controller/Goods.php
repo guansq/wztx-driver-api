@@ -76,7 +76,7 @@ class Goods extends BaseController{
      * @apiParam   {Number} [car_style_length_id]     车长ID
      * @apiParam   {Number} [car_style_type_id]     车型ID
      * @apiSuccess  {Array} list            列表
-     * @apiSuccess  {String} list.order_id       订单ID
+     * @apiSuccess  {String} list.id       订单ID
      * @apiSuccess  {String} list.org_city       出发地
      * @apiSuccess  {String} list.dest_city      目的地
      * @apiSuccess  {String} list.mind_price     心理价格
