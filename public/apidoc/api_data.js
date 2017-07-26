@@ -1004,7 +1004,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/message",
-    "title": "01.我的消息-列表(ok)",
+    "title": "01.我的消息-列表done",
     "name": "index",
     "group": "Message",
     "header": {
@@ -1145,7 +1145,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/message/:id",
-    "title": "02.我的消息-详情(ok)",
+    "title": "02.我的消息-详情done",
     "name": "read",
     "group": "Message",
     "header": {

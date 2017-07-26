@@ -16,7 +16,7 @@ class Message extends BaseController{
 
 
     /**
-     * @api      {GET} /message 01.我的消息-列表(ok)
+     * @api      {GET} /message 01.我的消息-列表done
      * @apiName  index
      * @apiGroup Message
      * @apiHeader {String} authorization-token   token.
@@ -63,7 +63,7 @@ class Message extends BaseController{
     }
 
     /**
-     * @api {GET} /message/:id  02.我的消息-详情(ok)
+     * @api {GET} /message/:id  02.我的消息-详情done
      * @apiName read
      * @apiGroup Message
      * @apiHeader {String} authorization-token   token.
