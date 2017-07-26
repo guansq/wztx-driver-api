@@ -143,8 +143,8 @@ class DrBaseInfo extends BaseLogic{
      * 得到工作状态
      */
     public function getWorkInfo($where){
-        $online = $this->where($where)->value('online');
-        return resultArray(2000,'成功',['online'=>$online]);
+        $result = $this->field('online,map_code')->where($where)->find();
+        return resultArray(2000,'成功',$result);
     }
     /*
      * 改变工作状态

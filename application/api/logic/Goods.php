@@ -28,8 +28,9 @@ class Goods extends BaseLogic{
         if(empty($list)){
             return resultArray(4000,'暂无数据');
         }
-        foreach ($list as $k =>$v){
+        foreach ($list as $k => &$v){
             $v['weight'] =strval($v['weight']);
+            $v['volume'] =strval($v['volume']);
             $v['final_price']= wztxMoney( $v['final_price']);
             $v['sp_price'] = wztxMoney( $v['mind_price']);
             $v['system_price'] = wztxMoney( $v['system_price']);
@@ -104,6 +105,15 @@ class Goods extends BaseLogic{
         $list = Db::query($sql);
         if(empty($list)){
             return resultArray('4000','没有找到附近的订单');
+        }
+
+        foreach ($list as $k => &$v){
+            $v['weight'] =strval($v['weight']);
+            $v['volume'] =strval($v['volume']);
+            $v['final_price']= wztxMoney( $v['final_price']);
+            $v['sp_price'] = wztxMoney( $v['mind_price']);
+            $v['system_price'] = wztxMoney( $v['system_price']);
+            $v['usecar_time'] =wztxDate($v['usecar_time']);
         }
         $ret = [
             'list' => $list,

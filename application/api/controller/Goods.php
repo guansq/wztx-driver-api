@@ -102,7 +102,7 @@ class Goods extends BaseController{
         }
         $where['status'] = 'quote';//待报价
         $ret = model('Goods','logic')->getGoodsList($where,$pageParam);
-        returnJson('2000', '成功', $ret);
+        returnJson($ret);
     }
 
 }
