@@ -317,7 +317,7 @@ define({ "api": [
     ]
   },
   {
-    "type": "POST",
+    "type": "GET",
     "url": "/goods/detail",
     "title": "货源详情done",
     "name": "detail",
