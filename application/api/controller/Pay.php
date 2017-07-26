@@ -32,7 +32,7 @@ class Pay extends BaseController {
     }
 
     /**
-     * @api {POST} /pay/withDraw  提现
+     * @api {POST} /pay/withDraw  提现done
      * @apiName withDraw
      * @apiGroup Pay
      * @apiHeader {String} authorization-token      token.
@@ -68,12 +68,19 @@ class Pay extends BaseController {
         if (wztxMoney($baseUserInfo['cash']) < wztxMoney($paramAll['withdrawal_amount'])) {
             returnJson(4000, '提现金额大于可提现金额');
         }
+        //当前有提现订单不能申请提现
+        $where['status'] = ['in',['init','agree']];
+        $where['base_id'] = $this->loginUser['id'];
+        $ret = model('WithDraw', 'logic')->getWithDrawList($where);
+        if(!empty($ret)){
+            returnJson(4000, '当前有提现订单存在，不能提现');
+        }
         //完善个人信息填写  sp_id
         $paramAll['base_id'] = $this->loginUser['id'];
         $paramAll['real_name'] = $baseUserInfo['real_name'];
         $paramAll['phone'] = $baseUserInfo['phone'];
         $paramAll['withdraw_code'] = order_num();
-        $paramAll['type'] = 2;
+        $paramAll['type'] = 'driver';
         $paramAll['status'] = 'init';
         $paramAll['amount'] = wztxMoney($paramAll['withdrawal_amount']);
         //  $paramAll['deposit_name'] =  $baseUserInfo['amount'];
@@ -89,12 +96,14 @@ class Pay extends BaseController {
             $ret = model('WithDraw', 'logic')->saveWithDraw($paramAll);
             if ($ret["code"] == 2000) {
                 $changeStatus = model('DrBaseInfo', 'logic')->updateBaseUserInfo(['id' => $paramAll['base_id']], ['cash' => $paramAll['balance'], 'update_at' => time()]);
-                returnJson($changeStatus);
+                if ($changeStatus["code"] == 2000) {// 提交事务
+                    Db::commit();
+                    returnJson($changeStatus);
+                }
             } else {
                 returnJson(4000, '提交提现失败，稍后重试');
             }
-            // 提交事务
-            Db::commit();
+
         } catch (\Exception $e) {
             // 回滚事务
             Db::rollback();
@@ -190,8 +199,27 @@ class Pay extends BaseController {
      * @apiGroup Pay
      * @apiHeader {String} authorization-token          token.
      * @apiSuccess {Array}   list                       提现记录
+     * @apiSuccess {String}   list.withdrawal_amount    提现金额
+     * @apiSuccess {String}   list.bank_name            银行名称
+     * @apiSuccess {String}   list.payment_account      收款账号
+     * @apiSuccess {String}   list.result_time          提现成功时间
      */
     public function showCashRecord() {
-
+        $where['status'] = ['in',['pay_success']];
+        $where['base_id'] = $this->loginUser['id'];
+        $ret = model('WithDraw', 'logic')->getWithDrawList($where);
+        if (empty($ret)) {
+            returnJson(4004, '未获取到提现记录');
+        }
+        $list = [];
+        foreach ($ret as $k => $v){
+            $v['account'] = substr_replace($v['account'] ,"******",-10,6);
+            $list[$k]['id'] =$v['id'];
+            $list[$k]['withdrawal_amount'] =wztxMoney($v['real_amount']);
+            $list[$k]['bank_name'] =$v['bank'];
+            $list[$k]['account'] =$v['account'];
+            $list[$k]['result_time'] =wztxDate($v['result_time']);
+        }
+        returnJson(2000, '成功', ['list'=>$list]);
     }
 }
