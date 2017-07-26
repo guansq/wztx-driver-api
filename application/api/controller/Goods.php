@@ -105,4 +105,87 @@ class Goods extends BaseController{
         returnJson($ret);
     }
 
+    /**
+     * @api     {POST}  /goods/detail            货源详情done
+     * @apiName detail
+     * @apiGroup Goods
+     * @apiHeader {String} authorization-token           token.
+     * @apiParam    {Int}    id                 货源ID
+     * @apiSuccess  {String} goods_name         货品名称
+     * @apiSuccess  {String} weight             重量
+     * @apiSuccess  {String} org_city           起始地
+     * @apiSuccess  {String} dest_city          目的地
+     * @apiSuccess  {String} dest_receive_name  收货人姓名
+     * @apiSuccess  {String} dest_phone         收货人电话
+     * @apiSuccess  {String} dest_address_name  收货人地址
+     * @apiSuccess  {String} dest_address_detail收货人地址详情
+     * @apiSuccess  {String} org_send_name      寄件人姓名
+     * @apiSuccess  {String} org_phone          寄件人电话
+     * @apiSuccess  {String} org_address_name   寄件人地址
+     * @apiSuccess  {String} org_address_datail 寄件人地址详情
+     * @apiSuccess  {String} usecar_time        用车时间
+     * @apiSuccess  {String} send_time          发货时间
+     * @apiSuccess  {String} arr_time           到达时间
+     * @apiSuccess  {String} real_name          车主姓名
+     * @apiSuccess  {String} phone              联系电话
+     * @apiSuccess  {String} policy_code        保单编号
+     * @apiSuccess  {Int} is_pay                是否支付1为已支付 0为未支付
+     * @apiSuccess  {String} is_receipt         货物回单1-是-默认，2-否
+     * @apiSuccess  {String} system_price       系统出价
+     * @apiSuccess  {String} mind_price         货主出价
+     * @apiSuccess  {String} final_price        总运费
+     */
+    public function detail() {
+        $paramAll = $this->getReqParams([
+            'id',
+        ]);
+        $rule = [
+            'id' => ['require', 'regex' => '^[0-9]*$'],
+        ];
+
+        validateData($paramAll, $rule);
+        //'dr_id' => $this->loginUser['id'],
+        $goodsInfo = model('Goods', 'logic')->getGoodsInfo([ 'id' => $paramAll['id']]);
+        if (empty($goodsInfo)) {
+            returnJson('4004', '未获取到货源信息');
+        }
+        if ($this->loginUser['id'] == $goodsInfo['dr_id']) {
+            $drBaseInfo = model('DrBaseInfo', 'logic')->findInfoByUserId($this->loginUser['id']);
+            $dr_phone = $drBaseInfo['phone'];
+            $dr_real_name = $drBaseInfo['real_name'];
+        } else {
+            $dr_phone = '';
+            $dr_real_name = '';
+        }
+
+        $detail = [
+            'status' => $goodsInfo['status'],
+            'order_code' => $goodsInfo['order_code'],
+            'goods_name' => $goodsInfo['goods_name'],
+            'weight' => strval($goodsInfo['weight']),
+            'org_city' => $goodsInfo['org_city'],
+            'dest_city' => $goodsInfo['dest_city'],
+            'dest_receive_name' => $goodsInfo['dest_receive_name'],
+            'dest_phone' => $goodsInfo['dest_phone'],
+            'dest_address_name' => $goodsInfo['dest_address_name'],
+            'dest_address_detail' => $goodsInfo['dest_address_detail'],
+            'org_send_name' => $goodsInfo['org_send_name'],
+            'org_phone' => $goodsInfo['org_phone'],
+            'org_address_name' => $goodsInfo['org_address_name'],
+            'org_address_detail' => $goodsInfo['org_address_detail'],
+            'usecar_time' => wztxDate($goodsInfo['usecar_time']),
+            'send_time' => wztxDate($goodsInfo['send_time']),
+            'arr_time' => wztxDate($goodsInfo['arr_time']),
+            'real_name' => $dr_real_name,
+            'phone' => $dr_phone,
+            'policy_code' => $goodsInfo['policy_code'],
+            'is_pay' => $goodsInfo['is_pay'],
+            'is_receipt' => $goodsInfo['is_receipt'],
+            'system_price' => wztxMoney($goodsInfo['system_price']),
+            'mind_price' => wztxMoney($goodsInfo['mind_price']),
+            'final_price' => wztxMoney($goodsInfo['final_price']),
+        ];
+        returnJson('2000', '成功', $detail);
+    }
+
 }
