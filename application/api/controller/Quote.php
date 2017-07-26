@@ -167,6 +167,7 @@ class Quote extends BaseController{
         //生成订单
         $orderInfo['order_code'] = order_num();
         $orderInfo['sp_id'] = $goodsInfo['sp_id'];
+        $orderInfo['dr_id'] = $this->loginUser['id'];
         $orderInfo['type'] = $goodsInfo['type'];
         $orderInfo['appoint_at'] = $goodsInfo['appoint_at'];
         $orderInfo['insured_amount'] = $goodsInfo['insured_amount'];
