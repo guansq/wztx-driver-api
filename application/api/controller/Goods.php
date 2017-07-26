@@ -106,7 +106,7 @@ class Goods extends BaseController{
     }
 
     /**
-     * @api     {POST}  /goods/detail            货源详情done
+     * @api     {GET}  /goods/detail            货源详情done
      * @apiName detail
      * @apiGroup Goods
      * @apiHeader {String} authorization-token           token.
@@ -160,7 +160,6 @@ class Goods extends BaseController{
 
         $detail = [
             'status' => $goodsInfo['status'],
-            'order_code' => $goodsInfo['order_code'],
             'goods_name' => $goodsInfo['goods_name'],
             'weight' => strval($goodsInfo['weight']),
             'org_city' => $goodsInfo['org_city'],
@@ -174,8 +173,6 @@ class Goods extends BaseController{
             'org_address_name' => $goodsInfo['org_address_name'],
             'org_address_detail' => $goodsInfo['org_address_detail'],
             'usecar_time' => wztxDate($goodsInfo['usecar_time']),
-            'send_time' => wztxDate($goodsInfo['send_time']),
-            'arr_time' => wztxDate($goodsInfo['arr_time']),
             'real_name' => $dr_real_name,
             'phone' => $dr_phone,
             'policy_code' => $goodsInfo['policy_code'],
