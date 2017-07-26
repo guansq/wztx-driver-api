@@ -32,7 +32,7 @@ class Pay extends BaseController {
     }
 
     /**
-     * @api {POST} /pay/withDraw  提现
+     * @api {POST} /pay/withDraw  提现done
      * @apiName withDraw
      * @apiGroup Pay
      * @apiHeader {String} authorization-token      token.
@@ -199,8 +199,27 @@ class Pay extends BaseController {
      * @apiGroup Pay
      * @apiHeader {String} authorization-token          token.
      * @apiSuccess {Array}   list                       提现记录
+     * @apiSuccess {String}   list.withdrawal_amount    提现金额
+     * @apiSuccess {String}   list.bank_name            银行名称
+     * @apiSuccess {String}   list.payment_account      收款账号
+     * @apiSuccess {String}   list.result_time          提现成功时间
      */
     public function showCashRecord() {
-
+        $where['status'] = ['in',['pay_success']];
+        $where['base_id'] = $this->loginUser['id'];
+        $ret = model('WithDraw', 'logic')->getWithDrawList($where);
+        if (empty($ret)) {
+            returnJson(4004, '未获取到提现记录');
+        }
+        $list = [];
+        foreach ($ret as $k => $v){
+            $v['account'] = substr_replace($v['account'] ,"******",-10,6);
+            $list[$k]['id'] =$v['id'];
+            $list[$k]['withdrawal_amount'] =wztxMoney($v['real_amount']);
+            $list[$k]['bank_name'] =$v['bank'];
+            $list[$k]['account'] =$v['account'];
+            $list[$k]['result_time'] =wztxDate($v['result_time']);
+        }
+        returnJson(2000, '成功', ['list'=>$list]);
     }
 }

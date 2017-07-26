@@ -165,4 +165,12 @@ class DrBaseInfo extends BaseLogic{
         }
         return resultArray(4000,'更改状态失败');
     }
+    // 获得被推荐人的id列表
+    public function getRecommIDs($userInfo){
+        return $this->where("recomm_id",$userInfo['id'])->select();
+    }
+    // 获得被推荐人的bonus
+    public function getRecommBonus($where){
+        return Db::name('ShareList')->where($where)->value("amount");
+    }
 }
