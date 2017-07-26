@@ -80,7 +80,7 @@ class Pay extends BaseController {
         $paramAll['real_name'] = $baseUserInfo['real_name'];
         $paramAll['phone'] = $baseUserInfo['phone'];
         $paramAll['withdraw_code'] = order_num();
-        $paramAll['type'] = 2;
+        $paramAll['type'] = 'driver';
         $paramAll['status'] = 'init';
         $paramAll['amount'] = wztxMoney($paramAll['withdrawal_amount']);
         //  $paramAll['deposit_name'] =  $baseUserInfo['amount'];
