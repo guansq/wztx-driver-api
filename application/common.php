@@ -493,6 +493,10 @@ function getCompanyName($userInfo){
 /*
  * 判断司机是否通过了认证
  */
-function ispassAuth(){
-
+function ispassAuth($userInfo){
+    $status = Db::name('dr_base_info')->where("id",$userInfo['id'])->value('auth_status');
+    if($status == 'pass'){
+        return true;
+    }
+    return false;
 }
