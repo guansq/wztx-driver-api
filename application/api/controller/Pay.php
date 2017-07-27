@@ -210,7 +210,7 @@ class Pay extends BaseController {
      * @apiSuccess {String}   list.withdrawal_amount    提现金额
      * @apiSuccess {String}   list.bank_name            银行名称
      * @apiSuccess {String}   list.payment_account      收款账号
-     * @apiSuccess {String}   list.result_time          提现成功时间
+     * @apiSuccess {String}   list.create_at            提交提现时间
      * @apiSuccess {String}   list.status               提现状态init=未处理，agree=后台同意，refuse=已拒绝，pay_success=银行返回成功，pay_fail=银行返回失败
      * @apiSuccess {Number} page                         页码.
      * @apiSuccess {Number} pageSize                     每页数据量.
@@ -232,7 +232,7 @@ class Pay extends BaseController {
             $list[$k]['withdrawal_amount'] =wztxMoney($v['real_amount']);
             $list[$k]['bank_name'] =$v['bank'];
             $list[$k]['account'] =$v['account'];
-            $list[$k]['result_time'] =wztxDate($v['result_time']);
+            $list[$k]['create_at'] =wztxDate($v['create_at']);
             $list[$k]['status'] =$v['status'];
         }
         $ret['list'] = $list;
