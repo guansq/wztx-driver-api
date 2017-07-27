@@ -166,8 +166,25 @@ class DrBaseInfo extends BaseLogic{
         return resultArray(4000,'更改状态失败');
     }
     // 获得被推荐人的id列表
-    public function getRecommIDs($userInfo){
-        return $this->where("recomm_id",$userInfo['id'])->select();
+    public function getRecommIDs($userInfo,$pageParam){
+        $dataTotal =  $this->where("recomm_id",$userInfo['id'])->order('create_at desc')->count();
+        if (empty($dataTotal)) {
+            return false;
+        }
+        $list =  $this->where("recomm_id",$userInfo['id'])->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
+           ->select();
+
+        if(empty($list)){
+            return false;
+        }
+        $ret = [
+            'list' => $list,
+            'page' => $pageParam['page'],
+            'pageSize' => $pageParam['pageSize'],
+            'dataTotal' => $dataTotal,
+            'pageTotal' => intval(($dataTotal + $pageParam['pageSize'] - 1) / $pageParam['pageSize']),
+        ];
+        return $ret;
     }
     // 获得被推荐人的bonus
     public function getRecommBonus($where){

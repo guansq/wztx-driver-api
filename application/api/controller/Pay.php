@@ -51,7 +51,7 @@ class Pay extends BaseController {
             'account_name',
         ]);
         $rule = [
-            'withdrawal_amount' => 'require',
+            'withdrawal_amount' => ['require','^[0-9]+(.[0-9]{2})?$'],
             'bank_name' => 'require',
             'payment_account' => 'require',
             'account_name' => 'require',
@@ -59,11 +59,17 @@ class Pay extends BaseController {
         validateData($paramAll, $rule);
         $drBaseInfoLogic = model('DrBaseInfo', 'logic');
         $baseUserInfo = $drBaseInfoLogic->findInfoByUserId($this->loginUser['id']);
+        if(empty($paramAll['withdrawal_amount'])){
+            returnJson(4000, '提现金额不能为0');
+        }
         if (empty($baseUserInfo)) {
             returnJson(4000, '未找到用户信息');
         }
         if ($baseUserInfo['auth_status'] != 'pass') {
             returnJson(4000, '当前认证状态不支持提现');
+        }
+        if ($baseUserInfo['bond_status'] == 'frozen') {
+            returnJson(4000, '冻结账户不支持提现');
         }
         if (wztxMoney($baseUserInfo['cash']) < wztxMoney($paramAll['withdrawal_amount'])) {
             returnJson(4000, '提现金额大于可提现金额');
@@ -198,21 +204,29 @@ class Pay extends BaseController {
      * @apiName showCashRecord
      * @apiGroup Pay
      * @apiHeader {String} authorization-token          token.
+     * @apiParam {Number} [page=1]                       页码.
+     * @apiParam {Number} [pageSize=20]                  每页数据量.
      * @apiSuccess {Array}   list                       提现记录
      * @apiSuccess {String}   list.withdrawal_amount    提现金额
      * @apiSuccess {String}   list.bank_name            银行名称
      * @apiSuccess {String}   list.payment_account      收款账号
      * @apiSuccess {String}   list.result_time          提现成功时间
+     * @apiSuccess {String}   list.status               提现状态init=未处理，agree=后台同意，refuse=已拒绝，pay_success=银行返回成功，pay_fail=银行返回失败
+     * @apiSuccess {Number} page                         页码.
+     * @apiSuccess {Number} pageSize                     每页数据量.
+     * @apiSuccess {Number} dataTotal                    数据总数.
+     * @apiSuccess {Number} pageTotal                    总页码数.
      */
     public function showCashRecord() {
-        $where['status'] = ['in',['pay_success']];
+        $pageParam = $this->getPagingParams();
+        //$where['status'] = ['in',['pay_success']];
         $where['base_id'] = $this->loginUser['id'];
-        $ret = model('WithDraw', 'logic')->getWithDrawList($where);
+        $ret = model('WithDraw', 'logic')->getWithDrawList($where, $pageParam);
         if (empty($ret)) {
             returnJson(4004, '未获取到提现记录');
         }
         $list = [];
-        foreach ($ret as $k => $v){
+        foreach ($ret['list'] as $k => $v){
             $v['account'] = substr_replace($v['account'] ,"******",-10,6);
             $list[$k]['id'] =$v['id'];
             $list[$k]['withdrawal_amount'] =wztxMoney($v['real_amount']);
@@ -220,6 +234,7 @@ class Pay extends BaseController {
             $list[$k]['account'] =$v['account'];
             $list[$k]['result_time'] =wztxDate($v['result_time']);
         }
-        returnJson(2000, '成功', ['list'=>$list]);
+        $ret['list'] = $list;
+        returnJson(2000, '成功', $ret);
     }
 }

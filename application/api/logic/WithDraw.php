@@ -25,8 +25,24 @@ class WithDraw extends BaseLogic {
     /**
      * Describe: 获取提现中
      */
-    public function getWithDrawList($where) {
-        $ret = $this->where($where)->select();
+    public function getWithDrawList($where,$pageParam) {
+        $dataTotal =  $this->where($where)->order('create_at desc')->count();
+        if (empty($dataTotal)) {
+            return false;
+        }
+        $list =  $this->where($where)->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
+            ->select();
+
+        if(empty($list)){
+            return false;
+        }
+        $ret = [
+            'list' => $list,
+            'page' => $pageParam['page'],
+            'pageSize' => $pageParam['pageSize'],
+            'dataTotal' => $dataTotal,
+            'pageTotal' => intval(($dataTotal + $pageParam['pageSize'] - 1) / $pageParam['pageSize']),
+        ];
         return $ret;
     }
 }
