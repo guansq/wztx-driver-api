@@ -233,6 +233,7 @@ class Pay extends BaseController {
             $list[$k]['bank_name'] =$v['bank'];
             $list[$k]['account'] =$v['account'];
             $list[$k]['result_time'] =wztxDate($v['result_time']);
+            $list[$k]['status'] =$v['status'];
         }
         $ret['list'] = $list;
         returnJson(2000, '成功', $ret);

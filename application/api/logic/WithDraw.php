@@ -25,7 +25,7 @@ class WithDraw extends BaseLogic {
     /**
      * Describe: 获取提现中
      */
-    public function getWithDrawList($where,$pageParam) {
+    public function getWithDrawList($where,$pageParam=[]) {
         $dataTotal =  $this->where($where)->order('create_at desc')->count();
         if (empty($dataTotal)) {
             return false;
