@@ -1121,17 +1121,38 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "Array",
             "optional": false,
-            "field": "systemtotal",
-            "description": "<p>系统消息总未读数.</p>"
+            "field": "list",
+            "description": "<p>列表.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.name",
+            "description": "<p>名称.</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "privatetotal",
-            "description": "<p>私人消息总未读数.</p>"
+            "field": "list.unread",
+            "description": "<p>未读数量.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.icon_url",
+            "description": "<p>图标链接.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.push_type",
+            "description": "<p>推送类型.</p>"
           }
         ]
       }
@@ -1148,7 +1169,7 @@
   {
     "type": "GET",
     "url": "/message",
-    "title": "01.我的消息-列表done",
+    "title": "我的消息-列表done",
     "name": "index",
     "group": "Message",
     "header": {
@@ -1865,7 +1886,7 @@
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "Int",
             "optional": false,
             "field": "uninvoicing_singular_total_order",
             "description": "<p>累计未结账单数</p>"
@@ -1882,7 +1903,7 @@
             "type": "String",
             "optional": false,
             "field": "withdrawal_money",
-            "description": "<p>可提现金额</p>"
+            "description": "<p>可提现金额和余额一致</p>"
           },
           {
             "group": "Success 200",
