@@ -62,27 +62,34 @@ class Message extends BaseController{
      * @apiSuccess {String} list.name              名称.
      * @apiSuccess {Number} list.unread            未读数量.
      * @apiSuccess {String} list.icon_url           图标链接.
-     * @apiSuccess {String} list.push_type         推送类型.
+     * @apiSuccess {String} list.push_type          推送类型.
+     * @apiSuccess {String} list.msg                列表文案.
+     *
      */
     public function getUnRead(){
+        $privatemsg = '';
         if(empty($this->loginUser)){
             $privatetotal = 0;
         }else{
             $privatetotal =  model('Message','logic')->countUnreadMsg($this->loginUser);
+            $privatemsg =  model('Message','logic')->getUnreadMsg($this->loginUser,$privatetotal);
         }
         $systemtotal =  model('Message','logic')->countSystemUnreadMsg($this->loginUser);
+        $systemmsg =  model('Message','logic')->getSystemUnreadMsg($this->loginUser,$systemtotal);
         $list = [
             [
                 'name'=>'系统消息',
                 'unread'=>$systemtotal,
                 'icon_url'=>'',
                 'push_type'=>'system',
+                'privatemsg'=>$privatemsg
             ],
             [
                 'name'=>'私人消息',
                 'unread'=>$privatetotal,
                 'icon_url'=>'',
                 'push_type'=>'private',
+                'systemmsg'=>$systemmsg
             ],
         ];
         returnJson(2000,'成功获取', ['list'=>$list]);

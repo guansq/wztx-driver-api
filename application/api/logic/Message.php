@@ -10,7 +10,7 @@ namespace app\api\logic;
 
 use think\Db;
 
-class Message extends BaseLogic{
+class Message extends BaseLogic {
 
     const TYPE_ARR = [
         'single' => '私人消息',
@@ -24,29 +24,58 @@ class Message extends BaseLogic{
      * Describe: 查询未读单数量 这只是私人消息的统计方式
      * @param $user
      */
-    public function countUnreadMsg($user){
+    public function countUnreadMsg($user) {
         $where = [
             'read_at' => 'NULL',
             'type' => 1
         ];
         return Db::table('rt_message_sendee')->where($where)->where('sendee_id', $user['id'])->count();
     }
+    public function getUnreadMsg($user,$count=0) {
+        $where = [
+            'ms.sendee_id' => $user['id'],
+            'ms.type' => 1,
+            'm.push_type' => ['not in', ['all']]
+        ];
+
+        if(empty($count)){
+            $where2 = [];
+        }else{
+            $where2=[
+                'read_at' => 'NULL',
+            ];
+        }
+        $item = $this->alias('m')
+            ->join('MessageSendee ms', 'm.id = ms.msg_id')
+            ->where($where)->where($where2)->order('m.publish_time desc')
+            ->find();
+        return empty($item['content'])?'': mb_substr($item['content'], 1, 20) . '...';
+    }
+
     /**
      * Describe: 查询未读单数量 这只是系统消息的统计方式
      * @param $user
      */
     public function countSystemUnreadMsg($user) {
         $where = [
-            'ms.type' => 0,
+            'ms.type' => 1,
             'ms.push_type' => 'all'
         ];
         $dataTotal = $this->alias('ms')->where($where)->count();
-        if(empty($user)){
+        if (empty($user)) {
             return $dataTotal;
-        }else{
-            $redmsg = $this->alias('ms')->join('rt_message_sendee m','ms.id = m.msg_id','left')->where($where)->where('sendee_id', $user['id'])->count();
-            return $dataTotal-$redmsg;
+        } else {
+            $redmsg = $this->alias('ms')->join('rt_message_sendee m', 'ms.id = m.msg_id', 'left')->where($where)->where('sendee_id', $user['id'])->count();
+            return $dataTotal - $redmsg;
         }
+    }
+    public function getSystemUnreadMsg($user, $count = 0) {
+        $where = [
+            'ms.type' => 1,
+            'ms.push_type' => 'all'
+        ];
+        $item = $this->alias('ms')->where($where)->order('ms.publish_time desc')->find();
+        return empty($item['content'])?'': mb_substr($item['content'], 1, 20) . '...';
     }
     /**
      * Author: WILL<314112362@qq.com>
@@ -65,7 +94,7 @@ class Message extends BaseLogic{
      * @success {Number} dataTotal           数据总数.
      * @success {Number} pageTotal           总页码数.
      */
-    public function getMyMessage($user, $pageParam){
+    public function getMyMessage($user, $pageParam) {
         if ($user['push_type'] == 'private') {
             if (empty($user['id'])) {
                 return resultArray(4004);
@@ -93,7 +122,7 @@ class Message extends BaseLogic{
             $unreadnum = 0;
             foreach ($dbRet as $item) {
                 $isRead = empty($item['read_at']) ? 0 : 1;
-                if(empty($isRead)){
+                if (empty($isRead)) {
                     $unreadnum += 1;
                 }
                 $list[] = [
@@ -112,7 +141,7 @@ class Message extends BaseLogic{
                 'pageSize' => $pageParam['pageSize'],
                 'dataTotal' => $dataTotal,
                 'pageTotal' => intval(($dataTotal + $pageParam['pageSize'] - 1) / $pageParam['pageSize']),
-                'unreadnum'=>$unreadnum
+                'unreadnum' => $unreadnum
             ];
             return resultArray(2000, '', $ret);
         }
@@ -136,13 +165,13 @@ class Message extends BaseLogic{
             foreach ($dbRet as $item) {
                 if (empty($user['id'])) {
                     $isRead = 0;
-                    $unreadnum = $unreadnum+1;
+                    $unreadnum = $unreadnum + 1;
                 } else {
                     $MsgSendeeModel = db('MessageSendee');
                     $info = $MsgSendeeModel->alias('m')->where(['sendee_id' => $user['id'], 'msg_id' => $item['id'], 'type' => 1])->find();
                     if (empty($info) || empty($info['read_at'])) {
                         $isRead = 0;
-                        $unreadnum = $unreadnum+1;
+                        $unreadnum = $unreadnum + 1;
                     } else {
                         $isRead = 1;
                     }
@@ -164,7 +193,7 @@ class Message extends BaseLogic{
                 'pageSize' => $pageParam['pageSize'],
                 'dataTotal' => $dataTotal,
                 'pageTotal' => intval(($dataTotal + $pageParam['pageSize'] - 1) / $pageParam['pageSize']),
-                'unreadnum'=>$unreadnum
+                'unreadnum' => $unreadnum
             ];
 
             return resultArray(2000, '', $ret);
@@ -182,8 +211,8 @@ class Message extends BaseLogic{
      * @success {Number} isRead          是否阅读
      * @success {String} pushTime        推送时间.
      */
-    public function getMyMsgDetail($id, $user){
-        $detailMsg = $this->where(['id' => $id,'type'=>1])->find();
+    public function getMyMsgDetail($id, $user) {
+        $detailMsg = $this->where(['id' => $id, 'type' => 1])->find();
         if (empty($detailMsg)) {
             return resultArray(4004);
         }
@@ -217,13 +246,13 @@ class Message extends BaseLogic{
         } else {
             if (!empty($user['id'])) {
                 $MsgSendeeModel = db('MessageSendee');
-                $info = $MsgSendeeModel->alias('m')->where(['sendee_id' => $user['id'], 'msg_id' =>$detailMsg['id'], 'type' => 1])->find();
-                if(empty($info)){
+                $info = $MsgSendeeModel->alias('m')->where(['sendee_id' => $user['id'], 'msg_id' => $detailMsg['id'], 'type' => 1])->find();
+                if (empty($info)) {
                     //插入阅读数据
                     $insertData['msg_id'] = $detailMsg['id'];
                     $insertData['sendee_id'] = $user['id'];
                     $insertData['create_at'] = time();
-                    $insertData['read_at'] =time();
+                    $insertData['read_at'] = time();
                     $insertData['type'] = 1;
                     db('MessageSendee')->insert($insertData);
                 }
