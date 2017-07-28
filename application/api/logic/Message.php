@@ -50,52 +50,109 @@ class Message extends BaseLogic{
      * @success {Number} pageTotal           总页码数.
      */
     public function getMyMessage($user, $pageParam){
-        $MsgSendeeModel = db('MessageSendee');
-        $list = [];
-        $where = [
-            'ms.sendee_id' => $user['id'],
-            'ms.type' => 1
-        ];
-        $fields = [
-            'm.id' => 'id',
-            'm.type' => 'type',
-            'm.title' => 'title',
-            'm.content' => 'content',
-            'm.publish_time' => 'publish_time',
-            'ms.read_at' => 'read_at',
-        ];
-        $dataTotal = $MsgSendeeModel->alias('ms')->where($where)->count();
-        $dbRet = $this->alias('m')
-            ->join('MessageSendee ms', 'm.id = ms.msg_id')
-            ->where($where)
-            ->page($pageParam['page'], $pageParam['pageSize'])
-            ->field($fields)
-            ->order('m.create_at DESC')
-            ->select();
-        if(empty($dataTotal)){
-            return resultArray(4004);
-        }
-
-        foreach($dbRet as $item){
-            $list[] = [
-                'id' => $item['id'],
-                'type' => $item['type'],
-                'title' => $item['title'],
-                'summary' => mb_substr($item['content'], 1, 20).'...',
-                'isRead' => empty($item['read_at']) ? 0 : 1,
-                'pushTime' => empty($item['publish_time']) ? '' : date('Y-m-d  H:i', $item['publish_time']),
+        if ($user['push_type'] == 'private') {
+            if (empty($user['id'])) {
+                return resultArray(4004);
+            }
+            $list = [];
+            $where = [
+                'ms.sendee_id' => $user['id'],
+                'ms.type' => 1,
+                'm.push_type' => ['not in', ['all']]
             ];
+            $dataTotal = $this->alias('m')
+                ->join('MessageSendee ms', 'm.id = ms.msg_id')
+                ->where($where)
+                ->count();
+            if (empty($dataTotal)) {
+                return resultArray(4004);
+            }
+            $dbRet = $this->alias('m')
+                ->join('MessageSendee ms', 'm.id = ms.msg_id')
+                ->where($where)
+                ->page($pageParam['page'], $pageParam['pageSize'])
+                ->field("m.*,ms.read_at")
+                ->order('m.create_at DESC')
+                ->select();
+            $unreadnum = 0;
+            foreach ($dbRet as $item) {
+                $isRead = empty($item['read_at']) ? 0 : 1;
+                if(empty($isRead)){
+                    $unreadnum += 1;
+                }
+                $list[] = [
+                    'id' => $item['id'],
+                    'type' => $item['type'],
+                    'push_type' => $item['push_type'],
+                    'title' => $item['title'],
+                    'summary' => mb_substr($item['content'], 1, 20) . '...',
+                    'isRead' => $isRead,
+                    'pushTime' => empty($item['publish_time']) ? '' : date('Y-m-d  H:i', $item['publish_time']),
+                ];
+            }
+            $ret = [
+                'list' => $list,
+                'page' => $pageParam['page'],
+                'pageSize' => $pageParam['pageSize'],
+                'dataTotal' => $dataTotal,
+                'pageTotal' => intval(($dataTotal + $pageParam['pageSize'] - 1) / $pageParam['pageSize']),
+                'unreadnum'=>$unreadnum
+            ];
+            return resultArray(2000, '', $ret);
         }
+        if ($user['push_type'] == 'system') {
+            $list = [];
+            $where = [
+                'ms.type' => 1,
+                'ms.push_type' => 'all'
+            ];
+            $dataTotal = $this->alias('ms')->where($where)->count();
+            if (empty($dataTotal)) {
+                return resultArray(4004);
+            }
+            $dbRet = $this->alias('ms')
+                ->where($where)
+                ->page($pageParam['page'], $pageParam['pageSize'])
+                ->field("ms.*")
+                ->order('ms.create_at DESC')
+                ->select();
+            $unreadnum = 0;
+            foreach ($dbRet as $item) {
+                if (empty($user['id'])) {
+                    $isRead = 0;
+                    $unreadnum = $unreadnum+1;
+                } else {
+                    $MsgSendeeModel = db('MessageSendee');
+                    $info = $MsgSendeeModel->alias('m')->where(['sendee_id' => $user['id'], 'msg_id' => $item['id'], 'type' => 1])->find();
+                    if (empty($info) || empty($info['read_at'])) {
+                        $isRead = 0;
+                        $unreadnum = $unreadnum+1;
+                    } else {
+                        $isRead = 1;
+                    }
+                }
+                $list[] = [
+                    'id' => $item['id'],
+                    'type' => $item['type'],
+                    'push_type' => $item['push_type'],
+                    'title' => $item['title'],
+                    'summary' => mb_substr($item['content'], 1, 20) . '...',
+                    'isRead' => $isRead,
+                    'pushTime' => empty($item['publish_time']) ? '' : date('Y-m-d  H:i', $item['publish_time']),
+                ];
+            }
 
-        $ret = [
-            'list' => $list,
-            'page' => $pageParam['page'],
-            'pageSize' => $pageParam['pageSize'],
-            'dataTotal' => $dataTotal,
-            'pageTotal' => floor($dataTotal/$pageParam['pageSize']) + 1,
-        ];
+            $ret = [
+                'list' => $list,
+                'page' => $pageParam['page'],
+                'pageSize' => $pageParam['pageSize'],
+                'dataTotal' => $dataTotal,
+                'pageTotal' => intval(($dataTotal + $pageParam['pageSize'] - 1) / $pageParam['pageSize']),
+                'unreadnum'=>$unreadnum
+            ];
 
-        return resultArray(2000, '', $ret);
+            return resultArray(2000, '', $ret);
+        }
     }
 
     /**
@@ -110,35 +167,62 @@ class Message extends BaseLogic{
      * @success {String} pushTime        推送时间.
      */
     public function getMyMsgDetail($id, $user){
-        $where = [
-            'ms.sendee_id' => $user['id'],
-            'ms.msg_id' => $id
-        ];
-        $fields = [
-            'm.id' => 'id',
-            'm.type' => 'type',
-            'm.title' => 'title',
-            'm.content' => 'content',
-            'm.publish_time' => 'publish_time',
-            'ms.read_at' => 'read_at',
-        ];
-        $dbRet = $this->alias('m')->join('MessageSendee ms', 'm.id = ms.msg_id')->where($where)->field($fields)->find();
-        if(empty($dbRet)){
+        $detailMsg = $this->where(['id' => $id,'type'=>1])->find();
+        if (empty($detailMsg)) {
             return resultArray(4004);
         }
+        if ($detailMsg['push_type'] != 'all') {
+            if (empty($user['id'])) {
+                return resultArray(4004);
+            }
+            $where = [
+                'ms.sendee_id' => $user['id'],
+                'ms.msg_id' => $id,
+                'ms.type' => 1
+            ];
+            $dbRet = $this->alias('m')->join('MessageSendee ms', 'm.id = ms.msg_id')->where($where)->field("m.*,ms.read_at")->find();
+            if (empty($dbRet)) {
+                return resultArray(4004);
+            }
+            $ret = [
+                'id' => $dbRet['id'],
+                'type' => $dbRet['type'],
+                'title' => $dbRet['title'],
+                'push_type' => $dbRet['push_type'],
+                'content' => $dbRet['content'],
+                'isRead' => empty($dbRet['read_at']) ? 0 : 1,
+                'pushTime' => empty($dbRet['publish_time']) ? '' : date('Y-m-d H:i', $dbRet['publish_time']),
+            ];
+            if (empty($dbRet['read_at'])) {
+                db('MessageSendee')->alias('ms')->where($where)->update(['read_at' => time()]);
+            }
+            return resultArray(2000, '', $ret);
 
-        $ret = [
-            'id' => $dbRet['id'],
-            'type' => $dbRet['type'],
-            'title' => $dbRet['title'],
-            'content' => $dbRet['content'],
-            'isRead' => empty($dbRet['read_at']) ? 0 : 1,
-            'pushTime' => empty($dbRet['publish_time']) ? '' : date('Y-m-d H:i', $dbRet['publish_time']),
-        ];
-        if(empty($dbRet['read_at'])){
-            db('MessageSendee')->alias('ms')->where($where)->update(['read_at' => time()]);
+        } else {
+            if (!empty($user['id'])) {
+                $MsgSendeeModel = db('MessageSendee');
+                $info = $MsgSendeeModel->alias('m')->where(['sendee_id' => $user['id'], 'msg_id' =>$detailMsg['id'], 'type' => 1])->find();
+                if(empty($info)){
+                    //插入阅读数据
+                    $insertData['msg_id'] = $detailMsg['id'];
+                    $insertData['sendee_id'] = $user['id'];
+                    $insertData['create_at'] = time();
+                    $insertData['read_at'] =time();
+                    $insertData['type'] = 1;
+                    db('MessageSendee')->insert($insertData);
+                }
+            }
+            $ret = [
+                'id' => $detailMsg['id'],
+                'type' => $detailMsg['type'],
+                'push_type' => $detailMsg['push_type'],
+                'title' => $detailMsg['title'],
+                'content' => $detailMsg['content'],
+                'isRead' => 1,
+                'pushTime' => empty($detailMsg['publish_time']) ? '' : date('Y-m-d H:i', $detailMsg['publish_time']),
+            ];
+            return resultArray(2000, '', $ret);
         }
-        return resultArray(2000, '', $ret);
     }
 
 }

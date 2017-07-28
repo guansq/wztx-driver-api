@@ -51,7 +51,7 @@ return [
         'supporter' => 'Supporter',
         'inquiry' => 'Inquiry',
         'po' => 'PO',
-        'message' => 'Message',
+//        'message' => 'Message',
         'ask' => 'Ask',
     ],
 ];

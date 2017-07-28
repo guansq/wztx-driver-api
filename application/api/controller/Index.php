@@ -117,15 +117,23 @@ class Index extends BaseController{
      * @apiSuccess {Number} list.position   序号.
      * @apiSuccess {String} list.url    跳转链接.
      * @apiSuccess {String} list.src     图片.
+     * @apiSuccess {Object} unreadMsg       未读消息.
      */
     public function getAdvertisement(){
         $ret = model('Advertisement', 'logic')->getAdInfo();
 
-        if(!$ret){
-            return returnJson('4000','数据为空');
+        if(empty($this->loginUser['id'])){
+            $unreadMsgCnt = 0;
+        }else{
+            $unreadMsgCnt = model('Message', 'logic')->countUnreadMsg($this->loginUser);
         }
-        //dump($newArr);die;
-        return returnJson('2000','成功',['list'=>$ret]);
+        $ret = [
+            'list' => $ret,
+            'unreadMsg' => [
+                'msg' => $unreadMsgCnt,
+            ]
+        ];
+        returnJson(2000, '', $ret);
     }
     /**
      * 显示创建资源表单页.
@@ -189,6 +197,9 @@ class Index extends BaseController{
 
     public function index(){
         echo 'test';
+    }
+    public function test () {
+        saveOrderShare(1);
     }
 
 }

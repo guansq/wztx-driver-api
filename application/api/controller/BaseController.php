@@ -36,27 +36,40 @@ class BaseController extends Controller{
         //不需要token验证的控制器方法
         $except_controller = [
             "User" => ["login", "reg", "test", "forget",'computeQlfScore'],
-            "Index" => ["apiCode", 'lastApk', 'appConfig', 'sendCaptcha', 'getAdvertisement'],
+            "Index" => ["apiCode", 'lastApk', 'appConfig', 'sendCaptcha','test'],
             "Car" => ['getallcarstyle'],
             'Goods' => ['goodslist'],
         ];
 
-        if(!array_key_exists($this->controller, $except_controller) || !in_array($this->action, $except_controller[$this->controller])){
+        if(!array_key_exists($this->controller, $except_controller) || !in_array($this->action, $except_controller[$this->controller])) {
             $token = request()->header('authorization-token', '');
-            if(empty($token)){
-                //returnJson(4011);
+            $except_token_controller = [
+                "Index" => ["getAdvertisement"],
+                "Message" => ["index", "detail"],
+            ];
+            if (array_key_exists($this->controller, $except_token_controller) && in_array($this->action, $except_token_controller[$this->controller])) {
+                if (empty($token)) {
+                    $this->loginUser = '';
+                } else {
+                    $ret = JwtHelper::checkHomeToken($token);
+                    if (empty($ret)) {
+                        $this->loginUser = '';
+                    } else {
+                        $this->loginUser = $ret;
+                    }
+                }
+            } else {
+                $this->loginUser = JwtHelper::checkToken($token);
+
+                $drBaseInfo = model('DrBaseInfo', 'logic')->findInfoByUserId($this->loginUser['id']);
+
+                /*            if(empty($drBaseInfo)){
+                                //returnJson(4011);
+                            }*/
+                $this->loginUser['type'] = $drBaseInfo['type'];
+                $this->loginUser['map_code'] = $drBaseInfo['map_code'];
+                $this->loginUser['online'] = $drBaseInfo['online'];//上班状态 0=上班，1=不上班
             }
-
-            $this->loginUser = JwtHelper::checkToken($token);
-
-            $drBaseInfo = model('DrBaseInfo', 'logic')->findInfoByUserId($this->loginUser['id']);
-
-/*            if(empty($drBaseInfo)){
-                //returnJson(4011);
-            }*/
-            $this->loginUser['type'] = $drBaseInfo['type'];
-            $this->loginUser['map_code'] = $drBaseInfo['map_code'];
-            $this->loginUser['online'] = $drBaseInfo['online'];//上班状态 0=上班，1=不上班
         }
     }
 

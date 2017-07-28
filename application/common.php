@@ -358,6 +358,7 @@ function sendMsg($sendeeId,$title,$content,$basetype=0,$type='single',$pri=3){
         'type' => $basetype,
         'publish_time' => time(),
         'pri' => $pri,
+        'push_type'=>$type,
         'create_at' => time(),
         'update_at' => time()
     ];
@@ -499,4 +500,77 @@ function ispassAuth($userInfo){
         return true;
     }
     return false;
+}
+
+/*
+ * 添加推荐列表根据订单情况
+ */
+function saveOrderShare($order_id = ''){
+    if(empty($order_id)){
+        return false;
+    }
+    //获取订单详情
+    $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo([ 'id' => $order_id]);
+    if (empty($orderInfo)) {
+        return false;
+    }
+    if(in_array($orderInfo['status'],['pay_success','comment'])){
+        $spBaseInfo =getBaseSpUserInfo($orderInfo['sp_id']);
+        if(!empty($spBaseInfo['recomm_id'])){
+            $spInviteBaseInfo = getBaseSpUserInfo($spBaseInfo['recomm_id']);
+            $share_money = wztxMoney($orderInfo['final_price']*getSysconf('share_percent')/100);
+            $whereSp = [
+                'share_name'=>$spBaseInfo['real_name'],
+                'share_id'=>$spBaseInfo['recomm_id'],
+                'status'=>0,
+                'type'=>0,
+                'code'=>$spInviteBaseInfo['recomm_code'],
+                'invite_name'=>$spInviteBaseInfo['real_name'],
+                'invite_id'=>$orderInfo['sp_id'],
+                'pay_orderid'=>$order_id,
+                'amount'=>$share_money,
+                'create_at'=>time(),
+            ];
+            if(saveRecomm($whereSp)){
+                $isUpdate =  Db::name('SpBaseInfo')->where(['id'=>$spBaseInfo['recomm_id']])->update(['bonus'=>['exp','bonus+'.$share_money]]);
+            }
+        }
+
+        $drBaseInfo = model('DrBaseInfo', 'logic')->findInfoByUserId($orderInfo['dr_id']);
+        if(!empty($drBaseInfo['recomm_id'])){
+            $drInviteBaseInfo = model('DrBaseInfo', 'logic')->findInfoByUserId($drBaseInfo['recomm_id']);
+
+            $whereSp = [
+                'share_name'=>$drBaseInfo['real_name'],
+                'share_id'=>$drBaseInfo['recomm_id'],
+                'status'=>0,
+                'type'=>1,
+                'code'=>$drInviteBaseInfo['recomm_code'],
+                'invite_name'=>$drInviteBaseInfo['real_name'],
+                'invite_id'=>$orderInfo['dr_id'],
+                'pay_orderid'=>$order_id,
+                'amount'=>$share_money,
+                'create_at'=>time(),
+            ];
+            if(saveRecomm($whereSp)){
+                $isUpdate =  Db::name('DrBaseInfo')->where(['id'=>$drBaseInfo['recomm_id']])->update(['cash'=>['exp','cash+'.$share_money]]);
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+
+// 保存推荐信息
+function saveRecomm($where){
+    if(empty($where['share_id']) || empty($where['share_id']) || !in_array($where['type'],['0','1'])){
+        return false;
+    }
+    $whereExist = ['share_id'=>$where['share_id'],'invite_id'=>$where['invite_id'],'type'=>$where['type']];
+    $isExist =  Db::name('ShareList')->where($whereExist)->find();
+    if(!empty($isExist)){
+        return false;
+    }
+    return Db::name('ShareList')->insert($where);
 }

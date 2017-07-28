@@ -59,6 +59,33 @@ class JwtHelper{
         return $userInfo;
     }
 
+    public static function decodeHomeToken($jwt){
+        try{
+            return (Array)JWT::decode($jwt, self::JWT_KEY, ['HS256']);
+        }catch(\Exception $e){
+            return false;
+        }
+    }
+
+    public static function checkHomeToken($jwt){
+        $decode = self::decodeHomeToken($jwt);
+        if(empty($decode)){
+            return false;
+        }
+        $user_id = $decode["data"][0];
+        $sign = $decode["data"][1];
+        $userInfo = Db::table(self::USER_TABLE_NAME)->where(['id' => $user_id])->find();
+
+        if(empty($userInfo)){
+            return false;
+        }
+        if(empty($sign) || $sign != self::tokenSign($userInfo)){
+            return false;
+        }
+        return $userInfo;
+    }
+
+
 
     /**
      * token签名
