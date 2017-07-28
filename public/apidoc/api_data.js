@@ -781,6 +781,13 @@ define({ "api": [
             "optional": false,
             "field": "list.src",
             "description": "<p>图片.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "unreadMsg",
+            "description": "<p>未读消息.</p>"
           }
         ]
       }
@@ -1003,6 +1010,95 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "/message/detail",
+    "title": "我的消息-详情done",
+    "name": "detail",
+    "group": "Message",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>消息ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>类型.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "title",
+            "description": "<p>标题.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>内容.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "isRead",
+            "description": "<p>是否阅读</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "pushTime",
+            "description": "<p>推送时间.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Message.php",
+    "groupTitle": "Message",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/message/detail"
+      }
+    ]
+  },
+  {
+    "type": "GET",
     "url": "/message",
     "title": "01.我的消息-列表done",
     "name": "index",
@@ -1027,9 +1123,9 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": true,
-            "field": "type",
+            "field": "push_type",
             "defaultValue": "private",
-            "description": "<p>消息类型. all=全部  system=系统消息 private=私人消息</p>"
+            "description": "<p>消息类型. system=系统消息 private=私人消息</p>"
           },
           {
             "group": "Parameter",
@@ -1129,6 +1225,13 @@ define({ "api": [
             "optional": false,
             "field": "pageTotal",
             "description": "<p>总页码数.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "unreadnum",
+            "description": "<p>未读消息.</p>"
           }
         ]
       }
@@ -1139,95 +1242,6 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.ruitukeji.com/message"
-      }
-    ]
-  },
-  {
-    "type": "GET",
-    "url": "/message/:id",
-    "title": "02.我的消息-详情done",
-    "name": "read",
-    "group": "Message",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization-token",
-            "description": "<p>token.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>id.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>消息ID.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "type",
-            "description": "<p>类型.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "title",
-            "description": "<p>标题.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>内容.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "isRead",
-            "description": "<p>是否阅读</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "pushTime",
-            "description": "<p>推送时间.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Message.php",
-    "groupTitle": "Message",
-    "sampleRequest": [
-      {
-        "url": "http://wztx.drv.api.ruitukeji.com/message/:id"
       }
     ]
   },
@@ -1992,8 +2006,8 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.result_time",
-            "description": "<p>提现成功时间</p>"
+            "field": "list.create_at",
+            "description": "<p>提交提现时间</p>"
           },
           {
             "group": "Success 200",
