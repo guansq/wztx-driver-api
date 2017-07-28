@@ -1099,6 +1099,54 @@
   },
   {
     "type": "GET",
+    "url": "/message/getUnRead",
+    "title": "未读消息数量done",
+    "name": "getUnRead",
+    "group": "Message",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": true,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "systemtotal",
+            "description": "<p>系统消息总未读数.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "privatetotal",
+            "description": "<p>私人消息总未读数.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Message.php",
+    "groupTitle": "Message",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.ruitukeji.com/message/getUnRead"
+      }
+    ]
+  },
+  {
+    "type": "GET",
     "url": "/message",
     "title": "01.我的消息-列表done",
     "name": "index",
