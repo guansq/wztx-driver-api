@@ -16,7 +16,7 @@ class Message extends BaseController{
 
 
     /**
-     * @api      {GET} /message 01.我的消息-列表done
+     * @api      {GET} /message 我的消息-列表done
      * @apiName  index
      * @apiGroup Message
      * @apiHeader {String} authorization-token   token.
@@ -58,8 +58,11 @@ class Message extends BaseController{
      * @apiName getUnRead
      * @apiGroup Message
      * @apiHeader {String} [authorization-token]   token.
-     * @apiSuccess {Number} systemtotal              系统消息总未读数.
-     * @apiSuccess {Number} privatetotal             私人消息总未读数.
+     * @apiSuccess {Array} list                 列表.
+     * @apiSuccess {String} list.name              名称.
+     * @apiSuccess {Number} list.unread            未读数量.
+     * @apiSuccess {String} list.icon_url           图标链接.
+     * @apiSuccess {String} list.push_type         推送类型.
      */
     public function getUnRead(){
         if(empty($this->loginUser)){
@@ -68,8 +71,21 @@ class Message extends BaseController{
             $privatetotal =  model('Message','logic')->countUnreadMsg($this->loginUser);
         }
         $systemtotal =  model('Message','logic')->countSystemUnreadMsg($this->loginUser);
-
-        returnJson(2000,'成功获取', ['systemtotal'=>$systemtotal,'privatetotal'=>$privatetotal]);
+        $list = [
+            [
+                'name'=>'系统消息',
+                'unread'=>$systemtotal,
+                'icon_url'=>'',
+                'push_type'=>'system',
+            ],
+            [
+                'name'=>'私人消息',
+                'unread'=>$privatetotal,
+                'icon_url'=>'',
+                'push_type'=>'private',
+            ],
+        ];
+        returnJson(2000,'成功获取', ['list'=>$list]);
     }
     /**
      * 显示创建资源表单页.

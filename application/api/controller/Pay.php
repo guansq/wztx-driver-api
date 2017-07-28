@@ -22,13 +22,58 @@ class Pay extends BaseController {
      * @apiSuccess {Int}    cur_month_total_order   本月累计单数
      * @apiSuccess {String}  month_total_money        本月累计金额
      * @apiSuccess {String}  year_total_money        年累计金额
-     * @apiSuccess {String}  uninvoicing_singular_total_order        累计未结账单数
+     * @apiSuccess {Int}  uninvoicing_singular_total_order        累计未结账单数
      * @apiSuccess {String}  uninvoicing_singular_total_money        累计未结金额数
-     * @apiSuccess {String}  withdrawal_money        可提现金额
+     * @apiSuccess {String}  withdrawal_money        可提现金额和余额一致
      * @apiSuccess {String}  bonus                   我的推荐奖励
      */
     public function index() {
+        $begin_time = time();
+        $end_time = strtotime("-1 year");
+        $last_month_time = date('Y-m', strtotime("-1 month"));
+        $now_month_time = date('Y-m');
+        $where['pay_time'] = array('between', array($end_time, $begin_time));
+        $where['status'] = ['in', ['pay_success', 'comment']];
+        $where['dr_id'] = $this->loginUser['id'];
+        $result = model('TransportOrder', 'logic')->getSuccessListInfo($where);
+        $pre_month_total_order = 0;
+        $pre_month_total_money = 0;
+        $cur_month_total_order = 0;
+        $month_total_money = 0;
+        $year_total_money = 0;
+        foreach ($result as $k => $v) {
+            if ($v['month'] == $now_month_time) {
+                $cur_month_total_order = $v['order_amount'];
+                $month_total_money = $v['tran_total'];
+            }
+            if ($v['month'] == $last_month_time) {
+                $pre_month_total_order = $v['order_amount'];
+                $pre_month_total_money = $v['tran_total'];
+            }
+            $year_total_money = $year_total_money + $v['tran_total'];
+        }
+        $resultunb = model('TransportOrder', 'logic')->getUnbalanced(['is_clear' => 0, 'dr_id' => $this->loginUser['id']]);
 
+        $uninvoicing_singular_total_order = empty($resultunb[0]['order_amount']) ? 0 : $resultunb[0]['order_amount'];
+        $uninvoicing_singular_total_money = empty($resultunb[0]['tran_total']) ? 0 : $resultunb[0]['tran_total'];
+        $drBaseInfoLogic = model('DrBaseInfo', 'logic');
+        $baseUserInfo = $drBaseInfoLogic->findInfoByUserId($this->loginUser['id']);
+        $balance = $withdrawal_money = empty($baseUserInfo['cash']) ? '0' : $baseUserInfo['cash'];
+        $bonus = model('DrBaseInfo', 'logic')->getRecommBonusAll(['share_id' => $this->loginUser['id'], 'status' => 0, 'type' => 1]);
+        $bonus = empty($bonus[0]['amount'])?0:$bonus[0]['amount'];
+        $return_msg = [
+            'balance' =>wztxMoney($balance) ,
+            'pre_month_total_order' => $pre_month_total_order,
+            'pre_month_total_money' => wztxMoney($pre_month_total_money),
+            'cur_month_total_order' => $cur_month_total_order,
+            'month_total_money' =>wztxMoney( $month_total_money),
+            'year_total_money' => wztxMoney($year_total_money),
+            'uninvoicing_singular_total_order' => $uninvoicing_singular_total_order,
+            'uninvoicing_singular_total_money' => wztxMoney($uninvoicing_singular_total_money),
+            'withdrawal_money' => wztxMoney($withdrawal_money),
+            'bonus' => wztxMoney($bonus),
+        ];
+        returnJson(2000,'成功',$return_msg);
     }
 
     /**
@@ -51,7 +96,7 @@ class Pay extends BaseController {
             'account_name',
         ]);
         $rule = [
-            'withdrawal_amount' => ['require','^[0-9]+(.[0-9]{2})?$'],
+            'withdrawal_amount' => ['require', '^[0-9]+(.[0-9]{2})?$'],
             'bank_name' => 'require',
             'payment_account' => 'require',
             'account_name' => 'require',
@@ -59,7 +104,7 @@ class Pay extends BaseController {
         validateData($paramAll, $rule);
         $drBaseInfoLogic = model('DrBaseInfo', 'logic');
         $baseUserInfo = $drBaseInfoLogic->findInfoByUserId($this->loginUser['id']);
-        if(empty($paramAll['withdrawal_amount'])){
+        if (empty($paramAll['withdrawal_amount'])) {
             returnJson(4000, '提现金额不能为0');
         }
         if (empty($baseUserInfo)) {
@@ -75,10 +120,10 @@ class Pay extends BaseController {
             returnJson(4000, '提现金额大于可提现金额');
         }
         //当前有提现订单不能申请提现
-        $where['status'] = ['in',['init','agree']];
+        $where['status'] = ['in', ['init', 'agree']];
         $where['base_id'] = $this->loginUser['id'];
         $ret = model('WithDraw', 'logic')->getWithDrawList($where);
-        if(!empty($ret)){
+        if (!empty($ret)) {
             returnJson(4000, '当前有提现订单存在，不能提现');
         }
         //完善个人信息填写  sp_id
@@ -226,14 +271,14 @@ class Pay extends BaseController {
             returnJson(4004, '未获取到提现记录');
         }
         $list = [];
-        foreach ($ret['list'] as $k => $v){
-            $v['account'] = substr_replace($v['account'] ,"******",-10,6);
-            $list[$k]['id'] =$v['id'];
-            $list[$k]['withdrawal_amount'] =wztxMoney($v['real_amount']);
-            $list[$k]['bank_name'] =$v['bank'];
-            $list[$k]['account'] =$v['account'];
-            $list[$k]['create_at'] =wztxDate($v['create_at']);
-            $list[$k]['status'] =$v['status'];
+        foreach ($ret['list'] as $k => $v) {
+            $v['account'] = substr_replace($v['account'], "******", -10, 6);
+            $list[$k]['id'] = $v['id'];
+            $list[$k]['withdrawal_amount'] = wztxMoney($v['real_amount']);
+            $list[$k]['bank_name'] = $v['bank'];
+            $list[$k]['account'] = $v['account'];
+            $list[$k]['create_at'] = wztxDate($v['create_at']);
+            $list[$k]['status'] = $v['status'];
         }
         $ret['list'] = $list;
         returnJson(2000, '成功', $ret);

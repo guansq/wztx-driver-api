@@ -78,5 +78,20 @@ class TransportOrder extends BaseLogic {
         }
         return resultArray(2000, '更改订单状态成功');
     }
+    //获取成功订单信息
+    public function  getSuccessListInfo($where){
+        $list = $this->alias('a')->where($where)->field(' FROM_UNIXTIME(pay_time,"%Y-%m") month,count(id) order_amount,sum(final_price) tran_total')->group('month')->select();
+        //echo $this->getLastSql();
+        return $list;
+    }
+    //获取未结算订单
+    public function getUnbalanced($where){
+        $list = $this->alias('a')->where($where)->field('count(id) order_amount,sum(final_price) tran_total')->select();
+        //echo $this->getLastSql();
+        if ($list) {
+            $list = collection($list)->toArray();
+        }
+        return $list;
+    }
 
 }

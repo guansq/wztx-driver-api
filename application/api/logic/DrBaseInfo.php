@@ -190,4 +190,10 @@ class DrBaseInfo extends BaseLogic{
     public function getRecommBonus($where){
         return Db::name('ShareList')->where($where)->value("amount");
     }
+    // 获得被推荐人的总bonus
+    public function getRecommBonusAll($where){
+        $ret =Db::name('ShareList')->where($where)->field("sum(amount) amount")->select();
+        // echo $this->getLastSql();
+        return $ret;
+    }
 }
