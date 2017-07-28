@@ -45,7 +45,7 @@ class BaseController extends Controller{
             $token = request()->header('authorization-token', '');
             $except_token_controller = [
                 "Index" => ["getAdvertisement"],
-                "Message" => ["index", "detail"],
+                "Message" => ["index", "detail","getunread"],
             ];
             if (array_key_exists($this->controller, $except_token_controller) && in_array($this->action, $except_token_controller[$this->controller])) {
                 if (empty($token)) {

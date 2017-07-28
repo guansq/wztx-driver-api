@@ -31,7 +31,23 @@ class Message extends BaseLogic{
         ];
         return Db::table('rt_message_sendee')->where($where)->where('sendee_id', $user['id'])->count();
     }
-
+    /**
+     * Describe: 查询未读单数量 这只是系统消息的统计方式
+     * @param $user
+     */
+    public function countSystemUnreadMsg($user) {
+        $where = [
+            'ms.type' => 0,
+            'ms.push_type' => 'all'
+        ];
+        $dataTotal = $this->alias('ms')->where($where)->count();
+        if(empty($user)){
+            return $dataTotal;
+        }else{
+            $redmsg = $this->alias('ms')->join('rt_message_sendee m','ms.id = m.msg_id','left')->where($where)->where('sendee_id', $user['id'])->count();
+            return $dataTotal-$redmsg;
+        }
+    }
     /**
      * Author: WILL<314112362@qq.com>
      * Describe: 查询我的消息列表

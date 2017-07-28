@@ -53,7 +53,24 @@ class Message extends BaseController{
         $ret =  model('Message','logic')->getMyMessage($where,$pageParam);
         returnJson($ret);
     }
+    /**
+     * @api {GET} /message/getUnRead     未读消息数量done
+     * @apiName getUnRead
+     * @apiGroup Message
+     * @apiHeader {String} [authorization-token]   token.
+     * @apiSuccess {Number} systemtotal              系统消息总未读数.
+     * @apiSuccess {Number} privatetotal             私人消息总未读数.
+     */
+    public function getUnRead(){
+        if(empty($this->loginUser)){
+            $privatetotal = 0;
+        }else{
+            $privatetotal =  model('Message','logic')->countUnreadMsg($this->loginUser);
+        }
+        $systemtotal =  model('Message','logic')->countSystemUnreadMsg($this->loginUser);
 
+        returnJson(2000,'成功获取', ['systemtotal'=>$systemtotal,'privatetotal'=>$privatetotal]);
+    }
     /**
      * 显示创建资源表单页.
      *
