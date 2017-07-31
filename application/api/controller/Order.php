@@ -12,6 +12,7 @@ class Order extends BaseController {
     const TITLE = '您有新的司机报价';
     const SPTITLE = '您的订单已被接单';
     const SPCONTENT = '您的订单已被接单';
+
     /*
      * @api     {POST}  /order/showQuoteInfo        显示分配中的报价信息
      * @apiName showQuoteInfo
@@ -57,7 +58,7 @@ class Order extends BaseController {
      * @apiSuccess {Number} pageSize                     每页数据量.
      * @apiSuccess {Number} dataTotal                    数据总数.
      * @apiSuccess {Number} pageTotal                    总页码数.
-      *
+     *
      */
     public function listInfo() {
         $paramAll = $this->getReqParams([
@@ -69,13 +70,13 @@ class Order extends BaseController {
         validateData($paramAll, $rule);
         $where = [];
         if ($paramAll['type'] != 'all') {
-            if($paramAll['type'] == 'success'){
-                $where['status'] = ['in',['pay_success','comment']];
-            }else{
+            if ($paramAll['type'] == 'success') {
+                $where['status'] = ['in', ['pay_success', 'comment']];
+            } else {
                 $where['status'] = $paramAll['type'];
             }
-        }else{
-            $where['status'] = ['not in',['init']];
+        } else {
+            $where['status'] = ['not in', ['init']];
         }
         $where['dr_id'] = $this->loginUser['id'];
         $pageParam = $this->getPagingParams();
@@ -84,19 +85,19 @@ class Order extends BaseController {
             returnJson('4004', '暂无订单信息');
         }
         $list = [];
-        foreach ($orderInfo['list'] as $k =>$v){
+        foreach ($orderInfo['list'] as $k => $v) {
             $list[$k]['order_id'] = $v['id'];
             $list[$k]['org_city'] = $v['org_city'];
             $list[$k]['dest_city'] = $v['dest_city'];
-            $list[$k]['weight'] =strval($v['weight']);
+            $list[$k]['weight'] = strval($v['weight']);
             $list[$k]['goods_name'] = $v['goods_name'];
             $list[$k]['status'] = $v['status'];
             $list[$k]['car_style_length'] = $v['car_style_length'];
-            $list[$k]['car_style_type'] =$v['car_style_type'];
-            $list[$k]['final_price'] =wztxMoney($v['final_price']);
-            $list[$k]['mind_price'] =wztxMoney($v['mind_price']);
-            $list[$k]['system_price'] =wztxMoney($v['system_price']);
-            $list[$k]['usecar_time'] =wztxDate($v['usecar_time']);
+            $list[$k]['car_style_type'] = $v['car_style_type'];
+            $list[$k]['final_price'] = wztxMoney($v['final_price']);
+            $list[$k]['mind_price'] = wztxMoney($v['mind_price']);
+            $list[$k]['system_price'] = wztxMoney($v['system_price']);
+            $list[$k]['usecar_time'] = wztxDate($v['usecar_time']);
         }
         $orderInfo['list'] = $list;
 
@@ -195,31 +196,44 @@ class Order extends BaseController {
      * @apiParam    {Int}    order_id           order_id
      * @apiParam    {String}    img_url         图片链接，多个用 | 分隔
      * @apiSuccess  {String} order_id         order_id
+     * @apiParam  {String}  dest_address_maps            目的地址的坐标 如116.480881,39.989410
      */
     public function uploadCerPic() {
         $paramAll = $this->getReqParams([
             'order_id',
             'img_url',
+            'dest_address_maps'
         ]);
         $rule = [
             'order_id' => ['require', 'regex' => '^[0-9]*$'],
             'img_url' => 'require',
+            'dest_address_maps' => 'require|max:30',
         ];
-
+        $address = explode(',', $paramAll['dest_address_maps']);
+        $paramAll['dest_longitude'] = $address[0];
+        $paramAll['dest_latitude'] = $address[1];
         validateData($paramAll, $rule);
-        $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo(['dr_id' => $this->loginUser['id'], 'id' => $paramAll['order_id'],'status' => 'distribute']);//配送中的订单信息
+        $orderInfo = model('TransportOrder', 'logic')->getTransportOrderInfo(['dr_id' => $this->loginUser['id'], 'id' => $paramAll['order_id'], 'status' => 'distribute']);//配送中的订单信息
         if (empty($orderInfo)) {
             returnJson(4004, '未获取到订单信息');
         }
-        if($orderInfo['status'] != 'distribute'){
+        if ($orderInfo['status'] != 'distribute') {
             returnJson(4000, '当前状态不能拍照上传');
         }
+        $data = [
+            'status' => 'photo',
+            'arr_cer_pic' => $paramAll['img_url'],
+            'arr_time' => time(),
+            'dest_address_maps' => $paramAll['dest_address_maps'],
+            'dest_longitude' => $paramAll['dest_longitude'],
+            'dest_latitude' => $paramAll['dest_latitude']
+        ];
         //没有问题存入数据库
-        $changeStatus = model('TransportOrder', 'logic')->updateTransport(['id' => $paramAll['order_id']], ['status' => 'photo','arr_cer_pic'=>$paramAll['img_url'],'arr_time'=>time()]);
+        $changeStatus = model('TransportOrder', 'logic')->updateTransport(['id' => $paramAll['order_id']], $data );
         if ($changeStatus['code'] != 2000) {
             returnJson($changeStatus);
         }
-        returnJson(2000, '成功',['order_id'=>$paramAll['order_id']]);
+        returnJson(2000, '成功', ['order_id' => $paramAll['order_id']]);
     }
 
     /**
@@ -228,35 +242,49 @@ class Order extends BaseController {
      * @apiGroup Order
      * @apiHeader {String} authorization-token      token.
      * @apiParam  {Number}  order_id            order_id
+     * @apiParam  {String}  org_address_maps            出发地地址的坐标 如116.480881,39.989410
      */
-    public function shipping(){
-        $paramAll = $this->getReqParams(['order_id']);
-        $rule = ['order_id' => ['require', 'regex' => '^[0-9]*$']];
+    public function shipping() {
+        $paramAll = $this->getReqParams([
+            'order_id',
+            'org_address_maps'
+        ]);
+        $rule = [
+            'order_id' => ['require', 'regex' => '^[0-9]*$'],
+            'org_address_maps' => 'require|max:30',
+        ];
         validateData($paramAll, $rule);
         $where = [
             'dr_id' => $this->loginUser['id'],
             'id' => $paramAll['order_id'],
             'status' => 'quoted',//已确认订单状态
         ];
+        $address = explode(',', $paramAll['org_address_maps']);
+        $paramAll['org_longitude'] = $address[0];
+        $paramAll['org_latitude'] = $address[1];
         $data = [
             'status' => 'distribute',//更改为配送中的状态
-            'send_time' => time()
+            'send_time' => time(),
+            'org_address_maps'=>$paramAll['org_address_maps'],
+            'org_longitude'=>  $paramAll['org_longitude'],
+            'org_latitude'=>  $paramAll['org_latitude'],
+
         ];
         //通过order_id得到sp_id
         $spId = getSpIdByOrderId($paramAll['order_id']);
-        if(empty($spId)){
-            returnJson(4000,'发货失败');
+        if (empty($spId)) {
+            returnJson(4000, '发货失败');
         }
-        $ret = model('TransportOrder', 'logic')->updateTransport($where,$data);
-        if($ret['code'] == 4000){
-            returnJson(4000,'发货失败');
+        $ret = model('TransportOrder', 'logic')->updateTransport($where, $data);
+        if ($ret['code'] == 4000) {
+            returnJson(4000, '发货失败');
         }
         //发送推送信息给货主
         $push_token = getSpPushToken($spId);
-        if(!empty($push_token)){
-            pushInfo($push_token,'您的订单已经在配送中啦',$rt_key='wztx_shipper');//推送给货主端
+        if (!empty($push_token)) {
+            pushInfo($push_token, '您的订单已经在配送中啦', $rt_key = 'wztx_shipper');//推送给货主端
         }
-        returnJson(2000,'发货成功');
+        returnJson(2000, '发货成功');
     }
 
 }
