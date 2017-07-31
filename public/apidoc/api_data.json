@@ -1153,6 +1153,13 @@
             "optional": false,
             "field": "list.push_type",
             "description": "<p>推送类型.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.msg",
+            "description": "<p>列表文案.</p>"
           }
         ]
       }
@@ -1746,6 +1753,13 @@
             "optional": false,
             "field": "order_id",
             "description": "<p>order_id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "org_address_maps",
+            "description": "<p>出发地地址的坐标 如116.480881,39.989410</p>"
           }
         ]
       }
@@ -1794,6 +1808,13 @@
             "optional": false,
             "field": "img_url",
             "description": "<p>图片链接，多个用 | 分隔</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "dest_address_maps",
+            "description": "<p>目的地址的坐标 如116.480881,39.989410</p>"
           }
         ]
       }
