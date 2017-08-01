@@ -207,14 +207,20 @@ class User extends BaseController {
      * @apiSuccess {Number} sex                         性别 1=男 2=女 0=未知
      * @apiSuccess {String} address                     常驻地址
      *
+     * @apiParam {Number} logistics_type                物流类型 1：同城物流 2：长途物流
+     * @apiParam {String} hold_pic                      手持身份证照.
+     * @apiParam {String} front_pic                     身份证正面照.
+     * @apiParam {String} back_pic                      身份证反面照.
+     *
      * @apiSuccess {String} card_number                  车牌号码
      * @apiSuccess {String} car_type                     车型
      * @apiSuccess {String} car_length                   车长
      * @apiSuccess {String} weight                       载重
      * @apiSuccess {String} volume                       可载体积
      *
-     * @apiSuccess {String} front_pic                    身份证正
-     * @apiSuccess {String} back_pic                     身份证反
+     * @apiParam {String} car_style_type_id              车型ID.
+     * @apiParam {String} car_style_length_id            车长ID.
+
      * @apiSuccess {String} policy_pic                   保险单照片
      * @apiSuccess {String} index_pic                    车头和车牌号照片
      * @apiSuccess {String} vehicle_license_pic          行驶证照片
@@ -246,13 +252,17 @@ class User extends BaseController {
             'identity' => $result['identity'],
             'sex' => $result['sex'],
             'address' => $result['address'],
+            'logistics_type' => $result['logistics_type'],
+            'hold_pic' => $result['hold_pic'],
+            'front_pic' => $result['front_pic'],
+            'back_pic' => $result['back_pic'],
             'card_number' => $carauth['card_number'],
             'car_type' => $carauth['car_type'],
             'car_length' => $carauth['car_length'],
             'weight' => strval($carauth['weight']),
             'volume' => strval($carauth['volume']),
-            'front_pic' => $result['front_pic'],
-            'back_pic' => $result['back_pic'],
+            'car_style_type_id' => strval($carauth['car_style_type_id']),
+            'car_style_length_id' => strval($carauth['car_style_length_id']),
             'policy_pic' => $carauth['policy_pic'],
             'index_pic' => $carauth['index_pic'],
             'vehicle_license_pic' => $carauth['vehicle_license_pic'],
