@@ -79,7 +79,7 @@
     "groupTitle": "Car",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/car/getAllCarStyle"
+        "url": "http://wztx.drv.api.zenmechi.cc/car/getAllCarStyle"
       }
     ]
   },
@@ -134,7 +134,7 @@
     "groupTitle": "Car",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/car/getOneCarStyle"
+        "url": "http://wztx.drv.api.zenmechi.cc/car/getOneCarStyle"
       }
     ]
   },
@@ -258,7 +258,7 @@
     "groupTitle": "Comment",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/comment/commentInfo"
+        "url": "http://wztx.drv.api.zenmechi.cc/comment/commentInfo"
       }
     ]
   },
@@ -312,7 +312,7 @@
     "groupTitle": "File",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/file/uploadImg"
+        "url": "http://wztx.drv.api.zenmechi.cc/file/uploadImg"
       }
     ]
   },
@@ -520,7 +520,7 @@
     "groupTitle": "Goods",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/goods/detail"
+        "url": "http://wztx.drv.api.zenmechi.cc/goods/detail"
       }
     ]
   },
@@ -623,7 +623,7 @@
     "groupTitle": "Goods",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/goods/enableQuoteList"
+        "url": "http://wztx.drv.api.zenmechi.cc/goods/enableQuoteList"
       }
     ]
   },
@@ -734,7 +734,7 @@
     "groupTitle": "Goods",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/goods/goodsList"
+        "url": "http://wztx.drv.api.zenmechi.cc/goods/goodsList"
       }
     ]
   },
@@ -798,7 +798,7 @@
     "name": "GetIndexGetadvertisement",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/index/getAdvertisement"
+        "url": "http://wztx.drv.api.zenmechi.cc/index/getAdvertisement"
       }
     ]
   },
@@ -862,7 +862,7 @@
     "name": "GetIndexHome",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/index/home"
+        "url": "http://wztx.drv.api.zenmechi.cc/index/home"
       }
     ]
   },
@@ -878,7 +878,7 @@
     "groupTitle": "Index",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/apiCode"
+        "url": "http://wztx.drv.api.zenmechi.cc/apiCode"
       }
     ]
   },
@@ -913,7 +913,7 @@
     "groupTitle": "Index",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/appConfig"
+        "url": "http://wztx.drv.api.zenmechi.cc/appConfig"
       }
     ]
   },
@@ -955,7 +955,7 @@
     "groupTitle": "Index",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/lastApk"
+        "url": "http://wztx.drv.api.zenmechi.cc/lastApk"
       }
     ]
   },
@@ -1004,7 +1004,7 @@
     "groupTitle": "Index",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/index/sendCaptcha"
+        "url": "http://wztx.drv.api.zenmechi.cc/index/sendCaptcha"
       }
     ]
   },
@@ -1093,7 +1093,7 @@
     "groupTitle": "Message",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/message/detail"
+        "url": "http://wztx.drv.api.zenmechi.cc/message/detail"
       }
     ]
   },
@@ -1153,6 +1153,13 @@
             "optional": false,
             "field": "list.push_type",
             "description": "<p>推送类型.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.msg",
+            "description": "<p>列表文案.</p>"
           }
         ]
       }
@@ -1162,7 +1169,7 @@
     "groupTitle": "Message",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/message/getUnRead"
+        "url": "http://wztx.drv.api.zenmechi.cc/message/getUnRead"
       }
     ]
   },
@@ -1310,7 +1317,7 @@
     "groupTitle": "Message",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/message"
+        "url": "http://wztx.drv.api.zenmechi.cc/message"
       }
     ]
   },
@@ -1532,7 +1539,7 @@
     "groupTitle": "Order",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/order/detail"
+        "url": "http://wztx.drv.api.zenmechi.cc/order/detail"
       }
     ]
   },
@@ -1714,7 +1721,7 @@
     "groupTitle": "Order",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/order/listInfo"
+        "url": "http://wztx.drv.api.zenmechi.cc/order/listInfo"
       }
     ]
   },
@@ -1746,6 +1753,13 @@
             "optional": false,
             "field": "order_id",
             "description": "<p>order_id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "org_address_maps",
+            "description": "<p>出发地地址的坐标 如116.480881,39.989410</p>"
           }
         ]
       }
@@ -1755,7 +1769,7 @@
     "groupTitle": "Order",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/order/shipping"
+        "url": "http://wztx.drv.api.zenmechi.cc/order/shipping"
       }
     ]
   },
@@ -1794,6 +1808,13 @@
             "optional": false,
             "field": "img_url",
             "description": "<p>图片链接，多个用 | 分隔</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "dest_address_maps",
+            "description": "<p>目的地址的坐标 如116.480881,39.989410</p>"
           }
         ]
       }
@@ -1816,7 +1837,7 @@
     "groupTitle": "Order",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/order/uploadCerPic"
+        "url": "http://wztx.drv.api.zenmechi.cc/order/uploadCerPic"
       }
     ]
   },
@@ -1920,7 +1941,7 @@
     "groupTitle": "Pay",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/pay"
+        "url": "http://wztx.drv.api.zenmechi.cc/pay"
       }
     ]
   },
@@ -1995,7 +2016,7 @@
     "groupTitle": "Pay",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/pay/recharge"
+        "url": "http://wztx.drv.api.zenmechi.cc/pay/recharge"
       }
     ]
   },
@@ -2121,7 +2142,7 @@
     "groupTitle": "Pay",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/pay/showCashRecord"
+        "url": "http://wztx.drv.api.zenmechi.cc/pay/showCashRecord"
       }
     ]
   },
@@ -2296,7 +2317,7 @@
     "groupTitle": "Pay",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/pay/showPayRecord"
+        "url": "http://wztx.drv.api.zenmechi.cc/pay/showPayRecord"
       }
     ]
   },
@@ -2358,7 +2379,7 @@
     "groupTitle": "Pay",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/pay/withDraw"
+        "url": "http://wztx.drv.api.zenmechi.cc/pay/withDraw"
       }
     ]
   },
@@ -2413,7 +2434,7 @@
     "groupTitle": "Quote",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/quote/saveQuote"
+        "url": "http://wztx.drv.api.zenmechi.cc/quote/saveQuote"
       }
     ]
   },
@@ -2525,7 +2546,7 @@
     "groupTitle": "Recommend",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/recommend/showMyRecommList"
+        "url": "http://wztx.drv.api.zenmechi.cc/recommend/showMyRecommList"
       }
     ]
   },
@@ -2573,7 +2594,7 @@
     "groupTitle": "Test",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/test/test"
+        "url": "http://wztx.drv.api.zenmechi.cc/test/test"
       }
     ]
   },
@@ -2747,7 +2768,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/User/carAuth"
+        "url": "http://wztx.drv.api.zenmechi.cc/User/carAuth"
       }
     ]
   },
@@ -2788,7 +2809,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/User/changeWork"
+        "url": "http://wztx.drv.api.zenmechi.cc/User/changeWork"
       }
     ]
   },
@@ -2871,7 +2892,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/User/driverAuth"
+        "url": "http://wztx.drv.api.zenmechi.cc/User/driverAuth"
       }
     ]
   },
@@ -3080,7 +3101,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/user/getAuthInfo"
+        "url": "http://wztx.drv.api.zenmechi.cc/user/getAuthInfo"
       }
     ]
   },
@@ -3156,7 +3177,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/user/info"
+        "url": "http://wztx.drv.api.zenmechi.cc/user/info"
       }
     ]
   },
@@ -3197,7 +3218,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/User/isWork"
+        "url": "http://wztx.drv.api.zenmechi.cc/User/isWork"
       }
     ]
   },
@@ -3280,7 +3301,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/User/login"
+        "url": "http://wztx.drv.api.zenmechi.cc/User/login"
       }
     ]
   },
@@ -3356,7 +3377,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/User/reg"
+        "url": "http://wztx.drv.api.zenmechi.cc/User/reg"
       }
     ]
   },
@@ -3398,7 +3419,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/User/forget"
+        "url": "http://wztx.drv.api.zenmechi.cc/User/forget"
       }
     ]
   },
@@ -3453,7 +3474,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/User/updatePwd"
+        "url": "http://wztx.drv.api.zenmechi.cc/User/updatePwd"
       }
     ]
   },
@@ -3515,7 +3536,7 @@
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/user/uploadAvatar"
+        "url": "http://wztx.drv.api.zenmechi.cc/user/uploadAvatar"
       }
     ]
   },
@@ -3543,7 +3564,7 @@
     "groupTitle": "linelist",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/linelist/delline"
+        "url": "http://wztx.drv.api.zenmechi.cc/linelist/delline"
       }
     ]
   },
@@ -3604,7 +3625,7 @@
     "groupTitle": "linelist",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/linelist/setline"
+        "url": "http://wztx.drv.api.zenmechi.cc/linelist/setline"
       }
     ]
   },
@@ -3653,7 +3674,7 @@
     "groupTitle": "linelist",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.ruitukeji.com/linelist/showline"
+        "url": "http://wztx.drv.api.zenmechi.cc/linelist/showline"
       }
     ]
   }
