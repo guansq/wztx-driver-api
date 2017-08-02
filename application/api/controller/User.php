@@ -69,7 +69,7 @@ class User extends BaseController {
      */
     public function driverAuth() {
         //校验参数
-        $paramAll = $this->getReqParams(['logistics_type', 'real_name', 'sex', 'identity', 'hold_pic', 'front_pic', 'back_pic']);
+        $paramAll = $this->getReqParams(['logistics_type', 'real_name', 'sex', 'identity', 'hold_pic', 'front_pic', 'back_pic','address']);
         $rule = [
             'logistics_type' => ['require', 'regex' => '/^(1|2)$/'],
             'real_name' => 'require|max:10',
@@ -78,6 +78,7 @@ class User extends BaseController {
             'hold_pic' => 'require',
             'front_pic' => 'require',
             'back_pic' => 'require',
+            'address' => 'require',
         ];
         validateData($paramAll, $rule);
         //查看验证状态为init才可以进行验证
