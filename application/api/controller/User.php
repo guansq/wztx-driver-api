@@ -84,7 +84,7 @@ class User extends BaseController {
         //查看验证状态为init才可以进行验证
         $drBaseInfoLogic = model('DrBaseInfo', 'logic');
         $authStatus = $drBaseInfoLogic->getAuthStatus($this->loginUser['id']);
-        if (in_array($authStatus,['init','refuse'])) {
+        if (!in_array($authStatus,['init','refuse'])) {
             $ret = [
                 'code' => '4022',
                 'msg' => '状态不合法',
