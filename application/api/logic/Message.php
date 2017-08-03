@@ -27,7 +27,7 @@ class Message extends BaseLogic {
     public function countUnreadMsg($user) {
         $where = [
             'read_at' => 'NULL',
-            'type' => 1
+            'type' => 1,
         ];
         return Db::table('rt_message_sendee')->where($where)->where('sendee_id', $user['id'])->count();
     }
@@ -35,7 +35,8 @@ class Message extends BaseLogic {
         $where = [
             'ms.sendee_id' => $user['id'],
             'ms.type' => 1,
-            'm.push_type' => ['not in', ['all']]
+            'm.push_type' => ['not in', ['all']],
+            'm.delete_at'=>['exp',' is  null'],
         ];
 
         if(empty($count)){
@@ -59,7 +60,8 @@ class Message extends BaseLogic {
     public function countSystemUnreadMsg($user) {
         $where = [
             'ms.type' => 1,
-            'ms.push_type' => 'all'
+            'ms.push_type' => 'all',
+            'ms.delete_at'=>['exp',' is  null'],
         ];
         $dataTotal = $this->alias('ms')->where($where)->count();
         if (empty($user)) {
@@ -72,7 +74,8 @@ class Message extends BaseLogic {
     public function getSystemUnreadMsg($user, $count = 0) {
         $where = [
             'ms.type' => 1,
-            'ms.push_type' => 'all'
+            'ms.push_type' => 'all',
+            'ms.delete_at'=>['exp',' is  null'],
         ];
         $item = $this->alias('ms')->where($where)->order('ms.publish_time desc')->find();
         return empty($item['content'])?'': mb_substr($item['content'], 1, 20) . '...';
@@ -103,7 +106,8 @@ class Message extends BaseLogic {
             $where = [
                 'ms.sendee_id' => $user['id'],
                 'ms.type' => 1,
-                'm.push_type' => ['not in', ['all']]
+                'm.push_type' => ['not in', ['all']],
+                'm.delete_at'=>['exp',' is  null'],
             ];
             $dataTotal = $this->alias('m')
                 ->join('MessageSendee ms', 'm.id = ms.msg_id')
@@ -149,7 +153,8 @@ class Message extends BaseLogic {
             $list = [];
             $where = [
                 'ms.type' => 1,
-                'ms.push_type' => 'all'
+                'ms.push_type' => 'all',
+                'ms.delete_at'=>['exp',' is  null'],
             ];
             $dataTotal = $this->alias('ms')->where($where)->count();
             if (empty($dataTotal)) {
@@ -223,7 +228,8 @@ class Message extends BaseLogic {
             $where = [
                 'ms.sendee_id' => $user['id'],
                 'ms.msg_id' => $id,
-                'ms.type' => 1
+                'ms.type' => 1,
+                'm.delete_at'=>['exp',' is  null'],
             ];
             $dbRet = $this->alias('m')->join('MessageSendee ms', 'm.id = ms.msg_id')->where($where)->field("m.*,ms.read_at")->find();
             if (empty($dbRet)) {
