@@ -140,6 +140,8 @@ class User extends BaseController {
             'policy_deadline',
             'license_startline',
             'license_deadline',
+            'operation_startline',
+            'operation_deadline',
             'driving_startline',
             'driving_deadline',
             'index_pic',

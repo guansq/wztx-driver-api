@@ -24,7 +24,7 @@ namespace service;
 class MsgService{
 
     const RT_APP_KEY  = 'wztx_driver';
-    const RT_MSG_HOME = 'http://pushmsg.ruitukeji.com';
+    const RT_MSG_HOME = 'http://mps.ruitukeji.com';//
 
     /**
      * Author: WILL<314112362@qq.com>
