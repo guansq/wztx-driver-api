@@ -111,7 +111,7 @@ class Index extends BaseController{
      * @apiName  getArticle
      * @apiGroup Index
      *
-     * @apiParam    {String}    type           文章标识(具体参照后台文章管理的标识)
+     * @apiParam    {String}    type           文章标识(司机端：关于我们-driver_about,提现服务说明-driver_withdrawa_description,推荐奖励说明-driver_recommend_reward,用户注册协议-driver_registration_protocol)
      * @apiSuccess {String} title    文章标题.
      * @apiSuccess {String} content   文章内容.
      * @apiSuccess {String} type     文章标识.
