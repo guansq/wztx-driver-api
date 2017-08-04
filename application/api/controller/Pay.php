@@ -122,7 +122,7 @@ class Pay extends BaseController {
         //当前有提现订单不能申请提现
         $where['status'] = ['in', ['init']];
         $where['base_id'] = $this->loginUser['id'];
-        $ret = model('WithDraw', 'logic')->getWithDrawList($where);
+        $ret = model('WithDraw', 'logic')->getWithDrawListIn($where);
         if (!empty($ret)) {
             returnJson(4000, '当前有提现订单存在，不能提现');
         }

@@ -30,8 +30,13 @@ class WithDraw extends BaseLogic {
         if (empty($dataTotal)) {
             return false;
         }
-        $list =  $this->where($where)->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
-            ->select();
+        if(empty($pageParam)){
+            $list =  $this->where($where)->order('create_at desc')->select();
+        }else{
+            $list =  $this->where($where)->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])
+                ->select();
+        }
+
 
         if(empty($list)){
             return false;
@@ -44,5 +49,16 @@ class WithDraw extends BaseLogic {
             'pageTotal' => intval(($dataTotal + $pageParam['pageSize'] - 1) / $pageParam['pageSize']),
         ];
         return $ret;
+    }
+
+    /**
+     * Describe: 获取提现中
+     */
+    public function getWithDrawListIn($where) {
+        if (empty($where)) {
+            return false;
+        }
+        $list =  $this->where($where)->order('create_at desc')->select();
+        return $list;
     }
 }
