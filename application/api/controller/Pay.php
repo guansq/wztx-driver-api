@@ -120,7 +120,7 @@ class Pay extends BaseController {
             returnJson(4000, '提现金额大于可提现金额');
         }
         //当前有提现订单不能申请提现
-        $where['status'] = ['in', ['init', 'agree']];
+        $where['status'] = ['in', ['init']];
         $where['base_id'] = $this->loginUser['id'];
         $ret = model('WithDraw', 'logic')->getWithDrawList($where);
         if (!empty($ret)) {
@@ -134,6 +134,7 @@ class Pay extends BaseController {
         $paramAll['type'] = 'driver';
         $paramAll['status'] = 'init';
         $paramAll['amount'] = wztxMoney($paramAll['withdrawal_amount']);
+        $paramAll['real_amount'] = wztxMoney($paramAll['withdrawal_amount']);
         //  $paramAll['deposit_name'] =  $baseUserInfo['amount'];
         $paramAll['bank'] = $paramAll['bank_name'];
         $paramAll['account'] = $paramAll['payment_account'];
