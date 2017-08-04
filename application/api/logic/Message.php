@@ -217,7 +217,7 @@ class Message extends BaseLogic {
      * @success {String} pushTime        推送时间.
      */
     public function getMyMsgDetail($id, $user) {
-        $detailMsg = $this->where(['id' => $id, 'type' => 1])->find();
+        $detailMsg = $this->where(['id' => $id, 'type' => 1,  'delete_at'=>['exp',' is  null']])->find();
         if (empty($detailMsg)) {
             return resultArray(4004);
         }
@@ -229,7 +229,6 @@ class Message extends BaseLogic {
                 'ms.sendee_id' => $user['id'],
                 'ms.msg_id' => $id,
                 'ms.type' => 1,
-                'm.delete_at'=>['exp',' is  null'],
             ];
             $dbRet = $this->alias('m')->join('MessageSendee ms', 'm.id = ms.msg_id')->where($where)->field("m.*,ms.read_at")->find();
             if (empty($dbRet)) {
