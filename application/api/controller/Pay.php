@@ -103,7 +103,7 @@ class Pay extends BaseController {
         ];
         validateData($paramAll, $rule);
         $drBaseInfoLogic = model('DrBaseInfo', 'logic');
-        if (empty(wztxMoney($paramAll['withdrawal_amount']))) {
+        if (empty(floatval(wztxMoney($paramAll['withdrawal_amount'])))) {
             returnJson(4000, '提现金额不能为0');
         }
         $baseUserInfo = $drBaseInfoLogic->findInfoByUserId($this->loginUser['id']);
