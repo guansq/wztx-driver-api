@@ -55,36 +55,6 @@ class Index extends BaseController{
         returnJson( $ret);
     }
 
-    /**
-     * @api      {GET} /index/home 首页(ok)
-     * @apiDescription
-     * @apiName  home
-     * @apiGroup Index
-     *
-     * @apiSuccess {Array} banners        轮播图.
-     * @apiSuccess {Number} banners.id      id.
-     * @apiSuccess {Number} banners.seqNo   序号.
-     * @apiSuccess {String} banners.link    跳转链接.
-     * @apiSuccess {String} banners.img     图片.
-     * @apiSuccess {String} [banners.title] 标题.
-     */
-    public function home(){
-        $banners = model('SystemBanner', 'logic')->getBannerList();
-        $unreadIoCnt = model('IO', 'logic')->countUnreadMsg($this->loginUser);
-        $unreadPoCnt = model('PO', 'logic')->countUnreadMsg($this->loginUser);
-        $unreadMsgCnt = model('Message', 'logic')->countUnreadMsg($this->loginUser);
-        $unreadAskCnt = model('Ask', 'logic')->countUnreadMsg($this->loginUser);
-        $ret = [
-            'banners' => $banners,
-            'unreadMsg' => [
-                'io' => $unreadIoCnt,
-                'po' => $unreadPoCnt,
-                'msg' => $unreadMsgCnt,
-                'ask' => $unreadAskCnt,
-            ]
-        ];
-        returnJson(2000, '', $ret);
-    }
 
     /**
      * @api      {POST} /index/sendCaptcha 发送验证码done
@@ -133,6 +103,32 @@ class Index extends BaseController{
                 'msg' => $unreadMsgCnt,
             ]
         ];
+        returnJson(2000, '', $ret);
+    }
+    /**
+     * @api      {GET} /index/getArticle 获取文章内容done
+     * @apiDescription
+     * @apiName  getArticle
+     * @apiGroup Index
+     *
+     * @apiParam    {String}    type           文章标识(具体参照后台文章管理的标识)
+     * @apiSuccess {String} title    文章标题.
+     * @apiSuccess {String} content   文章内容.
+     * @apiSuccess {String} type     文章标识.
+     */
+    public function getArticle(){
+
+        $paramAll = $this->getReqParams([
+            'type',
+        ]);
+        $rule = [
+            'type' => 'require',
+        ];
+        validateData($paramAll, $rule);
+        $ret = model('Article', 'logic')->getArticleInfo($paramAll['type']);
+        if(empty($ret)){
+            returnJson(4004, '未获取到文章内容');
+        }
         returnJson(2000, '', $ret);
     }
     /**
