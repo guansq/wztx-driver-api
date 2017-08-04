@@ -133,8 +133,8 @@ class User extends BaseController {
             'car_style_type_id',
             'car_length',
             'car_style_length_id',
-            'weight',
             'volume',
+            'weight',
             'card_number',
             'policy_pic',
             'policy_startline',
@@ -169,7 +169,7 @@ class User extends BaseController {
             'driving_licence_pic' => 'require|max:200',
             'operation_pic' => 'require|max:200'
         ];
-        //validateData($paramAll,$rule);
+        validateData($paramAll,$rule);
         $paramAll['auth_status'] = 'check';//待认证
         $paramAll['dr_id'] = $this->loginUser['id'];//
         $mapInfo = [

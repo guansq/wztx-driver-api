@@ -804,54 +804,46 @@
   },
   {
     "type": "GET",
-    "url": "/index/home",
-    "title": "首页(ok)",
-    "description": "<p>@apiName  home</p>",
+    "url": "/index/getArticle",
+    "title": "获取文章内容done",
+    "description": "<p>@apiName  getArticle</p>",
     "group": "Index",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>文章标识(具体参照后台文章管理的标识)</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Array",
+            "type": "String",
             "optional": false,
-            "field": "banners",
-            "description": "<p>轮播图.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "banners.id",
-            "description": "<p>id.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "banners.seqNo",
-            "description": "<p>序号.</p>"
+            "field": "title",
+            "description": "<p>文章标题.</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "banners.link",
-            "description": "<p>跳转链接.</p>"
+            "field": "content",
+            "description": "<p>文章内容.</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "banners.img",
-            "description": "<p>图片.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": true,
-            "field": "banners.title",
-            "description": "<p>标题.</p>"
+            "field": "type",
+            "description": "<p>文章标识.</p>"
           }
         ]
       }
@@ -859,10 +851,10 @@
     "version": "0.0.0",
     "filename": "application/api/controller/Index.php",
     "groupTitle": "Index",
-    "name": "GetIndexHome",
+    "name": "GetIndexGetarticle",
     "sampleRequest": [
       {
-        "url": "http://wztx.drv.api.zenmechi.cc/index/home"
+        "url": "http://wztx.drv.api.zenmechi.cc/index/getArticle"
       }
     ]
   },
@@ -2992,20 +2984,6 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "front_pic",
-            "description": "<p>身份证正</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "back_pic",
-            "description": "<p>身份证反</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
             "field": "policy_pic",
             "description": "<p>保险单照片</p>"
           },
@@ -3092,6 +3070,54 @@
             "optional": false,
             "field": "driving_deadline",
             "description": "<p>驾驶证截止日期</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "logistics_type",
+            "description": "<p>物流类型 1：同城物流 2：长途物流</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "hold_pic",
+            "description": "<p>手持身份证照.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "front_pic",
+            "description": "<p>身份证正面照.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "back_pic",
+            "description": "<p>身份证反面照.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "car_style_type_id",
+            "description": "<p>车型ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "car_style_length_id",
+            "description": "<p>车长ID.</p>"
           }
         ]
       }
