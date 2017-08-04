@@ -7,7 +7,7 @@ Route::any('lastApk','Index/lastApk');
 Route::get('index/home','Index/home');
 Route::get('index/getAdvertisement','Index/getAdvertisement');
 Route::post('index/sendCaptcha','Index/sendCaptcha');
-
+Route::get('index/getArticle','Index/getArticle');
 Route::get('u9api/syncAll','U9Api/syncAll');
 Route::get('u9api/initU9Data','U9Api/initU9Data');
 Route::get('u9api/initSupplier','U9Api/initSupplier');
