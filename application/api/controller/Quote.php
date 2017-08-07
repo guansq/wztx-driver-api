@@ -104,7 +104,7 @@ class Quote extends BaseController{
             //发送推送消息
             $push_token = getSpPushToken($info['sp_id']);//得到推送token
             if(!empty($push_token)){
-                pushInfo($push_token,self::SPTITLE,self::SPCONTENT,'wztx_shipper');//推送给司机
+                pushInfo($push_token,self::SPTITLE,self::SPCONTENT,'wztx_shipper');//推送给货主
             }
             //发送短信
             sendSMS(getSpPhone($info['sp_id']),self::SPCONTENT,'wztx_shipper');
