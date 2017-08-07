@@ -414,6 +414,8 @@ class User extends BaseController {
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
      * @apiSuccess  {String} online 上班状态 0=上班，1=不上班
+     * @apiSuccess  {String} map_code 司机在地图中的id
+     * @apiSuccess  {String} auth_status 认证状态（init=未认证，check=认证中，pass=认证通过，refuse=认证失败, reauth=重新审核）
      */
     public function isWork() {
         $ret = model('DrBaseInfo','logic')->getWorkInfo(['id'=>$this->loginUser['id']]);

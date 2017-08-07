@@ -45,6 +45,8 @@ class Order extends BaseController {
      * @apiSuccess {String} list.order_id                订单ID
      * @apiSuccess {String} list.org_address_name        出发地名称
      * @apiSuccess {String} list.dest_address_name       目的地名称
+     * @apiSuccess {String} list.org_address_detail       发货人地址详情
+     * @apiSuccess {String} list.dest_address_detail       目的地详情
      * @apiSuccess {String} list.weight                  货物重量
      * @apiSuccess {String} list.goods_name              货物名称
      * @apiSuccess {String} list.car_style_length        车长
@@ -98,6 +100,8 @@ class Order extends BaseController {
             $list[$k]['mind_price'] = wztxMoney($v['mind_price']);
             $list[$k]['system_price'] = wztxMoney($v['system_price']);
             $list[$k]['usecar_time'] = wztxDate($v['usecar_time']);
+            $list[$k]['org_address_detail'] = $v['org_address_detail'];
+            $list[$k]['dest_address_detail'] = $v['dest_address_detail'];
         }
         $orderInfo['list'] = $list;
 
@@ -135,6 +139,8 @@ class Order extends BaseController {
      * @apiSuccess  {String} system_price       系统出价
      * @apiSuccess  {String} mind_price         货主出价
      * @apiSuccess  {String} final_price        总运费
+     * @apiSuccess  {String} effective_time      在途时效
+     * @apiSuccess  {String} remark              备注
      */
     public function detail() {
         $paramAll = $this->getReqParams([
@@ -184,6 +190,8 @@ class Order extends BaseController {
             'system_price' => wztxMoney($orderInfo['system_price']),
             'mind_price' => wztxMoney($orderInfo['mind_price']),
             'final_price' => wztxMoney($orderInfo['final_price']),
+            'effective_time' => $orderInfo['effective_time'],
+            'remark' => $orderInfo['remark']
         ];
         returnJson('2000', '成功', $detail);
     }
