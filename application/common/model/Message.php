@@ -9,6 +9,7 @@ namespace app\common\model;
 class Message extends BaseModel{
 
     public function saveMsg($data){
-        return $this->insertGetId($data);
+        $this->insert($data);
+        return $this->getLastInsID();
     }
 }

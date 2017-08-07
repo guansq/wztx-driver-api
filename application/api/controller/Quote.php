@@ -100,11 +100,11 @@ class Quote extends BaseController{
                 returnJson($result);
             }
             //发送订单信息给货主
-            sendMsg($goodsInfo['sp_id'],self::SPTITLE,self::SPCONTENT,1);
+            sendMsg($goodsInfo['sp_id'],self::SPTITLE,self::SPCONTENT,0);
             //发送推送消息
             $push_token = getSpPushToken($info['sp_id']);//得到推送token
             if(!empty($push_token)){
-                pushInfo($push_token,self::SPTITLE,self::SPCONTENT,'wztx_shipper');//推送给司机
+                pushInfo($push_token,self::SPTITLE,self::SPCONTENT,'wztx_shipper');//推送给货主
             }
             //发送短信
             sendSMS(getSpPhone($info['sp_id']),self::SPCONTENT,'wztx_shipper');
