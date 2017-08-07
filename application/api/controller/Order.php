@@ -43,6 +43,8 @@ class Order extends BaseController {
      * @apiParam {Number} [pageSize=20]                  每页数据量.
      * @apiSuccess {Array}  list                         订单列表
      * @apiSuccess {String} list.order_id                订单ID
+     * @apiSuccess {String} list.org_city               发货人省市区
+     * @apiSuccess {String} list.dest_city              到达城市
      * @apiSuccess {String} list.org_address_name        出发地名称
      * @apiSuccess {String} list.dest_address_name       目的地名称
      * @apiSuccess {String} list.org_address_detail       发货人地址详情
@@ -89,6 +91,8 @@ class Order extends BaseController {
         $list = [];
         foreach ($orderInfo['list'] as $k => $v) {
             $list[$k]['order_id'] = $v['id'];
+            $list[$k]['org_address_name'] = $v['org_address_name'];
+            $list[$k]['dest_address_name'] = $v['dest_address_name'];
             $list[$k]['org_city'] = $v['org_city'];
             $list[$k]['dest_city'] = $v['dest_city'];
             $list[$k]['weight'] = strval($v['weight']);
