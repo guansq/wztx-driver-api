@@ -511,6 +511,20 @@
             "optional": false,
             "field": "final_price",
             "description": "<p>总运费</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "effective_time",
+            "description": "<p>在途时效</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "remark",
+            "description": "<p>备注</p>"
           }
         ]
       }
@@ -1522,6 +1536,20 @@
             "optional": false,
             "field": "final_price",
             "description": "<p>总运费</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "effective_time",
+            "description": "<p>在途时效</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "remark",
+            "description": "<p>备注</p>"
           }
         ]
       }
@@ -1613,6 +1641,20 @@
             "optional": false,
             "field": "list.dest_address_name",
             "description": "<p>目的地名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.org_address_detail",
+            "description": "<p>发货人地址详情</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.dest_address_detail",
+            "description": "<p>目的地详情</p>"
           },
           {
             "group": "Success 200",
@@ -3235,6 +3277,20 @@
             "optional": false,
             "field": "online",
             "description": "<p>上班状态 0=上班，1=不上班</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "map_code",
+            "description": "<p>司机在地图中的id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "auth_status",
+            "description": "<p>认证状态（init=未认证，check=认证中，pass=认证通过，refuse=认证失败, reauth=重新审核）</p>"
           }
         ]
       }
