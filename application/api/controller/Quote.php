@@ -60,6 +60,13 @@ class Quote extends BaseController{
 
         //查询是否是第一次报价
         $quote_time = model('Quote','logic')->findOneQuote(['goods_id'=>$paramAll['goods_id']]);//该订单的报价次数,'status'=>'quote'
+        if($quote_time == 1){//如果是第一次报价
+            //生成订单
+            $result = $this->saveOrderBygoodsInfo($paramAll['goods_id'],'quote');//报价中
+            if($result['code'] == 4000){
+                returnJson($result);
+            }
+        }
 
         $info['goods_name'] = $goodsInfo['goods_name'];
         $info['weight'] = $goodsInfo['weight'];
@@ -95,12 +102,12 @@ class Quote extends BaseController{
                 returnJson($result);
             }
             //生成订单
-            $result = $this->saveOrderBygoodsInfo($paramAll['goods_id']);
+            $result = $this->saveOrderBygoodsInfo($paramAll['goods_id'],'quoted');//已报价
             if($result['code'] == 4000){
                 returnJson($result);
             }
             //发送订单信息给货主
-            sendMsg($goodsInfo['sp_id'],self::SPTITLE,self::SPCONTENT,1);
+            sendMsg($goodsInfo['sp_id'],self::SPTITLE,self::SPCONTENT,0);
             //发送推送消息
             $push_token = getSpPushToken($info['sp_id']);//得到推送token
             if(!empty($push_token)){
@@ -161,7 +168,7 @@ class Quote extends BaseController{
      * Auther: guanshaoqiu <94600115@qq.com>
      * Describe:根据货源信息保存订单
      */
-    private function saveOrderBygoodsInfo($goods_id){
+    private function saveOrderBygoodsInfo($goods_id,$status){
         //根据$goods_id取出信息
         $goodsInfo = model('Goods','logic')->getGoodsInfo(['id'=>$goods_id]);
         //生成订单
@@ -203,7 +210,7 @@ class Quote extends BaseController{
         $orderInfo['tran_type'] = $goodsInfo['tran_type'];
         $orderInfo['usecar_time'] = $goodsInfo['usecar_time'];
         $orderInfo['kilometres'] = $goodsInfo['kilometres'];
-        $orderInfo['status'] = 'quoted';
+        $orderInfo['status'] = $status;//状态未报价-已报价
         //完善个人信息填写  sp_id
         $baseUserInfo = getBaseSpUserInfo($goodsInfo['sp_id']);
         $orderInfo['real_name'] = $baseUserInfo['real_name'];

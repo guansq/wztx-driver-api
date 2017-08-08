@@ -78,9 +78,8 @@ class User extends BaseLogic{
         $pushToken = $params['pushToken'];
 
         $loginUser = $this->findByAccount($account);
-
         if(empty($loginUser)){
-            return resultArray(4014);
+            return resultArray(4000,'该用户不存在');
         }
         // 校验密码
         $ret = $this->checkPassword($loginUser, $password);
