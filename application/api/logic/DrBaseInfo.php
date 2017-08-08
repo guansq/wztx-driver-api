@@ -36,7 +36,7 @@ class DrBaseInfo extends BaseLogic{
     public function saveDriverAuth($where,$data){
         $ret = $this->where($where)->update($data);
 
-        if($ret === true){
+        if($ret){
             return resultArray(2000,'更新成功');
         }
         return resultArray(4020, '更新失败');
@@ -66,7 +66,7 @@ class DrBaseInfo extends BaseLogic{
             'auth_status' => 'check'
         ];
         $result = $this->where("id",$userInfo['id'])->update($updateArr);
-        if($result === true){
+        if($result){
             return resultArray(2000,'保存企业验证信息成功');
         }
         return resultArray(4020,'保存企业验证信息失败');

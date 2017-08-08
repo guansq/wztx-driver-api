@@ -94,7 +94,7 @@ class User extends BaseController {
         if (!in_array($authStatus,['init','refuse'])) {
             $ret = [
                 'code' => '4022',
-                'msg' => '状态不合法',
+                'msg' => '您已经重复验证过了',
                 'result' => ['auth_status' => $authStatus]
             ];
             returnJson($ret);
