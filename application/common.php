@@ -574,3 +574,12 @@ function saveRecomm($where){
     }
     return Db::name('ShareList')->insert($where);
 }
+
+//通过goods_id去查找未报价订单
+function findOrderByGoodsId($goods_id){
+    $where = [
+        'status'  => 'quote',
+        'goods_id' => $goods_id
+    ];
+    return Db::name('transport_order')->where($where)->find();
+}

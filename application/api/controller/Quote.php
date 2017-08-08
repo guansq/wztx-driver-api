@@ -60,13 +60,6 @@ class Quote extends BaseController{
 
         //查询是否是第一次报价
         $quote_time = model('Quote','logic')->findOneQuote(['goods_id'=>$paramAll['goods_id']]);//该订单的报价次数,'status'=>'quote'
-        if($quote_time == 1){//如果是第一次报价
-            //生成订单
-            $result = $this->saveOrderBygoodsInfo($paramAll['goods_id'],'quote');//报价中
-            if($result['code'] == 4000){
-                returnJson($result);
-            }
-        }
 
         $info['goods_name'] = $goodsInfo['goods_name'];
         $info['weight'] = $goodsInfo['weight'];
@@ -86,7 +79,7 @@ class Quote extends BaseController{
         $info['dest_address_name'] = $goodsInfo['dest_address_name'];
         $info['org_address_detail'] = $goodsInfo['org_address_detail'];
         $info['dest_address_detail'] = $goodsInfo['dest_address_detail'];
-        $result = model('Quote','logic')->saveQuote($info);//生成报价单
+
 
         if($paramAll['is_receive'] == 1){
             //更改货源状态
@@ -117,6 +110,8 @@ class Quote extends BaseController{
             sendSMS(getSpPhone($info['sp_id']),self::SPCONTENT,'wztx_shipper');
             returnJson(2000,'恭喜，您已获取该订单，请及时发货');
         }else{
+            //正常报价生成报价单
+            $result = model('Quote','logic')->saveQuote($info);//生成报价单
             if($quote_time == 0){
                 //第一次发送报价的价格给货主,取出货主phone
                 $phone = getSpPhone($goodsInfo['sp_id']);
@@ -127,6 +122,15 @@ class Quote extends BaseController{
             $push_token = getSpPushToken($goodsInfo['sp_id']);
             if(!empty($push_token)){
                 pushInfo($push_token,self::TITLE,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),$rt_key='wztx_shipper');//推送给货主端
+            }
+            //是否goods_id所对应的订单为空 如果为空新生成订单
+            $orderInfo = findOrderByGoodsId($goodsInfo['id']);
+            if($orderInfo->isEmpty()){
+                //生成订单
+                $result = $this->saveOrderBygoodsInfo($paramAll['goods_id'],'quote');//报价中
+                if($result['code'] == 4000){
+                    returnJson($result);
+                }
             }
             returnJson($result);
         }
@@ -173,6 +177,7 @@ class Quote extends BaseController{
         $goodsInfo = model('Goods','logic')->getGoodsInfo(['id'=>$goods_id]);
         //生成订单
         $orderInfo['order_code'] = order_num();
+        $orderInfo['goods_id'] = $goods_id;
         $orderInfo['sp_id'] = $goodsInfo['sp_id'];
         $orderInfo['dr_id'] = $this->loginUser['id'];
         $orderInfo['type'] = $goodsInfo['type'];
