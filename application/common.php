@@ -583,3 +583,11 @@ function findOrderByGoodsId($goods_id){
     ];
     return Db::name('transport_order')->where($where)->find();
 }
+
+
+/*
+ * 得到司机推送token
+ */
+function getPushToken($id){
+    return Db::name('system_user_driver')->where("id",$id)->value('push_token');
+}

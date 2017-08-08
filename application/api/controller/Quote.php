@@ -9,10 +9,14 @@ namespace app\api\controller;
 
 use think\Request;
 
+use think\Collection;
+
 class Quote extends BaseController{
     const TITLE = '您有新的司机报价';
     const SPTITLE = '您的订单已被接单';
     const SPCONTENT = '您的订单已被接单';
+    const UNGETTITLE = '抱歉，您的订单已被其他人接单';
+    const UNGETCONTENT = '抱歉，您的订单已被其他人接单';
     /*
      * @api {GET}    /quote/getInfo     获得报价信息done
      * @apiName     getInfo
@@ -94,8 +98,21 @@ class Quote extends BaseController{
             if($result['code'] == 4000){
                 returnJson($result);
             }
-            //生成订单
-            $result = $this->saveOrderBygoodsInfo($paramAll['goods_id'],'quoted');//已报价
+            //是否goods_id所对应的订单为空 如果为空新生成订单
+
+            $orderInfo = findOrderByGoodsId($paramAll['goods_id']);
+            if(empty($orderInfo)){
+                //生成订单
+                $result = $this->saveOrderBygoodsInfo($paramAll['goods_id'],'quoted');//更改为已报价
+                if($result['code'] == 4000){
+                    returnJson($result);
+                }
+            }else{
+                //$result = model('TransportOrder','logic')->updateTransport(['id'=>$orderInfo['id'],'status'=>'quote'],$data);
+                //更新订单
+                //$result = $this->saveOrderBygoodsInfo($paramAll['goods_id'],'quoted');//已报价
+            }
+
             if($result['code'] == 4000){
                 returnJson($result);
             }
@@ -105,6 +122,21 @@ class Quote extends BaseController{
             $push_token = getSpPushToken($info['sp_id']);//得到推送token
             if(!empty($push_token)){
                 pushInfo($push_token,self::SPTITLE,self::SPCONTENT,'wztx_shipper');//推送给货主
+            }
+            //发送推送消息给其他司机->取出所有的报价列表
+            $allQuoteId = model('Quote','logic')->getAllQuote($paramAll['goods_id']);
+            if(!collection($allQuoteId)->isEmpty()){
+                $unGetDr = [];
+                foreach($allQuoteId as $v){
+                    $unGetDr[] = $v['dr_id'];
+                }
+                foreach($unGetDr as $v){
+                    //发送推送消息
+                    $push_token = getPushToken($v);//得到推送token
+                    if(!empty($push_token)){
+                        pushInfo($push_token,self::UNGETTITLE,self::UNGETCONTENT,'wztx_driver');//推送给其他司机
+                    }
+                }
             }
             //发送短信
             sendSMS(getSpPhone($info['sp_id']),self::SPCONTENT,'wztx_shipper');
@@ -125,7 +157,7 @@ class Quote extends BaseController{
             }
             //是否goods_id所对应的订单为空 如果为空新生成订单
             $orderInfo = findOrderByGoodsId($goodsInfo['id']);
-            if($orderInfo->isEmpty()){
+            if(empty($orderInfo)){
                 //生成订单
                 $result = $this->saveOrderBygoodsInfo($paramAll['goods_id'],'quote');//报价中
                 if($result['code'] == 4000){
@@ -173,8 +205,15 @@ class Quote extends BaseController{
      * Describe:根据货源信息保存订单
      */
     private function saveOrderBygoodsInfo($goods_id,$status){
+
         //根据$goods_id取出信息
         $goodsInfo = model('Goods','logic')->getGoodsInfo(['id'=>$goods_id]);
+
+        if($status == 'quote'){
+            $final_price = null;
+        }else{
+            $final_price = $goodsInfo['final_price'];
+        }
         //生成订单
         $orderInfo['order_code'] = order_num();
         $orderInfo['goods_id'] = $goods_id;
@@ -207,7 +246,7 @@ class Quote extends BaseController{
         $orderInfo['car_style_length_id'] = $goodsInfo['car_style_length_id'];
         $orderInfo['effective_time'] = $goodsInfo['effective_time'];
         $orderInfo['mind_price'] = $goodsInfo['mind_price'];
-        $orderInfo['final_price'] = $goodsInfo['final_price'];
+        $orderInfo['final_price'] = $final_price;
         $orderInfo['system_price'] = $goodsInfo['system_price'];
         $orderInfo['payway'] = $goodsInfo['payway'];
         $orderInfo['is_pay'] = $goodsInfo['is_pay'];
