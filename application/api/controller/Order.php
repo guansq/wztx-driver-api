@@ -145,6 +145,7 @@ class Order extends BaseController {
      * @apiSuccess  {String} final_price        总运费
      * @apiSuccess  {String} effective_time      在途时效
      * @apiSuccess  {String} remark              备注
+     * @apiSuccess  {String} goods_id             货源ID
      */
     public function detail() {
         $paramAll = $this->getReqParams([
@@ -195,7 +196,8 @@ class Order extends BaseController {
             'mind_price' => wztxMoney($orderInfo['mind_price']),
             'final_price' => wztxMoney($orderInfo['final_price']),
             'effective_time' => $orderInfo['effective_time'],
-            'remark' => $orderInfo['remark']
+            'remark' => $orderInfo['remark'],
+            'goods_id' => $orderInfo['goods_id']
         ];
         returnJson('2000', '成功', $detail);
     }
