@@ -591,3 +591,14 @@ function findOrderByGoodsId($goods_id){
 function getPushToken($id){
     return Db::name('system_user_driver')->where("id",$id)->value('push_token');
 }
+
+/*
+ * 得到该司机对订单最后一次报价的价格
+ */
+function getLastQuotePrice($where){
+    $info = Db::name('quote')->where($where)->order('update_at desc')->limit(1)->select();
+    if(collection($info)->isEmpty()){
+        return '';
+    }
+    return wztxMoney($info[0]['dr_price']);
+}
