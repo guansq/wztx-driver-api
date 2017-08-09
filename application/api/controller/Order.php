@@ -199,6 +199,13 @@ class Order extends BaseController {
             'remark' => $orderInfo['remark'],
             'goods_id' => $orderInfo['goods_id']
         ];
+        if($orderInfo['status'] == 'quote'){
+            $where = [
+                'dr_id' => $orderInfo['dr_id'],
+                'goods_id' => $orderInfo['goods_id']
+            ];
+            $detail['quote_price'] = getLastQuotePrice($where);
+        }
         returnJson('2000', '成功', $detail);
     }
 

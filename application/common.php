@@ -394,7 +394,7 @@ function sendSMS($phone,$content,$rt_key='wztx_shipper'){
 /*
  * 推送信息 推送给货主为$rt_key='wztx_shipper' 推送给司机为 $rt_key='wztx_driver'
  */
-function pushInfo($token,$title,$content,$rt_key='wztx_shipper'){
+function pushInfo($token,$title,$content,$rt_key='wztx_shipper',$type='private'){
     $sendData = [
         "platform" => "all",
         "rt_appkey" => $rt_key,
@@ -412,7 +412,7 @@ function pushInfo($token,$title,$content,$rt_key='wztx_shipper'){
             "alert_type" => -1,
             "extras" => [
                 "0" => "RuiTu",
-                "key" => "value"
+                "type" => $type
             ]
         ]
     ];
@@ -582,4 +582,23 @@ function findOrderByGoodsId($goods_id){
         'goods_id' => $goods_id
     ];
     return Db::name('transport_order')->where($where)->find();
+}
+
+
+/*
+ * 得到司机推送token
+ */
+function getPushToken($id){
+    return Db::name('system_user_driver')->where("id",$id)->value('push_token');
+}
+
+/*
+ * 得到该司机对订单最后一次报价的价格
+ */
+function getLastQuotePrice($where){
+    $info = Db::name('quote')->where($where)->order('update_at desc')->limit(1)->select();
+    if(collection($info)->isEmpty()){
+        return '';
+    }
+    return wztxMoney($info[0]['dr_price']);
 }
