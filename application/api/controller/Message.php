@@ -11,15 +11,14 @@ namespace app\api\controller;
 
 use think\Request;
 
-class Message extends BaseController{
-
+class Message extends BaseController {
 
 
     /**
      * @api      {GET} /message 我的消息-列表done
      * @apiName  index
      * @apiGroup Message
-     * @apiHeader {String} authorization-token   token.
+     * @apiHeader {String} [authorization-token]   token.
      *
      * @apiParam {String} [push_type=private]           消息类型. system=系统消息 private=私人消息
      * @apiParam {Number} [page=1]                  页码.
@@ -27,7 +26,7 @@ class Message extends BaseController{
      *
      * @apiSuccess {Array} list                 列表.
      * @apiSuccess {Number} list.id              消息ID.
-     * @apiSuccess {String} list.type            类型.
+     * @apiSuccess {String} list.type            客户端类型 0货主端 1司机端.
      * @apiSuccess {String} list.title           标题.
      * @apiSuccess {String} list.summary         摘要.
      * @apiSuccess {Number} list.isRead          是否阅读
@@ -38,7 +37,7 @@ class Message extends BaseController{
      * @apiSuccess {Number} pageTotal           总页码数.
      * @apiSuccess {Number} unreadnum           未读消息.
      */
-    public function index(){
+    public function index() {
         $paramAll = $this->getReqParams([
             'push_type',
         ]);
@@ -48,11 +47,12 @@ class Message extends BaseController{
         validateData($paramAll, $rule);
         $where = [];
         $where['push_type'] = $paramAll['push_type'];
-        $where['id'] = empty($this->loginUser['id'])?'':$this->loginUser['id'];
+        $where['id'] = empty($this->loginUser['id']) ? '' : $this->loginUser['id'];
         $pageParam = $this->getPagingParams();
-        $ret =  model('Message','logic')->getMyMessage($where,$pageParam);
+        $ret = model('Message', 'logic')->getMyMessage($where, $pageParam);
         returnJson($ret);
     }
+
     /**
      * @api {GET} /message/getUnRead     未读消息数量done
      * @apiName getUnRead
@@ -66,40 +66,41 @@ class Message extends BaseController{
      * @apiSuccess {String} list.msg                列表文案.
      *
      */
-    public function getUnRead(){
+    public function getUnRead() {
         $privatemsg = '';
-        if(empty($this->loginUser)){
+        if (empty($this->loginUser)) {
             $privatetotal = 0;
-        }else{
-            $privatetotal =  model('Message','logic')->countUnreadMsg($this->loginUser);
-            $privatemsg =  model('Message','logic')->getUnreadMsg($this->loginUser,$privatetotal);
+        } else {
+            $privatetotal = model('Message', 'logic')->countUnreadMsg($this->loginUser);
+            $privatemsg = model('Message', 'logic')->getUnreadMsg($this->loginUser, $privatetotal);
         }
-        $systemtotal =  model('Message','logic')->countSystemUnreadMsg($this->loginUser);
-        $systemmsg =  model('Message','logic')->getSystemUnreadMsg($this->loginUser,$systemtotal);
+        $systemtotal = model('Message', 'logic')->countSystemUnreadMsg($this->loginUser);
+        $systemmsg = model('Message', 'logic')->getSystemUnreadMsg($this->loginUser, $systemtotal);
         $list = [
             [
-                'name'=>'系统消息',
-                'unread'=>$systemtotal,
-                'icon_url'=>'',
-                'push_type'=>'system',
-                'privatemsg'=>$privatemsg
+                'name' => '系统消息',
+                'unread' => $systemtotal,
+                'icon_url' => '',
+                'push_type' => 'system',
+                'privatemsg' => $privatemsg
             ],
             [
-                'name'=>'私人消息',
-                'unread'=>$privatetotal,
-                'icon_url'=>'',
-                'push_type'=>'private',
-                'systemmsg'=>$systemmsg
+                'name' => '私人消息',
+                'unread' => $privatetotal,
+                'icon_url' => '',
+                'push_type' => 'private',
+                'systemmsg' => $systemmsg
             ],
         ];
-        returnJson(2000,'成功获取', ['list'=>$list]);
+        returnJson(2000, '成功获取', ['list' => $list]);
     }
+
     /**
      * 显示创建资源表单页.
      *
      * @return \think\Response
      */
-    public function create(){
+    public function create() {
         //
     }
 
@@ -109,7 +110,7 @@ class Message extends BaseController{
      * @param  \think\Request $request
      * @return \think\Response
      */
-    public function save(Request $request){
+    public function save(Request $request) {
         //
     }
 
@@ -126,7 +127,7 @@ class Message extends BaseController{
      * @apiSuccess {Number} isRead          是否阅读
      * @apiSuccess {String} pushTime        推送时间.
      */
-    public function detail(){
+    public function detail() {
         $paramAll = $this->getReqParams([
             'id',
         ]);
@@ -135,7 +136,7 @@ class Message extends BaseController{
         ];
 
         validateData($paramAll, $rule);
-        $ret = model('Message','logic')->getMyMsgDetail($paramAll['id'],$this->loginUser);
+        $ret = model('Message', 'logic')->getMyMsgDetail($paramAll['id'], $this->loginUser);
         returnJson($ret);
     }
 
@@ -145,18 +146,38 @@ class Message extends BaseController{
      * @param  int $id
      * @return \think\Response
      */
-    public function edit($id){
+    public function edit($id) {
         //
+    }
+
+    /**
+     * @api {POST} /message/delMessage     删除消息done
+     * @apiName delMessage
+     * @apiGroup Message
+     * @apiHeader {String} authorization-token   token.
+     * @apiParam {String}   msg_id                  消息
+     */
+    public function delMessage() {
+        $paramAll = $this->getReqParams([
+            'msg_id',
+        ]);
+        $rule = [
+            'msg_id' => ['require', 'regex' => '^[0-9]*$'],
+        ];
+        validateData($paramAll, $rule);
+
+        $ret = model('Message', 'logic')->delMyMessage($paramAll, $this->loginUser);
+        returnJson($ret);
     }
 
     /**
      * 保存更新的资源
      *
      * @param  \think\Request $request
-     * @param  int            $id
+     * @param  int $id
      * @return \think\Response
      */
-    public function update(Request $request, $id){
+    public function update(Request $request, $id) {
         //
     }
 
@@ -166,7 +187,7 @@ class Message extends BaseController{
      * @param  int $id
      * @return \think\Response
      */
-    public function delete($id){
+    public function delete($id) {
         //
     }
 

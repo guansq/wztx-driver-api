@@ -43,6 +43,7 @@ class Recommend extends BaseController {
             $list[$k]['avatar'] = $v['avatar'];
             $list[$k]['name'] = $v['real_name'];
             $list[$k]['bonus'] = $v['bonus'];
+            $list[$k]['phone'] = $v['phone'];
         }
         $ret['list'] = $list;
         returnJson(2000, '成功', $ret);
