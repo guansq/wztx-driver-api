@@ -1015,6 +1015,47 @@ define({ "api": [
     ]
   },
   {
+    "type": "POST",
+    "url": "/message/delMessage",
+    "title": "删除消息done",
+    "name": "delMessage",
+    "group": "Message",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "msg_id",
+            "description": "<p>消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Message.php",
+    "groupTitle": "Message",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.zenmechi.cc/message/delMessage"
+      }
+    ]
+  },
+  {
     "type": "GET",
     "url": "/message/detail",
     "title": "我的消息-详情done",
@@ -1191,7 +1232,7 @@ define({ "api": [
           {
             "group": "Header",
             "type": "String",
-            "optional": false,
+            "optional": true,
             "field": "authorization-token",
             "description": "<p>token.</p>"
           }
@@ -1250,7 +1291,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "list.type",
-            "description": "<p>类型.</p>"
+            "description": "<p>客户端类型 0货主端 1司机端.</p>"
           },
           {
             "group": "Success 200",
@@ -1550,6 +1591,13 @@ define({ "api": [
             "optional": false,
             "field": "remark",
             "description": "<p>备注</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "goods_id",
+            "description": "<p>货源ID</p>"
           }
         ]
       }
@@ -1627,6 +1675,20 @@ define({ "api": [
             "optional": false,
             "field": "list.order_id",
             "description": "<p>订单ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.org_city",
+            "description": "<p>发货人省市区</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.dest_city",
+            "description": "<p>到达城市</p>"
           },
           {
             "group": "Success 200",
@@ -1717,7 +1779,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "list.status",
-            "description": "<p>init             初始状态（未分发订单前）quote报价中（分发订单后）quoted已报价-未配送（装货中）distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成）pay_failed（支付失败）/pay_success（支付成功）comment（已评论）</p>"
+            "description": "<p>init             初始状态（未分发订单前）quoted已报价-未配送（装货中）distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成）pay_failed（支付失败）/pay_success（支付成功）comment（已评论）</p>"
           },
           {
             "group": "Success 200",
@@ -2414,6 +2476,96 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.zenmechi.cc/pay/withDraw"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/quote/quoteList",
+    "title": "司机报价列表done",
+    "name": "quoteList",
+    "group": "Quote",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization-token",
+            "description": "<p>token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>报价ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "org_city",
+            "description": "<p>起始地</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "dest_city",
+            "description": "<p>目的地</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "goods_name",
+            "description": "<p>货品名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "weight",
+            "description": "<p>货品重量</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "system_price",
+            "description": "<p>系统出价</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "sp_price",
+            "description": "<p>货主出价</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "usecar_time",
+            "description": "<p>用车时间</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Quote.php",
+    "groupTitle": "Quote",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.zenmechi.cc/quote/quoteList"
       }
     ]
   },

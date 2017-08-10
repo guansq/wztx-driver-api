@@ -435,6 +435,13 @@ function getOrderIdByQuoteId($id){
 }
 
 /*
+ * 通过报价id得到订单id
+ */
+function getOrderIdByGoodsId($goods_id){
+    return Db::name('transport_order')->where("goods_id",$goods_id)->value('id');
+}
+
+/*
  *通过货主ID取出货主手机
  */
 function getSpPhone($id){
@@ -601,4 +608,12 @@ function getLastQuotePrice($where){
         return '';
     }
     return wztxMoney($info[0]['dr_price']);
+}
+
+
+/*
+ * 判断是否注册
+ */
+function isReg($phone){
+    return Db::name('system_user_driver')->where("user_name",$phone)->count();//存在为1 不存在为0
 }
