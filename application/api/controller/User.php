@@ -177,7 +177,7 @@ class User extends BaseController {
             'operation_pic' => 'require|max:200'
         ];
         validateData($paramAll,$rule);
-        $paramAll['auth_status'] = 'check';//待认证
+        //$paramAll['auth_status'] = 'check';//待认证
         $paramAll['dr_id'] = $this->loginUser['id'];//
         $mapInfo = [
             '_name' => $this->loginUser['id'],
@@ -191,7 +191,14 @@ class User extends BaseController {
         $where = [
             'id' => $this->loginUser['id']
         ];
-        $carId = $carinfoAuthLogic->saveCarAuth($paramAll);
+        if(empty($this->loginUser['car_id'])){
+            $carId = $carinfoAuthLogic->saveCarAuth($paramAll);
+        }else{
+            $carId = $this->loginUser['car_id'];
+            //unset($paramAll['auth_status']);
+            $carinfoAuthLogic->updateCarAuth(['id'=>$carId],$paramAll);
+        }
+
         $drBaseInfoLogic = model('DrBaseInfo', 'logic');
         $data = [
             'car_id' => $carId,

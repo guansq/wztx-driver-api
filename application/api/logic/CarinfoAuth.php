@@ -15,10 +15,20 @@ class CarinfoAuth extends BaseLogic{
      */
     public function saveCarAuth($data){
         $ret = $this->allowField(true)->save($data);
-        if($ret === false){
-            returnJson('4020', '更新失败');
+        if($ret){
+            return $this->getLastInsID();
         }
-        return $this->getLastInsID();
+        returnJson('4020', '抱歉，保存失败');
+    }
+
+    /*
+     * 更新车辆验证信息
+     */
+    public function updateCarAuth($where,$data){
+        $ret = $this->where($where)->update($data);
+        if(!$ret){
+            returnJson('4020', '抱歉，修改失败');
+        }
     }
     /**
      * Describe:获取车辆验证的信息

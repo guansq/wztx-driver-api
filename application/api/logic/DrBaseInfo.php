@@ -35,8 +35,7 @@ class DrBaseInfo extends BaseLogic{
      */
     public function saveDriverAuth($where,$data){
         $ret = $this->where($where)->update($data);
-
-        if($ret){
+        if($ret !== false){
             return resultArray(2000,'更新成功');
         }
         return resultArray(4020, '更新失败');
