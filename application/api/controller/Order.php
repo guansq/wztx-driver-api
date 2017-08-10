@@ -57,7 +57,7 @@ class Order extends BaseController {
      * @apiSuccess {String} list.system_price            系统价
      * @apiSuccess {String} list.mind_price              心理价位
      * @apiSuccess {String} list.usecar_time             用车时间
-     * @apiSuccess {String} list.status init             初始状态（未分发订单前）quote报价中（分发订单后）quoted已报价-未配送（装货中）distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成）pay_failed（支付失败）/pay_success（支付成功）comment（已评论）
+     * @apiSuccess {String} list.status init             初始状态（未分发订单前）quoted已报价-未配送（装货中）distribute配送中（在配送-未拍照）发货中 photo 拍照完毕（订单已完成）pay_failed（支付失败）/pay_success（支付成功）comment（已评论）
      * @apiSuccess {Number} page                         页码.
      * @apiSuccess {Number} pageSize                     每页数据量.
      * @apiSuccess {Number} dataTotal                    数据总数.
@@ -69,7 +69,7 @@ class Order extends BaseController {
             'type',
         ]);
         $rule = [
-            'type' => ['require', '/^(all|quote|quoted|distribute|photo|success)$/'],
+            'type' => ['require', '/^(all|quoted|distribute|photo|success)$/'],
         ];
         validateData($paramAll, $rule);
         $where = [];
@@ -80,7 +80,7 @@ class Order extends BaseController {
                 $where['status'] = $paramAll['type'];
             }
         } else {
-            $where['status'] = ['not in', ['init']];
+            $where['status'] = ['not in', ['quote']];
         }
         $where['dr_id'] = $this->loginUser['id'];
         $pageParam = $this->getPagingParams();

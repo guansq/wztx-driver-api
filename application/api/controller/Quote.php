@@ -68,6 +68,7 @@ class Quote extends BaseController{
         $info['goods_name'] = $goodsInfo['goods_name'];
         $info['weight'] = $goodsInfo['weight'];
         $info['goods_id'] = $goodsInfo['id'];
+        $info['order_id'] = getOrderIdByGoodsId($goodsInfo['id']);
         $info['dr_id'] = $this->loginUser['id'];
         $info['sp_id'] = $goodsInfo['sp_id'];
         $info['system_price'] = $goodsInfo['system_price'];
@@ -167,12 +168,11 @@ class Quote extends BaseController{
             returnJson($result);
         }
     }
-    /*
+    /**
      * @api {GET}   /quote/quoteList     司机报价列表done
      * @apiName     quoteList
      * @apiGroup    Quote
      * @apiHeader   {String}    authorization-token     token.
-     * @apiParam    {String}    status          all所有,init未报价,quote已报价
      * @apiSuccess  {String}    id  报价ID
      * @apiSuccess  {String}    org_city  起始地
      * @apiSuccess  {String}    dest_city 目的地
@@ -183,17 +183,13 @@ class Quote extends BaseController{
      * @apiSuccess  {String}    usecar_time     用车时间
      */
     public function quoteList(){
-        $paramAll = $this->getReqParams(['status']);
         $pageParam = $this->getPagingParams();
-        $rule = ['status' => 'require'];
-        validateData($paramAll,$rule);
-
         $where = [
             'dr_id' => $this->loginUser['id'],
         ];
-        if(in_array($paramAll['status'],['init','quote'])){
+        /*if(in_array($paramAll['status'],['init','quote'])){
             $where['status'] = $paramAll['status'];
-        }
+        }*/
         $result = model('Quote','logic')->geteQuoteList($where,$pageParam);
 
         returnJson($result);
@@ -218,7 +214,12 @@ class Quote extends BaseController{
         $orderInfo['order_code'] = order_num();
         $orderInfo['goods_id'] = $goods_id;
         $orderInfo['sp_id'] = $goodsInfo['sp_id'];
-        $orderInfo['dr_id'] = $this->loginUser['id'];
+        if($status == 'quote'){
+            $orderInfo['dr_id'] = null;
+        }else{
+            $orderInfo['dr_id'] = $this->loginUser['id'];
+        }
+        //$orderInfo['dr_id'] = $this->loginUser['id'];
         $orderInfo['type'] = $goodsInfo['type'];
         $orderInfo['appoint_at'] = $goodsInfo['appoint_at'];
         $orderInfo['insured_amount'] = $goodsInfo['insured_amount'];

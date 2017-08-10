@@ -435,6 +435,13 @@ function getOrderIdByQuoteId($id){
 }
 
 /*
+ * 通过报价id得到订单id
+ */
+function getOrderIdByGoodsId($goods_id){
+    return Db::name('transport_order')->where("goods_id",$goods_id)->value('id');
+}
+
+/*
  *通过货主ID取出货主手机
  */
 function getSpPhone($id){
