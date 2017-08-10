@@ -25,6 +25,9 @@ class Message extends BaseLogic {
      * @param $user
      */
     public function countUnreadMsg($user) {
+        if(empty($user)){
+            return 0;
+        }
         $where = [
             'read_at' => 'NULL',
             'type' => 1,
@@ -32,6 +35,9 @@ class Message extends BaseLogic {
         return Db::table('rt_message_sendee')->where($where)->where('sendee_id', $user['id'])->count();
     }
     public function getUnreadMsg($user,$count=0) {
+        if(empty($user['id'])){
+            return '';
+        }
         $where = [
             'ms.sendee_id' => $user['id'],
             'ms.type' => 1,
@@ -108,6 +114,7 @@ class Message extends BaseLogic {
                 'ms.type' => 1,
                 'm.push_type' => ['not in', ['all']],
                 'm.delete_at'=>['exp',' is  null'],
+                'ms.delete_at'=>['exp',' is  null'],
             ];
             $dataTotal = $this->alias('m')
                 ->join('MessageSendee ms', 'm.id = ms.msg_id')
@@ -156,9 +163,37 @@ class Message extends BaseLogic {
                 'ms.push_type' => 'all',
                 'ms.delete_at'=>['exp',' is  null'],
             ];
-            $dataTotal = $this->alias('ms')->where($where)->count();
-            if (empty($dataTotal)) {
-                return resultArray(4004);
+            if (empty($user['id'])) {
+                $dataTotal = $this->alias('ms')->where($where)->count();
+                if (empty($dataTotal)) {
+                    return resultArray(4004);
+                }
+            }
+
+
+            if (!empty($user['id'])) {
+                $whereSendee = [
+                    'm.sendee_id' => $user['id'],
+                    'm.delete_at'=>['exp',' is not null'],
+                    'm.type' => 0
+                ];
+                $MsgSendeeModel = db('MessageSendee');
+                $infodel = $MsgSendeeModel->alias('m')->where($whereSendee)->select();
+                $delId = '';
+                if(!empty($infodel)){
+                    $infodel = collection($infodel)->toArray();
+                    foreach ($infodel as $info => $v){
+                        $delId = $delId.','.$v['msg_id'];
+                    }
+                    $delId = substr($delId,1);
+                }
+                if(!empty($delId)){
+                    $where['ms.id'] = ['exp',' not in ('.$delId.')'];
+                }
+                $dataTotal = $this->alias('ms')->where($where)->count();
+                if (empty($dataTotal)) {
+                    return resultArray(4004);
+                }
             }
             $dbRet = $this->alias('ms')
                 ->where($where)
@@ -206,6 +241,55 @@ class Message extends BaseLogic {
     }
 
     /**
+     * 消息删除
+     */
+    public function delMyMessage($paramAll,$user) {
+        $id =  $paramAll['msg_id'];
+        $detailMsg = $this->where(['id' =>$id,'type'=>0,  'delete_at'=>['exp',' is  null']])->find();
+        if (empty($detailMsg)) {
+            return resultArray(4004);
+        }
+        if ($detailMsg['push_type'] != 'all') {
+            $where = [
+                'sendee_id' => $user['id'],
+                'msg_id' => $id,
+                'type' => 0,
+            ];
+            $dbRet =  db('MessageSendee')->where($where)->update(['delete_at'=>time()]);
+
+            if (empty($dbRet)) {
+                return resultArray(4004);
+            }
+            return resultArray(2000, '', []);
+        } else {
+            $MsgSendeeModel = db('MessageSendee');
+            $info = $MsgSendeeModel->alias('m')->where(['sendee_id' => $user['id'], 'msg_id' => $detailMsg['id'], 'type' => 0])->find();
+            if (empty($info)) {
+                //插入阅读数据
+                $insertData['msg_id'] = $detailMsg['id'];
+                $insertData['sendee_id'] = $user['id'];
+                $insertData['create_at'] = time();
+                $insertData['read_at'] = time();
+                $insertData['delete_at'] = time();
+                $insertData['type'] = 0;
+                $dbRet =  db('MessageSendee')->insert($insertData);
+            }else{
+                $where = [
+                    'sendee_id' => $user['id'],
+                    'msg_id' => $id,
+                    'type' => 0,
+                ];
+                $dbRet =  db('MessageSendee')->where($where)->update(['delete_at'=>time()]);
+            }
+            if(empty($dbRet)){
+                return resultArray(4004);
+            }
+            return resultArray(2000, '', []);
+        }
+    }
+
+
+    /**
      * Author: WILL<314112362@qq.com>
      * Describe: 我的消息详情
      * @param $user
@@ -230,7 +314,8 @@ class Message extends BaseLogic {
                 'ms.msg_id' => $id,
                 'ms.type' => 1,
             ];
-            $dbRet = $this->alias('m')->join('MessageSendee ms', 'm.id = ms.msg_id')->where($where)->field("m.*,ms.read_at")->find();
+            $dbRet = $this->alias('m')->join('MessageSendee ms', 'm.id = ms.msg_id','left')->where($where)->field("m.*,ms.read_at")->find();
+
             if (empty($dbRet)) {
                 return resultArray(4004);
             }
