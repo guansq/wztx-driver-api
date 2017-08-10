@@ -61,7 +61,7 @@ class Index extends BaseController{
      * @apiName  sendCaptcha
      * @apiGroup Index
      * @apiParam {String} mobile   手机号.
-     * @apiParam {String} opt      验证码类型 reg=注册 restpwd=找回密码 login=登陆 bind=绑定手机号.
+     * @apiParam {String} opt      验证码类型 reg=注册 resetpwd=找回密码 login=登陆 bind=绑定手机号.
      * @apiParam {String} codeId   此为客户端系统当前时间截 除去前两位后经MD5 加密后字符串.
      * @apiParam {String} validationId   codeIdvalidationId(此为手机号除去第一位后字符串+（codeId再次除去前三位） 生成字符串后经MD5加密后字符串)
      * 后端接收到此三个字符串后      也同样生成validationId
@@ -73,6 +73,12 @@ class Index extends BaseController{
             'mobile' => 'require|min:7',
             'opt' => 'require'
         ];
+        if(in_array($data['opt'],['resetpwd'])){
+            $isReg = isReg($data['mobile']);
+            if(!$isReg){
+                returnJson(4000,'抱歉您还未注册');
+            }
+        }
         validateData($data, $rule);
         returnJson(MsgService::sendCaptcha($data['mobile'],$data['opt']));
     }

@@ -609,3 +609,11 @@ function getLastQuotePrice($where){
     }
     return wztxMoney($info[0]['dr_price']);
 }
+
+
+/*
+ * 判断是否注册
+ */
+function isReg($phone){
+    return Db::name('system_user_driver')->where("user_name",$phone)->count();//存在为1 不存在为0
+}
