@@ -175,7 +175,7 @@ class Message extends BaseLogic {
                 $whereSendee = [
                     'm.sendee_id' => $user['id'],
                     'm.delete_at'=>['exp',' is not null'],
-                    'm.type' => 0
+                    'm.type' => 1
                 ];
                 $MsgSendeeModel = db('MessageSendee');
                 $infodel = $MsgSendeeModel->alias('m')->where($whereSendee)->select();
@@ -245,7 +245,7 @@ class Message extends BaseLogic {
      */
     public function delMyMessage($paramAll,$user) {
         $id =  $paramAll['msg_id'];
-        $detailMsg = $this->where(['id' =>$id,'type'=>0,  'delete_at'=>['exp',' is  null']])->find();
+        $detailMsg = $this->where(['id' =>$id,'type'=>1,  'delete_at'=>['exp',' is  null']])->find();
         if (empty($detailMsg)) {
             return resultArray(4004);
         }
@@ -253,7 +253,7 @@ class Message extends BaseLogic {
             $where = [
                 'sendee_id' => $user['id'],
                 'msg_id' => $id,
-                'type' => 0,
+                'type' => 1,
             ];
             $dbRet =  db('MessageSendee')->where($where)->update(['delete_at'=>time()]);
 
@@ -263,7 +263,7 @@ class Message extends BaseLogic {
             return resultArray(2000, '', []);
         } else {
             $MsgSendeeModel = db('MessageSendee');
-            $info = $MsgSendeeModel->alias('m')->where(['sendee_id' => $user['id'], 'msg_id' => $detailMsg['id'], 'type' => 0])->find();
+            $info = $MsgSendeeModel->alias('m')->where(['sendee_id' => $user['id'], 'msg_id' => $detailMsg['id'], 'type' => 1])->find();
             if (empty($info)) {
                 //插入阅读数据
                 $insertData['msg_id'] = $detailMsg['id'];
@@ -271,13 +271,13 @@ class Message extends BaseLogic {
                 $insertData['create_at'] = time();
                 $insertData['read_at'] = time();
                 $insertData['delete_at'] = time();
-                $insertData['type'] = 0;
+                $insertData['type'] = 1;
                 $dbRet =  db('MessageSendee')->insert($insertData);
             }else{
                 $where = [
                     'sendee_id' => $user['id'],
                     'msg_id' => $id,
-                    'type' => 0,
+                    'type' => 1,
                 ];
                 $dbRet =  db('MessageSendee')->where($where)->update(['delete_at'=>time()]);
             }
