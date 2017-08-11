@@ -170,7 +170,13 @@ class Quote extends BaseController{
                 $info['order_id'] = $result['result']['order_id'];//新生成的订单保存到报价中
             }
             //正常报价生成报价单
-            $result = model('Quote','logic')->saveQuote($info);//生成报价单
+            if($quote_time == 0){
+                $result = model('Quote','logic')->saveQuote($info);//生成报价单
+            }else{
+                $result = model('Quote','logic')->getQuoteInfo(['goods_id'=>$goodsInfo['id'],'dr_id'=>$this->loginUser['id']]);
+
+                $result = model('Quote','logic')->changeQuote(['id'=>$result['result']['id']],$info);//更新报价单
+            }
             returnJson($result);
         }
     }
