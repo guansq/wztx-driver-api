@@ -159,7 +159,8 @@ class Order extends BaseController {
 
         validateData($paramAll, $rule);
         $orderInfo = model('TransportOrder', 'logic')->getTransportOrderQuoteInfo(['id' => $paramAll['order_id']]);
-        if (empty($orderInfo)) {
+
+        if (collection($orderInfo)->isEmpty()) {
             returnJson('4004', '未获取到订单信息');
         }
         if ($this->loginUser['id'] == $orderInfo['dr_id']) {

@@ -83,6 +83,7 @@ class Quote extends BaseLogic{
         if($ret === false){
             return resultArray(4000,'更改报价信息失败');
         }
+        return resultArray(2000,'报价成功');
     }
 
     /**
