@@ -29,11 +29,13 @@ class Message extends BaseLogic {
             return 0;
         }
         $where = [
-            'read_at' => 'NULL',
+            'read_at' =>['exp',' is  null'],
             'type' => 1,
-            'delete_at'=>'NULL'
+            'delete_at'=>['exp',' is  null'],
         ];
-        return Db::table('rt_message_sendee')->where($where)->where('sendee_id', $user['id'])->count();
+        $total  =  Db::table('rt_message_sendee')->where($where)->where('sendee_id', $user['id'])->count();
+
+        return $total;
     }
     public function getUnreadMsg($user,$count=0) {
         if(empty($user['id'])){
@@ -50,7 +52,7 @@ class Message extends BaseLogic {
             $where2 = [];
         }else{
             $where2=[
-                'read_at' => 'NULL',
+                'read_at' =>['exp',' is  null'],
             ];
         }
         $item = $this->alias('m')
