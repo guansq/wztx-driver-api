@@ -125,12 +125,14 @@ class Order extends BaseController {
      * @apiSuccess  {String} org_city           起始地
      * @apiSuccess  {String} dest_city          目的地
      * @apiSuccess  {String} dest_receive_name  收货人姓名
-     * @apiSuccess  {String} dest_phone         收货人电话
+     * @apiSuccess  {String} dest_phone         收货人手机
+     * @apiSuccess  {String} [dest_telphone]    收货人电话
      * @apiSuccess  {String} dest_address_name  收货人地址
      * @apiSuccess  {String} dest_address_detail收货人地址详情
      * @apiSuccess  {String} org_send_name      寄件人姓名
      * @apiSuccess  {String} org_phone          寄件人电话
      * @apiSuccess  {String} org_address_name   寄件人地址
+     * @apiSuccess  {String} [org_telphone]     寄件人电话
      * @apiSuccess  {String} org_address_datail 寄件人地址详情
      * @apiSuccess  {String} usecar_time        用车时间
      * @apiSuccess  {String} send_time          发货时间
@@ -178,10 +180,12 @@ class Order extends BaseController {
             'dest_city' => $orderInfo['dest_city'],
             'dest_receive_name' => $orderInfo['dest_receive_name'],
             'dest_phone' => $orderInfo['dest_phone'],
+            'dest_telphone' => $orderInfo['dest_telphone'],
             'dest_address_name' => $orderInfo['dest_address_name'],
             'dest_address_detail' => $orderInfo['dest_address_detail'],
             'org_send_name' => $orderInfo['org_send_name'],
             'org_phone' => $orderInfo['org_phone'],
+            'org_telphone' => $orderInfo['org_telphone'],
             'org_address_name' => $orderInfo['org_address_name'],
             'org_address_detail' => $orderInfo['org_address_detail'],
             'usecar_time' => wztxDate($orderInfo['usecar_time']),
