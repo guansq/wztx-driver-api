@@ -52,7 +52,7 @@ class Pay extends BaseController {
             }
             $year_total_money = $year_total_money + $v['tran_total'];
         }
-        $resultunb = model('TransportOrder', 'logic')->getUnbalanced(['is_clear' => 0, 'dr_id' => $this->loginUser['id']]);
+        $resultunb = model('TransportOrder', 'logic')->getUnbalanced(['is_clear' => 0, 'dr_id' => $this->loginUser['id'], 'status' => ['in', ['pay_success', 'comment']]]);
 
         $uninvoicing_singular_total_order = empty($resultunb[0]['order_amount']) ? 0 : $resultunb[0]['order_amount'];
         $uninvoicing_singular_total_money = empty($resultunb[0]['tran_total']) ? 0 : $resultunb[0]['tran_total'];
