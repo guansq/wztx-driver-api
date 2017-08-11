@@ -139,6 +139,8 @@ class Quote extends BaseController{
                     }
                 }
             }
+            //更改所有的报价为已完成状态
+            model('Quote','logic')->changeQuote(['goods_id'=>$paramAll['goods_id']],['status'=>'complete']);
             //发送短信
             sendSMS(getSpPhone($info['sp_id']),self::SPCONTENT,'wztx_shipper');
             returnJson(2000,'恭喜，您已获取该订单，请及时发货');
