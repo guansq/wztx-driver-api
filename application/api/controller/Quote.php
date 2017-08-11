@@ -69,6 +69,9 @@ class Quote extends BaseController{
         $info['weight'] = $goodsInfo['weight'];
         $info['goods_id'] = $goodsInfo['id'];
         $info['order_id'] = getOrderIdByGoodsId($goodsInfo['id']);
+        if(empty($info['order_id'])){
+            returnJson(4000,'报价失败');
+        }
         $info['dr_id'] = $this->loginUser['id'];
         $info['sp_id'] = $goodsInfo['sp_id'];
         $info['system_price'] = $goodsInfo['system_price'];
