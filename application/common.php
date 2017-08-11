@@ -439,7 +439,7 @@ function getOrderIdByQuoteId($id){
  */
 function getOrderIdByGoodsId($goods_id){
 
-    return Db::name('transport_order')->where("goods_id",$goods_id)->find();
+    return Db::name('transport_order')->where("goods_id",$goods_id)->value('id');
 
 }
 
