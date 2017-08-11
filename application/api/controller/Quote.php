@@ -69,9 +69,6 @@ class Quote extends BaseController{
         $info['weight'] = $goodsInfo['weight'];
         $info['goods_id'] = $goodsInfo['id'];
         $info['order_id'] = getOrderIdByGoodsId($goodsInfo['id']);
-        if(empty($info['order_id'])){
-            returnJson(4000,'报价失败');
-        }
         $info['dr_id'] = $this->loginUser['id'];
         $info['sp_id'] = $goodsInfo['sp_id'];
         $info['system_price'] = $goodsInfo['system_price'];
@@ -148,8 +145,7 @@ class Quote extends BaseController{
             sendSMS(getSpPhone($info['sp_id']),self::SPCONTENT,'wztx_shipper');
             returnJson(2000,'恭喜，您已获取该订单，请及时发货');
         }else{
-            //正常报价生成报价单
-            $result = model('Quote','logic')->saveQuote($info);//生成报价单
+
             if($quote_time == 0){
                 //第一次发送报价的价格给货主,取出货主phone
                 $phone = getSpPhone($goodsInfo['sp_id']);
@@ -169,7 +165,10 @@ class Quote extends BaseController{
                 if($result['code'] == 4000){
                     returnJson($result);
                 }
+                $info['order_id'] = $result['result']['order_id'];//新生成的订单保存到报价中
             }
+            //正常报价生成报价单
+            $result = model('Quote','logic')->saveQuote($info);//生成报价单
             returnJson($result);
         }
     }
