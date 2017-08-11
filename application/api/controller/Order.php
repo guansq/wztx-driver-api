@@ -263,10 +263,11 @@ class Order extends BaseController {
         if (empty($spId)) {
             returnJson(4000, '上传凭证失败');
         }
+        sendMsg($spId,'您的订单已经配送完成','您的订单已经配送完成',0);
         //发送推送信息给货主
         $push_token = getSpPushToken($spId);
         if (!empty($push_token)) {
-            pushInfo($push_token, '您的订单已经配送完成', '您的订单已经配送完成', $rt_key = 'wztx_shipper');//推送给货主端
+            pushInfo($push_token, '您的订单已经配送完成', '您的订单已经配送完成',  'wztx_shipper');//推送给货主端
         }
         returnJson(2000, '成功', ['order_id' => $paramAll['order_id']]);
     }
@@ -314,10 +315,11 @@ class Order extends BaseController {
         if ($ret['code'] == 4000) {
             returnJson(4000, '发货失败');
         }
+        sendMsg($spId,'您的订单已经在配送中啦','您的订单已经在配送中啦',0);
         //发送推送信息给货主
         $push_token = getSpPushToken($spId);
         if (!empty($push_token)) {
-            pushInfo($push_token, '您的订单已经在配送中啦', '您的订单已经在配送中啦', $rt_key = 'wztx_shipper');//推送给货主端
+            pushInfo($push_token, '您的订单已经在配送中啦', '您的订单已经在配送中啦',  'wztx_shipper');//推送给货主端
         }
         returnJson(2000, '发货成功');
     }

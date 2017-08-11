@@ -137,6 +137,8 @@ class Quote extends BaseController{
                 foreach($unGetDr as $v){
                     //发送推送消息
                     $push_token = getPushToken($v);//得到推送token
+                    //发送订单信息给司机
+                    sendMsg($v,self::UNGETTITLE,self::UNGETCONTENT,1);
                     if(!empty($push_token)){
                         pushInfo($push_token,self::UNGETTITLE,self::UNGETCONTENT,'wztx_driver');//推送给其他司机
                     }
@@ -155,11 +157,11 @@ class Quote extends BaseController{
                 $phone = getSpPhone($goodsInfo['sp_id']);
                 sendSMS($phone,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),$rt_key='wztx_shipper');
             }
-
+            sendMsg($goodsInfo['sp_id'],self::TITLE,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),0);
             //发送推送信息给货主
             $push_token = getSpPushToken($goodsInfo['sp_id']);
             if(!empty($push_token)){
-                pushInfo($push_token,self::TITLE,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),$rt_key='wztx_shipper');//推送给货主端
+                pushInfo($push_token,self::TITLE,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),'wztx_shipper');//推送给货主端
             }
             //是否goods_id所对应的订单为空 如果为空新生成订单
             $orderInfo = findOrderByGoodsId($goodsInfo['id']);
