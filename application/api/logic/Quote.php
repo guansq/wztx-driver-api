@@ -20,7 +20,7 @@ class Quote extends BaseLogic{
     public function geteQuoteList($where,$pageParam){
         $list = [];
         $dataTotal = $this->where($where)->count();
-        $list = $this->where($where)->page($pageParam['page'], $pageParam['pageSize'])->select();
+        $list = $this->where($where)->order('create_at desc')->page($pageParam['page'], $pageParam['pageSize'])->select();
         if(empty($dataTotal)){
             return resultArray(4004,'没有报价信息');
         }

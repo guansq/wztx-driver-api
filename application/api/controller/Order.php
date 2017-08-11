@@ -154,7 +154,7 @@ class Order extends BaseController {
             'order_id',
         ]);
         $rule = [
-            'order_id' => ['require', 'regex' => '^[0-9]*$'],
+            'order_id' => ['require'],
         ];
 
         validateData($paramAll, $rule);
@@ -205,7 +205,7 @@ class Order extends BaseController {
         ];
         if($orderInfo['status'] == 'quote'){
             $where = [
-                'dr_id' => $orderInfo['dr_id'],
+                'dr_id' => $this->loginUser['id'],//当前司机ID
                 'goods_id' => $orderInfo['goods_id']
             ];
             $detail['quote_price'] = getLastQuotePrice($where);
