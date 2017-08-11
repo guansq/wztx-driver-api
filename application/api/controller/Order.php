@@ -156,7 +156,7 @@ class Order extends BaseController {
         ];
 
         validateData($paramAll, $rule);
-        $orderInfo = model('TransportOrder', 'logic')->getTransportOrderQuoteInfo(['dr_id' => $this->loginUser['id'], 'id' => $paramAll['order_id']]);
+        $orderInfo = model('TransportOrder', 'logic')->getTransportOrderQuoteInfo(['id' => $paramAll['order_id']]);
         if (empty($orderInfo)) {
             returnJson('4004', '未获取到订单信息');
         }
@@ -254,6 +254,16 @@ class Order extends BaseController {
         if ($changeStatus['code'] != 2000) {
             returnJson($changeStatus);
         }
+        //通过order_id得到sp_id
+        $spId = getSpIdByOrderId($paramAll['order_id']);
+        if (empty($spId)) {
+            returnJson(4000, '上传凭证失败');
+        }
+        //发送推送信息给货主
+        $push_token = getSpPushToken($spId);
+        if (!empty($push_token)) {
+            pushInfo($push_token, '您的订单已经配送完成', '您的订单已经配送完成', $rt_key = 'wztx_shipper');//推送给货主端
+        }
         returnJson(2000, '成功', ['order_id' => $paramAll['order_id']]);
     }
 
@@ -303,7 +313,7 @@ class Order extends BaseController {
         //发送推送信息给货主
         $push_token = getSpPushToken($spId);
         if (!empty($push_token)) {
-            pushInfo($push_token, '您的订单已经在配送中啦', $rt_key = 'wztx_shipper');//推送给货主端
+            pushInfo($push_token, '您的订单已经在配送中啦', '您的订单已经在配送中啦', $rt_key = 'wztx_shipper');//推送给货主端
         }
         returnJson(2000, '发货成功');
     }
