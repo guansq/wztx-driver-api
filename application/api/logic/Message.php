@@ -34,8 +34,7 @@ class Message extends BaseLogic {
             'delete_at'=>['exp',' is  null'],
         ];
         $total  =  Db::table('rt_message_sendee')->where($where)->where('sendee_id', $user['id'])->count();
-        echo $this->getLastSql();
-        die();
+
         return $total;
     }
     public function getUnreadMsg($user,$count=0) {
