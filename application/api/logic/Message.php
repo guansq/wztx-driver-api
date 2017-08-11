@@ -31,6 +31,7 @@ class Message extends BaseLogic {
         $where = [
             'read_at' => 'NULL',
             'type' => 1,
+            'delete_at'=>'NULL'
         ];
         return Db::table('rt_message_sendee')->where($where)->where('sendee_id', $user['id'])->count();
     }
