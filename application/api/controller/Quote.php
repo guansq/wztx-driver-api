@@ -76,8 +76,8 @@ class Quote extends BaseController{
         $info['dr_price'] = $paramAll['dr_price'];
         $info['is_receive'] = $paramAll['is_receive'];
         $info['usecar_time'] = $goodsInfo['usecar_time'];
-        $info['car_style_length'] = $goodsInfo['car_style_length'];
-        $info['car_style_type'] = $goodsInfo['car_style_type'];
+        $info['car_style_length'] = getCardLength($this->loginUser['car_id']);//司机的车长
+        $info['car_style_type'] = getCardType($this->loginUser['car_id']);//司机的车型
         $info['org_city'] = $goodsInfo['org_city'];
         $info['dest_city'] = $goodsInfo['dest_city'];
         $info['org_address_name'] = $goodsInfo['org_address_name'];
