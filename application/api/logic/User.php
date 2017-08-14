@@ -81,6 +81,10 @@ class User extends BaseLogic{
         if(empty($loginUser)){
             return resultArray(4000,'该用户不存在');
         }
+        //加入黑名单
+        if($loginUser['is_black'] === 1){
+            return resultArray(4000,'用户被加入黑名单');
+        }
         // 校验密码
         $ret = $this->checkPassword($loginUser, $password);
         if(!$ret){
@@ -252,7 +256,7 @@ class User extends BaseLogic{
      * @param $account
      */
     private function findByAccount($account){
-        return $this->alias('a')->field('a.*,b.real_name')->join('sp_base_info b','a.user_name = b.phone','LEFT')->where(['a.user_name' => $account])->find();
+        return $this->alias('a')->field('a.*,b.real_name,b.is_black')->join('sp_base_info b','a.user_name = b.phone','LEFT')->where(['a.user_name' => $account])->find();
     }
 
     /**

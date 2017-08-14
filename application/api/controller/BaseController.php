@@ -62,7 +62,9 @@ class BaseController extends Controller{
                 $this->loginUser = JwtHelper::checkToken($token);
 
                 $drBaseInfo = model('DrBaseInfo', 'logic')->findInfoByUserId($this->loginUser['id']);
-
+                if($drBaseInfo['is_black'] === 1){
+                    returnJson(4000,'用户被加入黑名单');
+                }
                 /*            if(empty($drBaseInfo)){
                                 //returnJson(4011);
                             }*/
