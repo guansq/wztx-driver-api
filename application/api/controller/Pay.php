@@ -106,6 +106,10 @@ class Pay extends BaseController {
         if (empty(floatval(wztxMoney($paramAll['withdrawal_amount'])))) {
             returnJson(4000, '提现金额不能为0');
         }
+
+        if(date('d') < getSysconf('withdraw_begintime') || date('d') > getSysconf('withdraw_endtime')){
+            returnJson(4000, '不在提现时间内不能提现');
+        }
         $baseUserInfo = $drBaseInfoLogic->findInfoByUserId($this->loginUser['id']);
         if (empty($baseUserInfo)) {
             returnJson(4000, '未找到用户信息');
