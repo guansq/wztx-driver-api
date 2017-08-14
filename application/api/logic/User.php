@@ -364,7 +364,7 @@ class User extends BaseLogic{
             // 校验密码
             $ret = $this->checkPassword($loginUser, $params['old_password']);
             if(!$ret){
-                return resultArray(4014);
+                return resultArray(4000,'原密码输入有误，请重新输入');
             }
         }
 
@@ -376,9 +376,9 @@ class User extends BaseLogic{
         ];
         $result = $this->where("id",$loginUser['id'])->update($data);
         if($result !== false){
-            return resultArray('2000','更改成功');
+            return resultArray(2000,'更改成功');
         }
-        return resultArray('4020','更改失败');
+        return resultArray(4020,'更改失败');
     }
 
 
