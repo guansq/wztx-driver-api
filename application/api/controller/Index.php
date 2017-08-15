@@ -113,7 +113,6 @@ class Index extends BaseController{
     }
     /**
      * @api      {GET} /index/getArticle 获取文章内容done
-     * @apiDescription
      * @apiName  getArticle
      * @apiGroup Index
      *
