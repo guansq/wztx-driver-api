@@ -619,3 +619,17 @@ function getLastQuotePrice($where){
 function isReg($phone){
     return Db::name('system_user_driver')->where("user_name",$phone)->count();//存在为1 不存在为0
 }
+/*
+ * 得到司机车长
+ */
+function getCardLength($id){
+    return Db::name('dr_carinfo_auth')->where("id",$id)->value('car_length');
+}
+
+/*
+ * 得到司机车长
+ */
+function getCardType($id){
+    return Db::name('dr_carinfo_auth')->where("id",$id)->value('car_type');
+}
+
