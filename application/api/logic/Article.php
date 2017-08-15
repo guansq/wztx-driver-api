@@ -19,6 +19,7 @@ class Article extends BaseLogic{
             "type" => $type,
         ];
         $ret = $this->where($where)->field("title,content,type")->find();
+        $ret['content']="<style>img{max-width:95%;height: auto;}</style>" . $ret['content'];
         return $ret;
     }
 }
