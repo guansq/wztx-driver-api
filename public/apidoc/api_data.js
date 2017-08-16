@@ -818,62 +818,6 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/index/getArticle",
-    "title": "获取文章内容done",
-    "description": "<p>@apiName  getArticle</p>",
-    "group": "Index",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "type",
-            "description": "<p>文章标识(司机端：关于我们-driver_about,提现服务说明-driver_withdrawa_description,推荐奖励说明-driver_recommend_reward,用户注册协议-driver_registration_protocol)</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "title",
-            "description": "<p>文章标题.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>文章内容.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "type",
-            "description": "<p>文章标识.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Index.php",
-    "groupTitle": "Index",
-    "name": "GetIndexGetarticle",
-    "sampleRequest": [
-      {
-        "url": "http://wztx.drv.api.zenmechi.cc/index/getArticle"
-      }
-    ]
-  },
-  {
-    "type": "GET",
     "url": "/apiCode",
     "title": "返回码说明(ok)",
     "description": "<p>技术支持：<a href=\"http://www.ruitukeji.com\" target=\"_blank\">睿途科技</a></p>",
@@ -920,6 +864,61 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://wztx.drv.api.zenmechi.cc/appConfig"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index/getArticle",
+    "title": "获取文章内容done",
+    "name": "getArticle",
+    "group": "Index",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>文章标识(司机端：关于我们-driver_about,提现服务说明-driver_withdrawa_description,推荐奖励说明-driver_recommend_reward,用户注册协议-driver_registration_protocol)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "title",
+            "description": "<p>文章标题.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>文章内容.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>文章标识.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Index.php",
+    "groupTitle": "Index",
+    "sampleRequest": [
+      {
+        "url": "http://wztx.drv.api.zenmechi.cc/index/getArticle"
       }
     ]
   },
@@ -986,7 +985,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "opt",
-            "description": "<p>验证码类型 reg=注册 restpwd=找回密码 login=登陆 bind=绑定手机号.</p>"
+            "description": "<p>验证码类型 reg=注册 resetpwd=找回密码 login=登陆 bind=绑定手机号.</p>"
           },
           {
             "group": "Parameter",
@@ -1457,6 +1456,13 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "dest_phone",
+            "description": "<p>收货人手机</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": true,
+            "field": "dest_telphone",
             "description": "<p>收货人电话</p>"
           },
           {
@@ -1493,6 +1499,13 @@ define({ "api": [
             "optional": false,
             "field": "org_address_name",
             "description": "<p>寄件人地址</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": true,
+            "field": "org_telphone",
+            "description": "<p>寄件人电话</p>"
           },
           {
             "group": "Success 200",
