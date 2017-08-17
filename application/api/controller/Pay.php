@@ -96,7 +96,7 @@ class Pay extends BaseController {
             'account_name',
         ]);
         $rule = [
-            'withdrawal_amount' => ['require', '^[0-9]+(.[0-9]{2})?$'],
+            'withdrawal_amount' => ['require'],
             'bank_name' => 'require',
             'payment_account' => 'require',
             'account_name' => 'require',
@@ -105,6 +105,9 @@ class Pay extends BaseController {
         $drBaseInfoLogic = model('DrBaseInfo', 'logic');
         if (empty(floatval(wztxMoney($paramAll['withdrawal_amount'])))) {
             returnJson(4000, '提现金额不能为0');
+        }
+        if(!preg_match( '/^[0-9]+(.[0-9]{1,2})?$/', $paramAll['withdrawal_amount'])){
+            returnJson(4000, '请输入整数或1-2位小数');
         }
 
         if(date('d') < getSysconf('withdraw_begintime') || date('d') > getSysconf('withdraw_endtime')){
