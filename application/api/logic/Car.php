@@ -19,7 +19,7 @@ class Car extends BaseLogic{
             //"type" => $type,
             "status" => 0
         ];
-        $ret = $this->where($where)->select();
+        $ret = $this->where($where)->order('sort')->select();
         $type = [1=>'type',2=>'length'];
 
         if(!$ret){
