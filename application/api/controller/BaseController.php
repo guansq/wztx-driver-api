@@ -35,7 +35,7 @@ class BaseController extends Controller{
     public function tokenGrantCheck(){
         //不需要token验证的控制器方法
         $except_controller = [
-            "User" => ["login", "reg", "test", "forget",'computeQlfScore'],
+            "User" => ["login", "reg", "test", "forget",'computeQlfScore','reauth'],
             "Index" => ["apiCode", 'lastApk', 'appConfig', 'sendCaptcha','test','getArticle'],
             "Car" => ['getallcarstyle'],
             'Goods' => ['goodslist'],

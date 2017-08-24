@@ -11,6 +11,7 @@ namespace app\api\controller;
 use think\Request;
 use service\MsgService;
 use service\MapService;
+use service\LogService;
 
 class User extends BaseController {
 
@@ -452,6 +453,28 @@ class User extends BaseController {
         validateData($paramAll, $rule);
         $ret = model('DrBaseInfo','logic')->changeWork(['id'=>$this->loginUser['id']],['online'=>$paramAll['online']]);
         returnJson($ret);
+    }
+
+    //重新认证
+    public function reauth() {
+        // 应用搜索条件
+        $time_now = time();
+        $where['policy_deadline|license_deadline|operation_deadline|driving_deadline'] = array('elt', $time_now);
+        $wheredrids =  model('DrBaseInfo','logic')->getReauthListIds($where);
+        $dr_id = [];
+
+        if (!empty($wheredrids)) {
+            foreach ($wheredrids as $wheredrid => $item) {
+                $dr_id[] = $item['dr_id'];
+            }
+            LogService::write('司机端重新认证-系统', implode(',', $dr_id));
+            $status = ['auth_status' => 'init', 'pass_time' => '', 'update_at' => time()];
+            $result =  model('DrBaseInfo','logic')->updateStatus(['id' => ['exp', 'in (' . implode(',', $dr_id) . ')']], $status);
+            returnJson(4000, '获取数据失败',$result);
+        } else {
+            returnJson( 4000, '获取数据失败','no change');
+        }
+
     }
 
 }

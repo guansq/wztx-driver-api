@@ -196,4 +196,20 @@ class DrBaseInfo extends BaseLogic{
         // echo $this->getLastSql();
         return $ret;
     }
+
+
+    //获取截止日期超出当前时间的货主id
+    public function  getReauthListIds($where=[]){
+        $list = Db::name('DrCarinfoAuth')->where($where)->field(['dr_id'])->select();
+        if ($list) {
+            $list = collection($list)->toArray();
+        }
+        return $list;
+    }
+
+    //修改司机端认证状态
+    function updateStatus($where, $status) {
+        $list = Db::name('DrBaseInfo')->where($where)->update($status);
+        return $list;
+    }
 }
