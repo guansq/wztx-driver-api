@@ -73,6 +73,13 @@ class Index extends BaseController{
             'mobile' => 'require|min:7',
             'opt' => 'require'
         ];
+        if($data['opt'] == 'reg'){
+            //用已有账号注册时，依然能获得验证码，  此处应该不能再获得验证码且应提示“该用户已存在”。
+            $info =  model('User','logic')->findByAccount($data['mobile']);
+            if(!empty($info)){
+                returnJson('4000','该用户已存在');
+            }
+        }
         if(in_array($data['opt'],['resetpwd'])){
             $isReg = isReg($data['mobile']);
             if(!$isReg){
