@@ -132,7 +132,7 @@ if(!function_exists('getCodeMsg')){
             5030 => '文件操作异常',
 
             // 调用第三方接口异常
-            6000 => '调用第三方接口异常',
+            6000 => '服务器端错误，请重新提交',
         ];
         if(key_exists($code, $CODE_MSG)){
             return $CODE_MSG[$code];

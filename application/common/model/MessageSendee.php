@@ -9,6 +9,7 @@ namespace app\common\model;
 class MessageSendee extends BaseModel{
 
     public function saveSendee($data){
-        return $this->save($data);
+        $this->insert($data);
+        return $this->getLastInsID();
     }
 }
