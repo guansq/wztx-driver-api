@@ -255,8 +255,8 @@ class User extends BaseLogic{
      * Describe:
      * @param $account
      */
-    private function findByAccount($account){
-        return $this->alias('a')->field('a.*,b.real_name,b.is_black')->join('sp_base_info b','a.user_name = b.phone','LEFT')->where(['a.user_name' => $account])->find();
+    public function findByAccount($account){
+        return $this->alias('a')->field('a.*,b.real_name,b.is_black')->join('dr_base_info b','a.user_name = b.phone','LEFT')->where(['a.user_name' => $account])->find();
     }
 
     /**
