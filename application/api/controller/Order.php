@@ -233,7 +233,7 @@ class Order extends BaseController {
         $rule = [
             'order_id' => ['require', 'regex' => '^[0-9]*$'],
             'img_url' => 'require',
-            'dest_address_maps' => 'require|max:30',
+            'dest_address_maps' => 'require|max:60',
         ];
         $address = explode(',', $paramAll['dest_address_maps']);
         $paramAll['dest_longitude'] = $address[0];
@@ -288,7 +288,7 @@ class Order extends BaseController {
         ]);
         $rule = [
             'order_id' => ['require', 'regex' => '^[0-9]*$'],
-            'org_address_maps' => 'require|max:30',
+            'org_address_maps' => 'require|max:60',
         ];
         validateData($paramAll, $rule);
         $where = [
