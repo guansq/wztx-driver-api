@@ -85,6 +85,20 @@ class User extends BaseLogic{
         if($loginUser['is_black'] === 1){
             return resultArray(4000,'用户被加入黑名单');
         }
+        //加上黑名单验证
+        $blackwhere = [
+            'id_del'=>0,
+            'phone'=>$account,
+            'type'=>1
+        ];
+        if(!empty(getBlackInfo($blackwhere))) {
+            $ret = [
+                'code' => '4022',
+                'msg' => '用户被加入黑名单',
+                'result' => []
+            ];
+            returnJson($ret);
+        }
         // 校验密码
         $ret = $this->checkPassword($loginUser, $password);
         if(!$ret){

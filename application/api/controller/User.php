@@ -101,6 +101,20 @@ class User extends BaseController {
             ];
             returnJson($ret);
         }
+        //加上黑名单验证
+        $blackwhere = [
+            'id_del'=>0,
+            'number'=>$paramAll['identity'],
+            'type'=>4
+        ];
+       if(!empty(getBlackInfo($blackwhere))) {
+           $ret = [
+               'code' => '4022',
+               'msg' => '用户被加入黑名单',
+               'result' => []
+           ];
+           returnJson($ret);
+       }
         //验证信息入库更改状态为check
 
         $where = [
@@ -188,6 +202,20 @@ class User extends BaseController {
             'car_type' => $paramAll['car_type'],
             'card_number' => $paramAll['card_number']
         ];
+        //加上黑名单验证
+        $blackwhere = [
+            'id_del'=>0,
+            'name'=>$paramAll['card_number'],
+            'type'=>5
+        ];
+        if(!empty(getBlackInfo($blackwhere))) {
+            $ret = [
+                'code' => '4022',
+                'msg' => '用户被加入黑名单',
+                'result' => []
+            ];
+            returnJson($ret);
+        }
         $map_code = MapService::saveMapData($mapInfo);//当前坐标.  104.394729,31.125698
         $carinfoAuthLogic = model('CarinfoAuth', 'logic');
         $where = [

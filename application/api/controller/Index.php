@@ -73,6 +73,20 @@ class Index extends BaseController{
             'mobile' => 'require|min:7',
             'opt' => 'require'
         ];
+        //加上黑名单验证
+        $blackwhere = [
+            'id_del'=>0,
+            'phone'=>$data['mobile'],
+            'type'=>1
+        ];
+        if(!empty(getBlackInfo($blackwhere))) {
+            $ret = [
+                'code' => '4022',
+                'msg' => '用户被加入黑名单',
+                'result' => []
+            ];
+            returnJson($ret);
+        }
         if($data['opt'] == 'reg'){
             //用已有账号注册时，依然能获得验证码，  此处应该不能再获得验证码且应提示“该用户已存在”。
             $info =  model('User','logic')->findByAccount($data['mobile']);
