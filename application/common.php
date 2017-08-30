@@ -459,6 +459,13 @@ function getSpPushToken($id){
 }
 
 /*
+ * 得到黑名单信息
+ */
+
+function getBlackInfo($where = []){
+    return Db::name('black_list')->where($where)->find();
+}
+/*
  * 生成签名
  */
 function createSign($sendData){
