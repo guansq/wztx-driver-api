@@ -87,7 +87,7 @@ class Goods extends BaseController{
     public function goodsList(){
         $paramAll = $this->getReqParams(['org_city','dest_city','car_style_length_id','car_style_type_id']);
         $pageParam =$this->getPagingParams();
-        $where = [];
+        $where = ['is_cancel'=>0];
         if(isset($paramAll['org_city'])&& !empty($paramAll['org_city'])){
             $where['org_city'] = ['like',"%{$paramAll['org_city']}%"];
         }
