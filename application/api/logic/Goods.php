@@ -111,13 +111,13 @@ class Goods extends BaseLogic{
         $grab_rang = getSysconf('grab_range');
         $whereStr = '';
         if(!empty($where['tran_type'])){
-            $whereStr .= 'AND tran_type ='.$where['tran_type'];
+            $whereStr .= ' AND tran_type ='.$where['tran_type'];
         }
         if(!empty($where['car_style_type_id'])){
-            $whereStr .= 'AND car_style_type_id ='.$where['car_style_type_id'];
+            $whereStr .= ' AND car_style_type_id ='.$where['car_style_type_id'];
         }
         if(!empty($where['car_style_length_id'])){
-            $whereStr .= 'AND car_style_length_id ='.$where['car_style_length_id'];
+            $whereStr .= ' AND car_style_length_id ='.$where['car_style_length_id'];
         }
         $sql = "select count(*) as num from rt_goods where sqrt(
             (
