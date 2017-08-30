@@ -109,15 +109,15 @@ class Goods extends BaseLogic{
      */
     public function findGoodsList($curLongitude,$curLatitude,$pageParam,$where){
         $grab_rang = getSysconf('grab_range');
-        $where = '';
+        $whereStr = '';
         if(!empty($where['tran_type'])){
-            $where .= 'AND tran_type ='.$where['tran_type'];
+            $whereStr .= 'AND tran_type ='.$where['tran_type'];
         }
         if(!empty($where['car_style_type_id'])){
-            $where .= 'AND car_style_type_id ='.$where['car_style_type_id'];
+            $whereStr .= 'AND car_style_type_id ='.$where['car_style_type_id'];
         }
         if(!empty($where['car_style_length_id'])){
-            $where .= 'AND car_style_length_id ='.$where['car_style_length_id'];
+            $whereStr .= 'AND car_style_length_id ='.$where['car_style_length_id'];
         }
         $sql = "select count(*) as num from rt_goods where sqrt(
             (
@@ -146,7 +146,7 @@ class Goods extends BaseLogic{
                 *
                 (($curLatitude-org_latitude)*PI()*12656/180)
             )
-        )<$grab_rang AND status = 'quote' ".$where." ORDER BY update_at DESC LIMIT $pageLimit,{$pageParam['pageSize']}";
+        )<$grab_rang AND status = 'quote' ".$whereStr." ORDER BY update_at DESC LIMIT $pageLimit,{$pageParam['pageSize']}";
         $list = Db::query($sql);
         if(empty($list)){
             return resultArray('4000','没有找到附近的订单');
