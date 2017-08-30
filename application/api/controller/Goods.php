@@ -44,7 +44,7 @@ class Goods extends BaseController{
             $curMapInfo = explode(',',$mapInfo[0]['_location']);
             $curLongitude = $curMapInfo[0];
             $curLatitude = $curMapInfo[1];
-            $where = getDriverWhere();
+            $where = getDriverWhere($this->loginUser['id']);
             $result = model('Goods','logic')->findGoodsList($curLongitude,$curLatitude,$pageParam,$where);
         }else{
             //有路线的司机返回最新的司机
@@ -63,7 +63,7 @@ class Goods extends BaseController{
                 $where['dest_city'] = ['like',"%{$info['dest_city']}%"];
             }
             $where['status'] = 'quote';//待报价
-            $where = array_merge($where,getDriverWhere());
+            $where = array_merge($where,getDriverWhere($this->loginUser['id']));
             $result = model('Goods','logic')->getSameGoodsList($where,$pageParam);
         }
         returnJson($result);

@@ -643,8 +643,8 @@ function getCardType($id){
 /*
  * 得到司机长途短途类型--》得到司机的车型
  */
-function getDriverWhere(){
-    $drInfo = model('DrBaseInfo','logic')->findInfoByUserId($this->loginUser['id']);
+function getDriverWhere($dr_id){
+    $drInfo = model('DrBaseInfo','logic')->findInfoByUserId($dr_id);
     //dr条件0=all，1=同城物流，2=长途物流 goods条件 0=短途1=长途
     $map = [
         1 => 0,//短途
@@ -654,7 +654,7 @@ function getDriverWhere(){
     if($drInfo['logistics_type'] != 'all'){
         $where['tran_type'] = $map[$drInfo['logistics_type']];
     }
-    $carInfo = model('CarinfoAuth','logic')->getCarAuthInfo(['dr_id'=>$this->loginUser['id']]);
+    $carInfo = model('CarinfoAuth','logic')->getCarAuthInfo(['dr_id'=>$dr_id]);
     if(!empty($carInfo)){
         $where['car_style_type_id'] = $carInfo['car_style_type_id'];
         $where['car_style_length_id'] = $carInfo['car_style_length_id'];
