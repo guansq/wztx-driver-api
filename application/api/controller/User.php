@@ -103,7 +103,7 @@ class User extends BaseController {
         }
         //加上黑名单验证
         $blackwhere = [
-            'id_del'=>0,
+            'is_del'=>0,
             'number'=>$paramAll['identity'],
             'type'=>4
         ];
@@ -204,7 +204,7 @@ class User extends BaseController {
         ];
         //加上黑名单验证
         $blackwhere = [
-            'id_del'=>0,
+            'is_del'=>0,
             'name'=>$paramAll['card_number'],
             'type'=>5
         ];

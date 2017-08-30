@@ -87,7 +87,7 @@ class User extends BaseLogic{
         }
         //加上黑名单验证
         $blackwhere = [
-            'id_del'=>0,
+            'is_del'=>0,
             'phone'=>$account,
             'type'=>1
         ];
