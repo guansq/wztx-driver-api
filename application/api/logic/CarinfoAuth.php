@@ -36,4 +36,10 @@ class CarinfoAuth extends BaseLogic{
     public function getCarAuth($car_id){
         return $this->where("id",$car_id)->find();
     }
+    /**
+     * Describe:获取车辆验证的信息
+     */
+    public function getCarAuthInfo($where){
+        return $this->where($where)->find();
+    }
 }

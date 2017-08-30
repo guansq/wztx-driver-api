@@ -44,6 +44,7 @@ class Goods extends BaseController{
             $curMapInfo = explode(',',$mapInfo[0]['_location']);
             $curLongitude = $curMapInfo[0];
             $curLatitude = $curMapInfo[1];
+            $where = $this->getDriverWhere();
             $result = model('Goods','logic')->findGoodsList($curLongitude,$curLatitude,$pageParam);
         }else{
             //有路线的司机返回最新的司机
@@ -62,9 +63,32 @@ class Goods extends BaseController{
                 $where['dest_city'] = ['like',"%{$info['dest_city']}%"];
             }
             $where['status'] = 'quote';//待报价
-            $result = model('Goods','logic')->getGoodsList($where,$pageParam);
+            $where = array_merge($where,getDriverWhere());
+            $result = model('Goods','logic')->getSameGoodsList($where,$pageParam);
         }
         returnJson($result);
+    }
+
+    /*
+     * 得到司机长途短途类型--》得到司机的车型
+     */
+    public function getDriverWhere(){
+        $drInfo = model('DrBaseInfo','logic')->findInfoByUserId($this->loginUser['id']);
+        //dr条件0=all，1=同城物流，2=长途物流 goods条件 0=短途1=长途
+        $map = [
+            1 => 0,//短途
+            2 => 1//长途
+        ];
+        $where = [];
+        if($drInfo['logistics_type'] != 'all'){
+            $where['tran_type'] = $map[$drInfo['logistics_type']];
+        }
+        $carInfo = model('CarinfoAuth','logic')->getCarAuthInfo(['dr_id'=>$this->loginUser['id']]);
+        if(!empty($carInfo)){
+            $where['car_style_type_id'] = $carInfo['car_style_type_id'];
+            $where['car_style_length_id'] = $carInfo['car_style_length_id'];
+        }
+        return $where;
     }
 
     /**
