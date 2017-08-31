@@ -117,6 +117,7 @@ class Goods extends BaseController{
      * @apiHeader {String} authorization-token           token.
      * @apiParam    {Int}    id                 货源ID
      * @apiSuccess  {String} goods_name         货品名称
+     * @apiSuccess  {String} dr_price         司机报价
      * @apiSuccess  {String} weight             重量
      * @apiSuccess  {String} org_city           起始地
      * @apiSuccess  {String} dest_city          目的地
@@ -167,6 +168,7 @@ class Goods extends BaseController{
 
         $detail = [
             'status' => $goodsInfo['status'],
+            'dr_price' => getQuotePrice(['dr_id' => $this->loginUser['id'],'goods_id' => $paramAll['id']]),
             'goods_name' => $goodsInfo['goods_name'],
             'weight' => strval($goodsInfo['weight']),
             'org_city' => $goodsInfo['org_city'],
@@ -191,6 +193,7 @@ class Goods extends BaseController{
             'effective_time' => $goodsInfo['effective_time'],
             'remark' => $goodsInfo['remark']
         ];
+
         returnJson('2000', '成功', $detail);
     }
 

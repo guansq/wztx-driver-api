@@ -619,6 +619,16 @@ function getLastQuotePrice($where){
     return wztxMoney($info[0]['dr_price']);
 }
 
+/*
+ * 当前司机报价价格
+ */
+function getQuotePrice($where){
+    $dr_price = Db::name('quote')->where($where)->value('dr_price');
+    if(empty($dr_price)){
+        return '0.00';
+    }
+    return wztxMoney($dr_price);
+}
 
 /*
  * 判断是否注册

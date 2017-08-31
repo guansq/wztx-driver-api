@@ -362,6 +362,13 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
+            "field": "dr_price",
+            "description": "<p>司机报价</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
             "field": "weight",
             "description": "<p>重量</p>"
           },
@@ -3039,7 +3046,7 @@
             "type": "Number",
             "optional": false,
             "field": "logistics_type",
-            "description": "<p>物流类型 1：同城物流 2：长途物流</p>"
+            "description": "<p>物流类型 1：同城物流 2：长途物流 0:所有</p>"
           },
           {
             "group": "Parameter",
