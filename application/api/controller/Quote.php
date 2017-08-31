@@ -109,7 +109,7 @@ class Quote extends BaseController{
                     returnJson($result);
                 }
             }else{
-                //$result = model('TransportOrder','logic')->updateTransport(['id'=>$orderInfo['id'],'status'=>'quote'],$data);
+                $result = model('TransportOrder','logic')->updateTransport(['id'=>$orderInfo['id']],$data);
                 //更新订单
                 //$result = $this->saveOrderBygoodsInfo($paramAll['goods_id'],'quoted');//已报价
             }
@@ -160,7 +160,7 @@ class Quote extends BaseController{
                 pushInfo($push_token,self::TITLE,'您的订单有新报价，价格为'.wztxMoney($paramAll['dr_price']),'wztx_shipper');//推送给货主端
             }
             //是否goods_id所对应的订单为空 如果为空新生成订单
-            $orderInfo = findOrderByGoodsId($goodsInfo['id']);
+            /*$orderInfo = findOrderByGoodsId($goodsInfo['id']);
             if(empty($orderInfo)){
                 //生成订单
                 $result = $this->saveOrderBygoodsInfo($paramAll['goods_id'],'quote');//报价中
@@ -168,7 +168,7 @@ class Quote extends BaseController{
                     returnJson($result);
                 }
                 $info['order_id'] = $result['result']['order_id'];//新生成的订单保存到报价中
-            }
+            }*/
             $quoteInfo = model('Quote','logic')->getQuoteInfo(['goods_id'=>$goodsInfo['id'],'dr_id'=>$this->loginUser['id']]);
 
             if($quoteInfo['code'] == 4000){
