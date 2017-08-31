@@ -63,6 +63,7 @@ class Goods extends BaseController{
                 $where['dest_city'] = ['like',"%{$info['dest_city']}%"];
             }
             $where['status'] = 'quote';//待报价
+            $where['is_cancel'] = 0;//未取消货源
             $where = array_merge($where,getDriverWhere($this->loginUser['id']));
             $result = model('Goods','logic')->getSameGoodsList($where,$pageParam);
         }
