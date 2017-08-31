@@ -67,7 +67,7 @@ class User extends BaseController {
      * @apiName  driverAuth
      * @apiGroup User
      * @apiHeader {String} authorization-token           token.
-     * @apiParam {Number} logistics_type         物流类型 1：同城物流 2：长途物流
+     * @apiParam {Number} logistics_type         物流类型 1：同城物流 2：长途物流 0:所有
      * @apiParam {String} real_name          真实姓名.
      * @apiParam {String} sex        性别 1=男 2=女 0=未知.
      * @apiParam {String} identity         身份证号.
@@ -80,7 +80,7 @@ class User extends BaseController {
         //校验参数
         $paramAll = $this->getReqParams(['logistics_type', 'real_name', 'sex', 'identity', 'hold_pic', 'front_pic', 'back_pic','address']);
         $rule = [
-            'logistics_type' => ['require', 'regex' => '/^(1|2)$/'],
+            'logistics_type' => ['require', 'regex' => '/^(0|1|2)$/'],
             'real_name' => 'require|max:10',
             'sex' => ['require', 'regex' => '/^(0|1|2)$/'],
             'identity' => ['require', 'regex' => '/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/'],
