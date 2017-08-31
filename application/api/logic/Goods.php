@@ -146,7 +146,7 @@ class Goods extends BaseLogic{
                 *
                 (($curLatitude-org_latitude)*PI()*12656/180)
             )
-        )<$grab_rang AND status = 'quote' ".$whereStr." ORDER BY update_at DESC LIMIT $pageLimit,{$pageParam['pageSize']}";
+        )<$grab_rang AND status = 'quote' AND is_cancel = 0 ".$whereStr." ORDER BY update_at DESC LIMIT $pageLimit,{$pageParam['pageSize']}";
         $list = Db::query($sql);
         if(empty($list)){
             return resultArray('4000','没有找到附近的订单');
