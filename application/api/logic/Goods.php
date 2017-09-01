@@ -131,7 +131,8 @@ class Goods extends BaseLogic{
                 *
                 (($curLatitude-org_latitude)*PI()*12656/180)
             )
-        )<$grab_rang AND status = 'quote'";
+        )<$grab_rang AND status = 'quote' AND is_cancel = 0 ".$whereStr;
+
         $dataTotal = Db::query($sql)[0]['num'];
         $pageLimit = ($pageParam['page']-1)*$pageParam['pageSize'];
         $sql = "select * from rt_goods where sqrt(
