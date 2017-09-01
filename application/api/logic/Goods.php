@@ -110,7 +110,7 @@ class Goods extends BaseLogic{
     public function findGoodsList($curLongitude,$curLatitude,$pageParam,$where){
         $grab_rang = getSysconf('grab_range');
         $whereStr = '';
-        if(!empty($where['tran_type'])){
+        if($where['tran_type'] !== ''){
             $whereStr .= ' AND tran_type ='.$where['tran_type'];
         }
         if(!empty($where['car_style_type_id'])){
@@ -148,6 +148,7 @@ class Goods extends BaseLogic{
                 (($curLatitude-org_latitude)*PI()*12656/180)
             )
         )<$grab_rang AND status = 'quote' AND is_cancel = 0 ".$whereStr." ORDER BY update_at DESC LIMIT $pageLimit,{$pageParam['pageSize']}";
+        //echo $sql;die;
         $list = Db::query($sql);
         if(empty($list)){
             return resultArray('4000','没有找到附近的订单');
