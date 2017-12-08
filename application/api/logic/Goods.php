@@ -110,7 +110,7 @@ class Goods extends BaseLogic{
     public function findGoodsList($curLongitude,$curLatitude,$pageParam,$where){
         $grab_rang = getSysconf('grab_range');
         $whereStr = '';
-        if($where['tran_type'] !== ''){
+        if(isset($where['tran_type'])){
             $whereStr .= ' AND tran_type ='.$where['tran_type'];
         }
         if(!empty($where['car_style_type_id'])){
