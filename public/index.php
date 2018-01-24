@@ -16,4 +16,6 @@ define('APP_PATH', __DIR__ . '/../application/');
 define('ENV_PREFIX', ''); // 环境变量的配置前缀
 //$_SERVER['PATH_INFO'] = $_SERVER['REQUEST_URI' ];
 // 加载框架引导文件
+// 绑定到index模块
+define('BIND_MODULE','api');
 require __DIR__ . '/../thinkphp/start.php';
